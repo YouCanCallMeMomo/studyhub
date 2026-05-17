@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub Semester 4 — BINUS Cyber Security</title>
+    <meta name="description" content="Portal materi perkuliahan Semester 4 Cyber Security BINUS University">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1729;
+            --bg-secondary: #1a2540;
+            --bg-card: #1e2d4a;
+            --bg-card-hover: #253756;
+            --accent-blue: #4a8eff;
+            --accent-purple: #8b5cf6;
+            --accent-teal: #14b8a6;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --accent-pink: #ec4899;
+            --text-primary: #e8edf5;
+            --text-secondary: #8896b3;
+            --text-muted: #5a6a8a;
+            --border-color: #2a3a5c;
+            --glow-blue: rgba(74, 142, 255, 0.15);
+            --glow-purple: rgba(139, 92, 246, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(74, 142, 255, 0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 80%, rgba(20, 184, 166, 0.04) 0%, transparent 50%);
+            z-index: 0;
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, -2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== HEADER ========== */
+        header {
+            padding: 28px 0 10px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 20px rgba(74, 142, 255, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 1px;
+        }
+
+        .header-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-secondary);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .header-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        /* ========== STATS BAR ========== */
+        .stats-bar {
+            margin: 20px 0 28px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 22px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .stat-number.blue { color: var(--accent-blue); }
+        .stat-number.purple { color: var(--accent-purple); }
+        .stat-number.teal { color: var(--accent-teal); }
+        .stat-number.orange { color: var(--accent-orange); }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 40px;
+            background: var(--border-color);
+        }
+
+        /* ========== SECTION TITLES ========== */
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            padding-left: 4px;
+        }
+
+        /* ========== SUBJECT CARDS GRID ========== */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .subject-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 18px 18px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-4px);
+            border-color: transparent;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .subject-card:hover::before {
+            opacity: 1;
+        }
+
+        .subject-card.active {
+            border-color: var(--accent-blue);
+            background: var(--bg-card-hover);
+            box-shadow: 0 0 30px var(--glow-blue);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+            transition: transform 0.3s;
+        }
+
+        .subject-card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        /* Color Variants */
+        .card-blue .card-icon { background: rgba(74, 142, 255, 0.15); }
+        .card-blue::before { background: linear-gradient(90deg, var(--accent-blue), transparent); }
+        .card-red .card-icon { background: rgba(239, 68, 68, 0.15); }
+        .card-red::before { background: linear-gradient(90deg, var(--accent-red), transparent); }
+        .card-teal .card-icon { background: rgba(20, 184, 166, 0.15); }
+        .card-teal::before { background: linear-gradient(90deg, var(--accent-teal), transparent); }
+        .card-purple .card-icon { background: rgba(139, 92, 246, 0.15); }
+        .card-purple::before { background: linear-gradient(90deg, var(--accent-purple), transparent); }
+        .card-orange .card-icon { background: rgba(245, 158, 11, 0.15); }
+        .card-orange::before { background: linear-gradient(90deg, var(--accent-orange), transparent); }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 12px;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ========== CONTENT VIEWER ========== */
+        .content-viewer {
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .content-viewer.visible {
+            display: block;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .viewer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .viewer-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .viewer-title h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-back:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(74, 142, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 142, 255, 0.4);
+        }
+
+        /* File list */
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            transition: all 0.25s;
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .file-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .file-icon.md { background: rgba(74, 142, 255, 0.12); }
+        .file-icon.docx { background: rgba(74, 142, 255, 0.2); }
+        .file-icon.img { background: rgba(245, 158, 11, 0.15); }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .file-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .file-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-size {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.04);
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .file-arrow {
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+
+        .file-item:hover .file-arrow {
+            transform: translateX(4px);
+            color: var(--accent-blue);
+        }
+
+        /* ========== MARKDOWN READER ========== */
+        .md-reader {
+            display: none;
+            margin-bottom: 40px;
+        }
+
+        .md-reader.visible {
+            display: block;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .reader-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 10px 0;
+        }
+
+        .reader-toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reader-body {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 36px 40px;
+            line-height: 1.85;
+            font-size: 14.5px;
+        }
+
+        .reader-body h1 { font-size: 26px; margin: 28px 0 14px; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-weight: 800; }
+        .reader-body h2 { font-size: 20px; margin: 24px 0 12px; color: var(--accent-purple); font-weight: 700; }
+        .reader-body h3 { font-size: 16px; margin: 18px 0 10px; color: var(--accent-teal); font-weight: 700; }
+        .reader-body p { margin: 8px 0; color: var(--text-primary); }
+        .reader-body strong { color: #fff; }
+        .reader-body em { color: var(--text-secondary); }
+        .reader-body ul, .reader-body ol { padding-left: 24px; margin: 8px 0; }
+        .reader-body li { margin: 4px 0; color: var(--text-primary); }
+        .reader-body li::marker { color: var(--accent-blue); }
+        .reader-body blockquote {
+            border-left: 3px solid var(--accent-purple);
+            padding: 10px 16px;
+            margin: 12px 0;
+            background: rgba(139, 92, 246, 0.06);
+            border-radius: 0 10px 10px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        .reader-body code {
+            background: rgba(74, 142, 255, 0.1);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            color: var(--accent-blue);
+        }
+        .reader-body pre {
+            background: #0d1321;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px 20px;
+            overflow-x: auto;
+            margin: 14px 0;
+        }
+        .reader-body pre code {
+            background: none;
+            padding: 0;
+            color: #a5d6ff;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .reader-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 13px;
+        }
+        .reader-body th {
+            background: var(--bg-card);
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--accent-blue);
+            border: 1px solid var(--border-color);
+        }
+        .reader-body td {
+            padding: 9px 14px;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        .reader-body tr:nth-child(even) td {
+            background: rgba(255,255,255,0.02);
+        }
+        .reader-body hr {
+            border: none;
+            height: 1px;
+            background: var(--border-color);
+            margin: 24px 0;
+        }
+        .reader-body img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 14px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            text-align: center;
+            padding: 28px 0 36px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+
+        footer p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        footer .footer-brand {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .container { padding: 0 16px; }
+            .header-content { flex-wrap: wrap; gap: 12px; }
+            .logo-text h1 { font-size: 18px; }
+            .logo-text p { font-size: 11px; }
+            .stats-bar { padding: 16px 12px; flex-wrap: wrap; gap: 12px; justify-content: center; }
+            .stat-divider { display: none; }
+            .stat-item { width: 45%; }
+            .stat-number { font-size: 22px; }
+            .stat-label { font-size: 11px; }
+            .subjects-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .subject-card { padding: 16px; }
+            .card-icon { width: 40px; height: 40px; font-size: 18px; margin-bottom: 12px; }
+            .card-title { font-size: 13px; }
+            .card-subtitle { font-size: 11px; }
+            .reader-body { padding: 20px 16px; font-size: 13.5px; }
+            .reader-body h1 { font-size: 20px; }
+            .reader-body h2 { font-size: 17px; }
+            .reader-body h3 { font-size: 14px; }
+            .reader-body pre { padding: 12px; font-size: 11px; }
+            .reader-body pre code { font-size: 11px; }
+            .reader-body table { font-size: 11px; display: block; overflow-x: auto; white-space: nowrap; }
+            .reader-body th, .reader-body td { padding: 6px 8px; }
+            .reader-body img { border-radius: 8px; }
+            .viewer-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+            .viewer-title h2 { font-size: 16px; }
+            .file-item { padding: 12px 14px; }
+            .file-info { gap: 10px; }
+            .file-icon { width: 36px; height: 36px; font-size: 16px; }
+            .file-name { font-size: 13px; }
+            .file-meta { font-size: 10px; }
+            .file-size { font-size: 10px; }
+            .reader-toolbar { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .reader-toolbar-left { width: 100%; }
+            .btn-primary { font-size: 12px; padding: 8px 14px; }
+            .btn-back { font-size: 12px; padding: 6px 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .subjects-grid { grid-template-columns: 1fr; gap: 10px; }
+            .header-badge { display: none; }
+            .logo-icon { width: 40px; height: 40px; font-size: 18px; }
+            .logo-area { gap: 10px; }
+            .stat-item { width: 42%; }
+            .stat-number { font-size: 20px; }
+            .reader-body { padding: 16px 12px; font-size: 13px; line-height: 1.7; }
+            .reader-body h1 { font-size: 18px; margin: 20px 0 10px; }
+            .reader-body h2 { font-size: 15px; margin: 18px 0 8px; }
+            .reader-body pre { padding: 10px; border-radius: 8px; }
+            .reader-body pre code { font-size: 10.5px; }
+            .reader-body table { font-size: 10px; }
+            .reader-body th, .reader-body td { padding: 5px 6px; }
+            .reader-body blockquote { padding: 8px 12px; font-size: 12.5px; }
+            .file-list { gap: 8px; }
+            .viewer-header > div { width: 100%; }
+            .viewer-header > div:last-child { display: flex; flex-wrap: wrap; gap: 8px; }
+            #quiz-viewer .reader-body { padding: 20px 12px !important; }
+            .quiz-option-btn { font-size: 13px !important; padding: 12px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">📚</div>
+                <div class="logo-text">
+                    <h1>StudyHub</h1>
+                    <p>Portal Materi Semester 4 — BINUS Cyber Security</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="dot"></span>
+                Semester Aktif
+            </div>
+        </div>
+    </header>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number blue">5</div>
+            <div class="stat-label">Mata Kuliah</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number purple">22</div>
+            <div class="stat-label">Dokumen Materi</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number teal">5</div>
+            <div class="stat-label">UTS Siap</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <div class="stat-number orange">1</div>
+            <div class="stat-label">UAS Siap</div>
+        </div>
+    </div>
+
+    <!-- SUBJECT CARDS -->
+    <div id="home-view">
+        <div class="section-title">📖 Mata Kuliah</div>
+        <div class="subjects-grid">
+            <div class="subject-card card-blue" onclick="openSubject('biology')">
+                <div class="card-icon">🧬</div>
+                <div class="card-title">Computational Biology</div>
+                <div class="card-subtitle">Dogma Sentral, Mutasi, Gene Structure, Evolusi Molekuler, UPGMA</div>
+                <div class="card-badge">📝 UTS • 7 dokumen</div>
+            </div>
+            <div class="subject-card card-red" onclick="openSubject('sna')">
+                <div class="card-icon">🖧</div>
+                <div class="card-title">Server Network Admin</div>
+                <div class="card-subtitle">DevSecOps, CI/CD Pipeline, SonarQube, Harbor, Blue-Green</div>
+                <div class="card-badge">📝 UTS + UAS • 3 dokumen</div>
+            </div>
+            <div class="subject-card card-teal" onclick="openSubject('sofeng')">
+                <div class="card-icon">⚙️</div>
+                <div class="card-title">Software Engineering</div>
+                <div class="card-subtitle">Kisi-kisi + 20 Latihan Study Case + Diagram UML</div>
+                <div class="card-badge">📝 UTS • 8 dokumen + diagram</div>
+            </div>
+            <div class="subject-card card-purple" onclick="openSubject('softsec')">
+                <div class="card-icon">🛡️</div>
+                <div class="card-title">Software Security</div>
+                <div class="card-subtitle">Threat Modeling, STRIDE, DREAD, Attack Tree</div>
+                <div class="card-badge">📝 UTS • 2 dokumen</div>
+            </div>
+            <div class="subject-card card-orange" onclick="openSubject('cyberlaw')">
+                <div class="card-icon">⚖️</div>
+                <div class="card-title">Cyber Law</div>
+                <div class="card-subtitle">UU ITE, UU PDP, Kebebasan Ekspresi vs Privasi, Studi Kasus</div>
+                <div class="card-badge">📝 UTS • 2 dokumen</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT VIEWER (file list) -->
+    <div class="content-viewer" id="content-viewer">
+        <div class="viewer-header">
+            <div class="viewer-title">
+                <span id="viewer-icon" style="font-size:22px;"></span>
+                <h2 id="viewer-subject-name"></h2>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-primary" id="btn-start-quiz" style="background:var(--accent-purple); color:white; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:600; display:flex; align-items:center; gap:8px;" onclick="startQuiz()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+                    Mulai Quiz (100 Soal)
+                </button>
+                <button class="btn-back" onclick="goHome()">← Kembali</button>
+            </div>
+        </div>
+        <div class="file-list" id="file-list"></div>
+    </div>
+
+    <!-- MARKDOWN READER -->
+    <div class="md-reader" id="md-reader">
+        <div class="reader-toolbar">
+            <div class="reader-toolbar-left">
+                <button class="btn-back" onclick="goBackToFiles()">← Daftar File</button>
+                <span id="reader-filename" style="font-size:13px; color:var(--text-muted);"></span>
+            </div>
+            <div>
+                <a href="#" id="btn-presentation" target="_blank" class="btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"></path><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"></path><path d="m7 21 5-5 5 5"></path></svg>
+                    Buka Presentasi
+                </a>
+            </div>
+        </div>
+        <div class="reader-body" id="reader-body"></div>
+    </div>
+
+    <!-- QUIZ VIEWER -->
+    <div class="md-reader" id="quiz-viewer" style="display:none; position:absolute; top:0; left:0; width:100%; min-height:100vh; background:var(--bg-card); z-index:100; border-radius:12px; border:1px solid var(--border-color);">
+        <div class="reader-toolbar">
+            <div class="reader-toolbar-left" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                <button class="btn-back" onclick="exitQuiz()">← Keluar Kuis</button>
+                <div style="font-weight:600; color:var(--accent-purple);" id="quiz-progress-text">Soal 1 / 20</div>
+            </div>
+        </div>
+        <div class="reader-body" id="quiz-body" style="padding: 40px; display:flex; flex-direction:column; gap:20px;">
+            <!-- Quiz content injected here -->
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <footer>
+        <p>🎓 <span class="footer-brand">StudyHub</span> • Portal Materi Semester 4 • BINUS University Cyber Security</p>
+    </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="quiz_biology.js"></script>
+<script src="quiz_sna.js"></script>
+<script src="quiz_sofeng.js"></script>
+<script src="quiz_softsec.js"></script>
+<script src="quiz_cyberlaw.js"></script>
+<script>
+// ============================================================
+// DATA: All study material files organized by subject
+// ============================================================
+const subjects = {
+    biology: {
+        icon: '🧬',
+        name: 'Computational Biology',
+        color: 'blue',
+        folder: 'BIOLOGY',
+        files: [
+            { name: 'UTS_COMPUTATIONAL_BIOLOGY_MATERI.md', label: 'Materi Utama Biologi Komputasi (Kisi-kisi UTS)', type: 'md', size: '28 KB' },
+            { name: 'LATIHAN_SOAL_COMP_BIO.md', label: 'Latihan Soal & Pembahasan (50 Soal)', type: 'md', size: '45 KB' },
+            { name: 'CENTRAL DOGMA.pdf', label: 'Session 9 — Central Dogma', type: 'pdf', size: 'Slide' },
+            { name: 'DNA&RNA.pdf', label: 'Session 10 — DNA, RNA & Transcription', type: 'pdf', size: 'Slide' },
+            { name: 'MUGEN TSUKOYOMI(mUTASI GENETEIK).pdf', label: 'Session 11 — Mutasi Genetik (Mugen Tsukoyomi)', type: 'pdf', size: 'Slide' },
+            { name: 'MOLECULAR_EVOLUTION.md', label: 'Session 12 — Molecular Evolution (Ringkasan)', type: 'md', size: '18 KB' },
+            { name: 'MOLECULAR_EVOLUTION.pptx', label: 'Session 12 — Molecular Evolution (Slide PPT)', type: 'pptx', size: '3.1 MB' },
+        ]
+    },
+    sna: {
+        icon: '🖧',
+        name: 'Server Network Administration',
+        color: 'red',
+        folder: 'SERVER_NETWORK_ADMIN',
+        files: [
+            { name: 'UTS_SNA_DEVSECOPS_MATERI.md', label: '⭐ UTS — Istilah Kunci + Study Case + Pembahasan', type: 'md', size: '42 KB' },
+            { name: 'UAS_DEVSECOPS_STUDY_CASE.md', label: 'UAS DevSecOps Study Case', type: 'md', size: '61 KB' },
+            { name: 'UAS_DEVSECOPS_STUDY_CASE.docx', label: 'UAS DevSecOps (Word)', type: 'docx', size: '50 KB' },
+        ]
+    },
+    sofeng: {
+        icon: '⚙️',
+        name: 'Software Engineering',
+        color: 'teal',
+        folder: 'SOFENG',
+        files: [
+            { name: 'LATIHAN_STUDY_CASE_SOFENG.md', label: '📝 Latihan Study Case (20 Soal + Diagram UML)', type: 'md', size: '48 KB' },
+            { name: 'KISI_KISI_UTS_SOFENG_LENGKAP.md', label: 'Kisi-Kisi UTS Lengkap (Semua Part)', type: 'md', size: '66 KB' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART1.md', label: 'Part 1 — Pengantar & SDLC', type: 'md', size: '12 KB' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART2.md', label: 'Part 2 — Requirements Engineering', type: 'md', size: '8 KB' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART3.md', label: 'Part 3 — Design & Architecture', type: 'md', size: '8 KB' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART4.md', label: 'Part 4 — Testing & QA', type: 'md', size: '16 KB' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART5.md', label: 'Part 5 — Project Management', type: 'md', size: '13 KB' },
+            { name: 'KISI_KISI_UTS_SOFENG.docx', label: 'Kisi-Kisi UTS (Word)', type: 'docx', size: '21 KB' },
+            { name: '03_Agile Principle & Lean Foundations.pdf', label: 'Session 3 — Agile & Lean', type: 'pdf', size: 'Slide' },
+            { name: '04_Scrum Framework.pdf', label: 'Session 4 — Scrum', type: 'pdf', size: 'Slide' },
+            { name: '05_Design Concepts.pdf', label: 'Session 5 — Design Concepts', type: 'pdf', size: 'Slide' },
+            { name: '06_Requirements Engineering.pdf', label: 'Session 6 — Req. Engineering', type: 'pdf', size: 'Slide' },
+            { name: '07_Requirements Modeling and UML.pdf', label: 'Session 7 — UML', type: 'pdf', size: 'Slide' },
+            { name: '08_Software Design Principles.pdf', label: 'Session 8 — Design Principles', type: 'pdf', size: 'Slide' },
+            { name: '09_Software Architecture Design Concepts and Styles  .pdf', label: 'Session 9 — Architecture', type: 'pdf', size: 'Slide' },
+            { name: '10_Software Architecture Design Documentation and Patterns  .pdf', label: 'Session 10 — Design Patterns', type: 'pdf', size: 'Slide' },
+            { name: '11_Project Management and Planning.pdf', label: 'Session 11 — Project Management', type: 'pdf', size: 'Slide' },
+            { name: '20260105095522D7082_Session 12_Project Estimation Techniques.pdf', label: 'Session 12 — Estimation', type: 'pdf', size: 'Slide' },
+        ]
+    },
+    softsec: {
+        icon: '🛡️',
+        name: 'Software Security',
+        color: 'purple',
+        folder: 'SOFTSEC',
+        files: [
+            { name: 'Materi_UTS_Software_Security_BINUS.md', label: 'Materi UTS Software Security', type: 'md', size: '24 KB' },
+            { name: 'Materi_UTS_Software_Security_BINUS.docx', label: 'Materi UTS (Word)', type: 'docx', size: '46 KB' },
+        ]
+    },
+    cyberlaw: {
+        icon: '⚖️',
+        name: 'Cyber Law',
+        color: 'orange',
+        folder: 'CYBERLAW',
+        files: [
+            { name: 'UTS_CYBER_LAW_MATERI.md', label: 'Materi Utama Cyber Law (Kisi-kisi UTS)', type: 'md', size: '32 KB' },
+            { name: 'LATIHAN_SOAL_CYBER_LAW.md', label: 'Latihan Soal & Pembahasan (30 Soal)', type: 'md', size: '38 KB' },
+        ]
+    },
+};
+
+let currentSubject = null;
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function openSubject(key) {
+    currentSubject = key;
+    const subj = subjects[key];
+
+    document.getElementById('home-view').style.display = 'none';
+    document.getElementById('md-reader').classList.remove('visible');
+
+    document.getElementById('viewer-icon').textContent = subj.icon;
+    document.getElementById('viewer-subject-name').textContent = subj.name;
+
+    const fileListEl = document.getElementById('file-list');
+    fileListEl.innerHTML = '';
+
+    subj.files.forEach(file => {
+        const iconEmoji = file.type === 'md' ? '📄' : file.type === 'docx' ? '📘' : file.type === 'pdf' ? '📊' : file.type === 'pptx' ? '📑' : file.type === 'slide' ? '📊' : '🖼️';
+        const iconClass = file.type;
+        const typeLabel = file.type === 'md' ? 'Markdown' : file.type === 'docx' ? 'Microsoft Word' : file.type === 'pdf' ? 'Slide Presentasi' : file.type === 'slide' ? 'Slide (Interactive PDF)' : file.type === 'pptx' ? 'PowerPoint Slide' : 'Gambar';
+
+        const el = document.createElement('div');
+        el.className = 'file-item';
+        el.innerHTML = `
+            <div class="file-info">
+                <div class="file-icon ${iconClass}">${iconEmoji}</div>
+                <div>
+                    <div class="file-name">${file.label}</div>
+                    <div class="file-meta">${typeLabel} • ${file.name}</div>
+                </div>
+            </div>
+            <div class="file-action">
+                <span class="file-size">${file.size}</span>
+                <span class="file-arrow">→</span>
+            </div>
+        `;
+
+        if (file.type === 'md') {
+            el.onclick = () => openMarkdown(subj.folder, file.name, file.label);
+        } else if (file.type === 'slide') {
+            el.onclick = () => openWebSlide(subj.folder, file.name, file.label);
+        } else if (file.type === 'pdf') {
+            el.onclick = () => openPdf(subj.folder, file.name, file.label);
+        } else if (file.type === 'docx' || file.type === 'pptx') {
+            el.onclick = () => {
+                const link = document.createElement('a');
+                link.href = subj.folder + '/' + file.name;
+                link.download = file.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+        } else {
+            el.onclick = () => alert('Jenis file tidak dikenal.');
+        }
+
+        fileListEl.appendChild(el);
+    });
+
+    const viewer = document.getElementById('content-viewer');
+    viewer.classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goHome() {
+            document.querySelector('.container').style.maxWidth = '1100px';
+    document.getElementById('content-viewer').classList.remove('visible');
+    document.getElementById('md-reader').classList.remove('visible');
+    document.getElementById('home-view').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBackToFiles() {
+            document.querySelector('.container').style.maxWidth = '1100px';
+    document.getElementById('md-reader').classList.remove('visible');
+    document.getElementById('content-viewer').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// MARKDOWN READER
+// ============================================================
+async function openMarkdown(folder, filename, label) {
+    document.getElementById('content-viewer').classList.remove('visible');
+    document.getElementById('reader-filename').textContent = filename;
+    
+    const btnPresentation = document.getElementById('btn-presentation');
+    btnPresentation.style.display = 'flex';
+    btnPresentation.href = `presentation.html?file=${folder}/${filename}`;
+
+    const readerBody = document.getElementById('reader-body');
+    readerBody.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding:60px 0;">⏳ Memuat materi...</p>';
+
+    document.getElementById('md-reader').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+        const filePath = `${folder}/${filename}?v=${new Date().getTime()}`;
+        const response = await fetch(filePath);
+        if (!response.ok) throw new Error('File tidak ditemukan');
+        const buffer = await response.arrayBuffer();
+        const mdText = new TextDecoder('utf-8').decode(buffer);
+        readerBody.innerHTML = marked.parse(mdText);
+    } catch (err) {
+        readerBody.innerHTML = `
+            <div style="text-align:center; padding:60px 20px;">
+                <p style="font-size:40px; margin-bottom:16px;">📁</p>
+                <p style="color:var(--text-secondary); font-size:15px; margin-bottom:8px;">
+                    Tidak dapat memuat file di browser secara langsung.
+                </p>
+                <p style="color:var(--text-muted); font-size:13px;">
+                    Untuk membaca file Markdown, jalankan website menggunakan Live Server.<br>
+                    Atau buka file langsung di VS Code:<br><br>
+                    <code style="font-size:14px;">c:\\SEMESTER4\\${folder}\\${filename}</code>
+                </p>
+            </div>
+        `;
+    }
+}
+
+// ============================================================
+// COMPONENT: PDF / SLIDE VIEWER
+// ============================================================
+function openPdf(folder, filename, label) {
+    document.getElementById('content-viewer').classList.remove('visible');
+    document.getElementById('reader-filename').textContent = filename;
+    
+    // Perluas kontainer untuk memberikan ruang lebih saat melebarkan PPT
+    document.querySelector('.container').style.maxWidth = '100%';
+    
+    // Sembunyikan tombol 'Buka Presentasi' karena ini sudah presentasi
+    document.getElementById('btn-presentation').style.display = 'none';
+
+    const readerBody = document.getElementById('reader-body');
+    const filePath = `${folder}/${filename}`;
+    
+    // Tampilkan PDF dalam tag iframe dengan resizer horisontal
+    readerBody.innerHTML = `
+        <div style="text-align: center; margin-bottom: 15px; color: var(--accent-purple); font-weight: 600;">
+            <p>💡 Geser untuk mengganti slide (scroll ke bawah) | ↔️ Tarik pinggiran kotak untuk mengatur lebar layar</p>
+        </div>
+        <div style="resize: horizontal; overflow: hidden; width: 70%; max-width: 100%; min-width: 300px; margin: 0 auto; border: 2px dashed var(--border-color); border-radius: 12px; padding: 4px; background: var(--bg-card);">
+            <iframe src="${filePath}" style="width: 100%; height: 80vh; min-height: 500px; border:none; border-radius:8px; background: white; display: block;"></iframe>
+        </div>
+    `;
+
+    document.getElementById('md-reader').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openWebSlide(folder, filename, label) {
+    document.getElementById('content-viewer').classList.remove('visible');
+    document.getElementById('reader-filename').textContent = filename;
+    
+    // Perluas kontainer untuk memberikan ruang lebih saat melebarkan Slide
+    document.querySelector('.container').style.maxWidth = '100%';
+    
+    // Sembunyikan tombol 'Buka Presentasi' karena ini sudah presentasi
+    document.getElementById('btn-presentation').style.display = 'none';
+
+    const readerBody = document.getElementById('reader-body');
+    
+    // Buka presentation.html di dalam iframe (Embed Mode)
+    const presentationUrl = `presentation.html?file=${folder}/${filename}`;
+    
+    readerBody.innerHTML = `
+        <div style="text-align: center; margin-bottom: 15px; color: var(--accent-primary); font-weight: 600;">
+            <p>✨ Mode Presentasi Interaktif (Web PDF) | ⌨️ Gunakan Panah Keyboard untuk navigasi</p>
+        </div>
+        <div style="width: 90%; max-width: 1300px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+            <iframe src="${presentationUrl}" style="width: 100%; height: 75vh; border:none; background: #0b1120; display: block;"></iframe>
+        </div>
+    `;
+
+    document.getElementById('md-reader').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// COMPONENT: QUIZ ENGINE
+// ============================================================
+let currentQuiz = [];
+let currentQuestionIndex = 0;
+let userAnswers = [];
+let isAnswerLocked = false;
+
+function startQuiz() {
+    const subjectName = document.getElementById('viewer-subject-name').textContent.toLowerCase();
+    
+    let rawQuestions = [];
+    if (typeof quiz_biology !== 'undefined' && subjectName.includes('biology')) rawQuestions = quiz_biology;
+    else if (typeof quiz_sna !== 'undefined' && subjectName.includes('admin')) rawQuestions = quiz_sna;
+    else if (typeof quiz_sofeng !== 'undefined' && subjectName.includes('engineering')) rawQuestions = quiz_sofeng;
+    else if (typeof quiz_cyberlaw !== 'undefined' && subjectName.includes('law')) rawQuestions = quiz_cyberlaw;
+    else if (typeof quiz_softsec !== 'undefined' && subjectName.includes('security')) rawQuestions = quiz_softsec;
+    
+    if (!rawQuestions || rawQuestions.length === 0) {
+        return alert("Data kuis (100 soal) untuk mata kuliah ini belum dideteksi. Pastikan file script kuis berhasil di-load!\nMata kuliah yg dibaca: " + subjectName);
+    }
+
+    // Shuffle and pick 20
+    const shuffled = [...rawQuestions].sort(() => 0.5 - Math.random());
+    currentQuiz = shuffled.slice(0, 20);
+    currentQuestionIndex = 0;
+    userAnswers = new Array(20).fill(null);
+
+    document.getElementById('md-reader').classList.remove('visible');
+    document.getElementById('content-viewer').classList.remove('visible');
+    document.getElementById('quiz-viewer').style.display = 'block';
+    
+    renderQuizQuestion();
+}
+
+let currentSelection = null;
+
+function renderQuizQuestion() {
+    if (currentQuestionIndex >= currentQuiz.length) {
+        showQuizResults();
+        return;
+    }
+    isAnswerLocked = false;
+    currentSelection = null;
+    document.getElementById('quiz-progress-text').textContent = `Soal ${currentQuestionIndex + 1} / 20`;
+    let qObj = currentQuiz[currentQuestionIndex];
+    let savedAnswer = userAnswers[currentQuestionIndex];
+    
+    let html = `
+        <div style="font-size:18px; font-weight:600; margin-bottom: 20px; line-height:1.5;">${currentQuestionIndex + 1}. ${qObj.q}</div>
+        <div style="display:flex; flex-direction:column; gap:10px;" id="quiz-options-container">
+    `;
+    
+    qObj.opts.forEach((opt, idx) => {
+        let btnStyle = "background:var(--bg-lighter); color:var(--text-main); border-color:var(--border-color);";
+        html += `<button class="quiz-option-btn" id="option-btn-${idx}" style="padding:15px; border-radius:8px; border:1px solid; text-align:left; cursor:pointer; font-size:15px; transition:0.2s; ${btnStyle}" onclick="selectQuizAnswer(${idx})">${opt}</button>`;
+    });
+
+    html += `</div>
+        <div id="explanation-box"></div>
+        <div style="margin-top: 30px; display:flex; justify-content:space-between;">
+            <button class="btn-back" onclick="prevQuizQuestion()" ${currentQuestionIndex === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>← Sebelumnya</button>
+            <div id="action-btn-container">
+                <button class="btn-primary" onclick="lockQuizAnswer()" id="lock-btn" style="background:#eab308; color:black; opacity:0.5; cursor:not-allowed;">
+                    🔒 Kunci Jawaban
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('quiz-body').innerHTML = html;
+    
+    if (savedAnswer !== null) {
+        currentSelection = savedAnswer;
+        lockQuizAnswer(true); // force lock
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectQuizAnswer(idx) {
+    if (isAnswerLocked) return;
+    currentSelection = idx;
+    
+    // Reset borders
+    const qObj = currentQuiz[currentQuestionIndex];
+    for (let i = 0; i < qObj.opts.length; i++) {
+        let btn = document.getElementById(`option-btn-${i}`);
+        if (i === idx) {
+            btn.style.borderColor = 'var(--accent-purple)';
+            btn.style.background = 'rgba(108, 92, 231, 0.1)'; 
+        } else {
+            btn.style.borderColor = 'var(--border-color)';
+            btn.style.background = 'var(--bg-lighter)';
+        }
+    }
+    
+    let lockBtn = document.getElementById('lock-btn');
+    if (lockBtn) {
+        lockBtn.style.opacity = '1';
+        lockBtn.style.cursor = 'pointer';
+    }
+}
+
+function lockQuizAnswer(isReview = false) {
+    if (isAnswerLocked && !isReview) return;
+    if (currentSelection === null) {
+        alert("Pilih jawaban terlebih dahulu sebelum mengunci!");
+        return;
+    }
+    
+    isAnswerLocked = true;
+    userAnswers[currentQuestionIndex] = currentSelection;
+    
+    let qObj = currentQuiz[currentQuestionIndex];
+    let isCorrect = (currentSelection === qObj.ans);
+    
+    // Ganti tombol menjadi Selanjutnya
+    const btnContainer = document.getElementById('action-btn-container');
+    btnContainer.innerHTML = `
+        <button class="btn-primary" onclick="nextQuizQuestion()" id="next-btn">
+            ${currentQuestionIndex === 19 ? 'Submit Jawaban' : 'Selanjutnya →'}
+        </button>
+    `;
+
+    for (let i = 0; i < qObj.opts.length; i++) {
+        let btn = document.getElementById(`option-btn-${i}`);
+        if (i === qObj.ans) {
+            btn.style.background = '#22c55e'; // Hijau benar
+            btn.style.color = 'white';
+            btn.style.borderColor = '#16a34a';
+        } else if (i === currentSelection && !isCorrect) {
+            btn.style.background = '#ef4444'; // Merah salah
+            btn.style.color = 'white';
+            btn.style.borderColor = '#dc2626';
+        } else {
+            btn.style.opacity = '0.4';
+            btn.style.cursor = 'not-allowed';
+            btn.style.background = 'var(--bg-lighter)';
+            btn.style.color = 'var(--text-main)';
+        }
+        btn.onclick = null; // Kunci tombol
+    }
+    
+    // Render Explanation Box if available
+    let expHtml = '';
+    if (qObj.exps && qObj.exps.length === 4) {
+        expHtml = `<div style="margin-top:15px;">`;
+        qObj.opts.forEach((optStr, i) => {
+            let label = i === qObj.ans ? `<span style="color:#22c55e; font-weight:bold;">(BENAR)</span>` : `<span style="color:#ef4444; font-weight:bold;">(SALAH)</span>`;
+            expHtml += `<div style="margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid var(--border-color); font-size:14px;">
+                <div style="font-weight:600; margin-bottom:4px;">Opsi ${String.fromCharCode(65+i)}: ${optStr} ${label}</div>
+                <div style="color:var(--text-secondary);">${qObj.exps[i]}</div>
+            </div>`;
+        });
+        expHtml += `</div>`;
+    } else {
+        // Fallback or generic message
+        expHtml = `<div style="color:var(--text-main); line-height:1.6; font-size:14.5px;">Fokus pada opsi: <b>${qObj.opts[qObj.ans]}</b> sebagai pilar materi ini. Cermati opsi lain yang sengaja dijadikan distraksi silang antar bab.</div>`;
+    }
+
+    document.getElementById('explanation-box').innerHTML = `
+        <div style="margin-top:25px; padding:20px; background:var(--bg-card); border:1px solid ${isCorrect ? '#22c55e' : '#ef4444'}; border-left:5px solid ${isCorrect ? '#22c55e' : '#ef4444'}; border-radius:8px; animation: fadeIn 0.5s;">
+            <div style="font-weight:700; font-size:16px; margin-bottom:10px; color:${isCorrect ? '#16a34a' : '#dc2626'}">
+                ${isCorrect ? '✅ Jawaban Tepat!' : '❌ Jawaban Salah!'}
+            </div>
+            ${expHtml}
+        </div>
+    `;
+}
+
+function prevQuizQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuizQuestion();
+    }
+}
+
+function nextQuizQuestion() {
+    if (userAnswers[currentQuestionIndex] === null) {
+        alert('Coba tebak jawaban terlebih dahulu dengan mengklik salah satu opsi!');
+        return;
+    }
+    currentQuestionIndex++;
+    if (currentQuestionIndex >= currentQuiz.length) {
+        showQuizResults();
+    } else {
+        renderQuizQuestion();
+    }
+}
+
+function showQuizResults() {
+    // Sisanya sama dengan perhitungan hasil breakdown
+    let finalScore = 0;
+    let correctCount = 0;
+    
+    currentQuiz.forEach((qObj, idx) => {
+        if (userAnswers[idx] === qObj.ans) {
+            correctCount++;
+            finalScore += 5;
+        }
+    });
+
+    document.getElementById('quiz-progress-text').textContent = "Hasil Evaluasi Kuis";
+    document.getElementById('quiz-body').innerHTML = `
+        <div style="text-align:center;">
+            <div style="font-size:70px; margin-bottom:10px;">${finalScore >= 80 ? '🏆' : finalScore >= 60 ? '👍' : '📚'}</div>
+            <h2 style="margin-bottom: 5px;">Skor Akhir: <span style="color:var(--accent-blue); font-size:40px; vertical-align:middle; margin-left:10px;">${finalScore}</span> <span style="font-size:20px; color:var(--text-muted);">/ 100</span></h2>
+            <p style="color:var(--text-secondary); margin-bottom:20px; font-size:16px;">Benar ${correctCount} dari 20 Soal Acak</p>
+            <div style="display:flex; justify-content:center; gap:10px; margin-top:20px;">
+                <button class="btn-primary" onclick="startQuiz()">🔁 Ulangi Kuis (Acak Baru)</button>
+                <button class="btn-back" onclick="exitQuiz()">Kembali ke Modul</button>
+            </div>
+        </div>
+    `;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function exitQuiz() {
+    document.getElementById('quiz-viewer').style.display = 'none';
+    document.getElementById('content-viewer').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

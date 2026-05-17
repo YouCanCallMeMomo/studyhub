@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi Materi — StudyHub</title>
+    <!-- Reveal.js core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <!-- Code Syntax Highlight -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/tokyo-night-dark.min.css">
+    
+    <!-- Custom Fonts: Plus Jakarta Sans for a highly modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --r-main-font: 'Plus Jakarta Sans', sans-serif;
+            --r-heading-font: 'Plus Jakarta Sans', sans-serif;
+            --r-code-font: 'JetBrains Mono', monospace;
+            --bg-dark: #0b1120;
+            --card-bg: #151e32;
+            --accent-primary: #3b82f6;   /* Blue */
+            --accent-secondary: #8b5cf6; /* Purple */
+            --accent-tertiary: #10b981;  /* Emerald */
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            margin: 0;
+            overflow: hidden; /* Reveal controls scrolling */
+        }
+
+        .reveal .slides {
+            text-align: left;
+        }
+
+        /* 
+         * VERY IMPORTANT: The Main Layout of each Slide
+         * We make every slide look like a beautiful PowerPoint card
+         */
+        .reveal .slides section {
+            height: 100%;
+            box-sizing: border-box;
+            padding: 50px 80px !important;
+            
+            /* Presentation Card Style */
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            
+            /* Fix overflow by allowing internal scroll inside the slide card */
+            overflow-y: auto !important;
+        }
+
+        /* Scrollbar for slides with too much content */
+        .reveal .slides section::-webkit-scrollbar {
+            width: 8px;
+        }
+        .reveal .slides section::-webkit-scrollbar-track {
+            background: transparent;
+            margin: 20px 0;
+        }
+        .reveal .slides section::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 10px;
+        }
+
+        /* Headers Styling */
+        .reveal h1, .reveal h2, .reveal h3 {
+            font-family: var(--r-heading-font);
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-transform: none;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        /* H1 Title */
+        .reveal h1 {
+            font-size: 56px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+
+        /* H2/H3 Section Titles */
+        .reveal h2 {
+            font-size: 42px;
+            color: var(--text-main);
+            border-bottom: 3px solid var(--accent-primary);
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .reveal h3 {
+            font-size: 36px;
+            color: var(--accent-tertiary);
+        }
+
+        /* Typography */
+        .reveal p, .reveal li {
+            font-family: var(--r-main-font);
+            font-size: 28px !important;
+            color: var(--text-main);
+            line-height: 1.6 !important;
+            margin-bottom: 16px;
+        }
+
+        .reveal ul, .reveal ol {
+            margin-left: 20px;
+        }
+
+        .reveal li {
+            margin-bottom: 12px;
+        }
+        
+        /* Colored styling for strong emphasis */
+        .reveal strong {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* Tables */
+        .reveal table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 24px;
+            margin: 30px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .reveal table th {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+            padding: 16px 20px;
+            font-weight: 700;
+            text-align: left;
+        }
+        .reveal table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+        }
+        .reveal table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Blockquotes */
+        .reveal blockquote {
+            width: 100%;
+            margin: 30px 0;
+            padding: 24px 30px;
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 6px solid var(--accent-secondary);
+            border-radius: 0 16px 16px 0;
+            font-size: 26px;
+            font-style: italic;
+            color: var(--text-muted);
+            box-shadow: none;
+        }
+
+        /* Code Blocks */
+        .reveal pre {
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            font-size: 20px;
+        }
+        .reveal code {
+            font-family: var(--r-code-font);
+        }
+
+        /* Back Button */
+        .floating-back-btn {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 1000;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-family: var(--r-main-font);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .floating-back-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+        }
+
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--r-main-font);
+            color: var(--accent-primary);
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="window.close()" class="floating-back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Tutup Presentasi
+    </button>
+
+    <div id="loading">Memuat Presentasi...</div>
+
+    <div class="reveal" style="display: none;">
+        <div class="slides" id="slides-container">
+            <!-- Dihasilkan secara dinamis -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+
+    <script>
+        async function loadPresentation() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const filePath = urlParams.get('file');
+
+                if (!filePath) throw new Error("File tidak spesifik.");
+
+                const response = await fetch(filePath + '?v=' + new Date().getTime());
+                if (!response.ok) throw new Error("Gagal mengambil materi.");
+                let md = await response.text();
+
+                // 1. Pecah markdown berdasarkan Header (# atau ## atau ###) 
+                // agar SETIAP sub-materi menjadi slide sendiri.
+                // Regex menggunakan positive lookahead agar tag # tetap dipertahankan di slide.
+                let sections = md.split(/^(?=#+ )/gm);
+                
+                // Hapus empty sections jika ada
+                sections = sections.filter(s => s.trim().length > 0);
+
+                let injectHtml = '';
+
+                sections.forEach(sec => {
+                    // Cek jika section ini terlalu panjang (lebih dari 1500 karakter), kita bisa potong lagi
+                    // Tapi karena sudah ada overflow-y: auto, konten tidak akan terpotong (tenggelam).
+                    // Kita biarkan user scroll di dalam slide tersebut dengan rapi.
+                    
+                    // Kita encode sec agar tidak rusak oleh HTML
+                    injectHtml += `
+                        <section data-markdown>
+                            <textarea data-template>
+${sec}
+                            </textarea>
+                        </section>
+                    `;
+                });
+
+                document.getElementById('slides-container').innerHTML = injectHtml;
+                document.getElementById('loading').style.display = 'none';
+                document.querySelector('.reveal').style.display = 'block';
+
+                // Inisialisasi Reveal dengan resolusi tinggi (1080p modern presentation ratio)
+                Reveal.initialize({
+                    hash: true,
+                    slideNumber: "c / t",
+                    transition: 'slide',
+                    backgroundTransition: 'fade',
+                    
+                    // Menonaktifkan vertical centering agar konten di slide rata atas (mulai dari judul)
+                    center: false,
+                    
+                    // Ukuran resolusi Full HD untuk mencegah layouting yang tersembunyi/overlapping
+                    width: 1440,
+                    height: 810,
+                    margin: 0.05, // Margin kecil di sekitar slide
+                    minScale: 0.2,
+                    maxScale: 2.0,
+
+                    plugins: [ RevealMarkdown, RevealHighlight ]
+                });
+
+            } catch (err) {
+                document.getElementById('loading').innerHTML = `<span style="color:#ef4444;">Error: ${err.message}</span>`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadPresentation);
+    </script>
+</body>
+</html>

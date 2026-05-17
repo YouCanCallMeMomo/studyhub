@@ -1,0 +1,65 @@
+COMP6100001 - Software engineeringSession 03
+Agile principles & Lean Production
+Kenny Jingga, S.Kom., M.T.
+Session 03 – Agile principles and Lean PRoduction
+Learning objectives
+At the end of this session, students will be expected to be able to:Explain the motivation behind Agile & LeanDescribe Agile Manifesto values & principlesExplain Lean & Kaizen for continuous improvementAnalyze how Agile reduces the cost of change
+Session 03 – Agile principles and Lean PRoduction
+Content outline
+Agile principlesLean foundationsAgile ManifestoKaizen / continuous improvementCost of changeAgile mindset (pre-Scrum)
+What is Agile?
+The ability to create and respond to changeA way to succeed in uncertaintyFocused on adaptiveness, not predictability
+What Makes Agile Different?
+Focus on people and collaborationTeams are cross-functionalSkills matter more than rigid rolesPractices support coordination and transparency
+Agile is A Mindset
+Guided by the Agile Manifesto’s values and principlesHelps teams navigate uncertaintyWork in short cycles: try ? get feedback ? adapt
+Where did Agile ideas come from?
+Lean Production
+TOYOTA PRODUCTION SYSTEM (TPS)
+Late 1940sBuild only what is needed, when it is needed (pull)Stop and fix problems early (quality first)Teams are empowered and multi-skilledContinuous improvement through small changes (Kaizen)
+Lean focuses on learning fast and reducing waste
+Lean Production
+From Lean to Agile
+Agile applies Lean thinking to software development
+Agile Manifesto
+AGILE Manifesto and Principles
+Evolution to agile manifesto
+1986https://hbr.org/1986/01/the-new-new-product-development-game
+1990
+2001
+…
+Agile Manifesto
+12 Principles Behind the Agile manifesto
+Highest priority is to satisfy the customer through early and continuous delivery of valuable software.Welcome changing requirements, even late in development. Agile processes harness change for the customer’s competitive advantage.Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale.Businesspeople and developers must work together daily throughout the project.Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done.
+Agile Manifesto
+12 Principles Behind the Agile manifesto
+The most efficient and effective method of conveying information to and within a development team is face-to-face conversation.Working software is the primary measure of progress.Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely.Continuous attention to technical excellence and good design enhances agility.Simplicity, the art of maximizing the amount of work not done, is essential.The best architectures, requirements, and designs emerge from self-organizing teams.At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly.
+Agile Development is adaptive rather than predictive; people-oriented rather than process-oriented. —Martin Fowler 
+Agile methodology
+Kaizen cycle
+For Continuous improvement
+The Process
+Agility And The Cost of Change
+AGILE Framework: Scrum
+Scrum
+Originally proposed by Schwaber and BeedleScrum—distinguishing featuresDevelopment work is partitioned into “packets”Testing and documentation are on-going as the product is constructedWork occurs in “sprints” and is derived from a “backlog” of existing requirementsMeetings are very short and sometimes conducted without chairs“demos” are delivered to the customer with the time-box allocated
+Agile Framework: Scrum
+Scrum
+Agile Frameworks: Kanban
+Description
+The Kanban method is a lean methodology that describes methods for improving any process or workflow, focused on change management and service delivery6 core practices:Visualizing workflow using a Kanban boardThe Kanban board is organized into columns representing the development stage for each element of software functionality. The cards on the board might contain single user stories or recently discovered defects on sticky notes and the team would advance them from “to do,” to “doing,” and “done” as the project progresses.Limiting the amount of work in progress (WIP) at any given timeDevelopers are encouraged to complete their current task before starting another. This reduces lead time, improves work quality, and increases the team’s ability to deliver software functionality frequently to their stakeholders.Managing workflow to reduce wasteUnderstanding the current value flow, analyzing places where it is stalled, defining changes, and then implementing the changes.Making process policies explicit(e.g., write down your reasons for selecting items to work on and the criteria used to define “done”).Focusing on continuous improvementCreating feedback loops where changes are introduced based on process data and the effects of the change on the process are measured after the changes are madeMake process changes collaborativelyInvolve all team members and other stakeholders as needed.
+Agile Frameworks: Kanban
+Kanban Boards
+Agile Frameworks: XP Programming
+Agile Framework: XP Programming
+XP PlanningBegins with the creation of “user stories”Agile team assesses each story and assigns a costStories are grouped to for a deliverable incrementA commitment is made on delivery dateAfter the first increment “project velocity” is used to help define subsequent delivery dates for other incrementsXP DesignFollows the KIS principleEncourage the use of CRC cardsFor difficult design problems, suggests the creation of “spike solutions”—a design prototypeEncourages “refactoring”—an iterative refinement of the internal program designXP CodingRecommends the construction of a unit test for a store before coding commencesEncourages “pair programming”XP TestingAll unit tests are executed daily“Acceptance tests” are defined by the customer and executed to assess customer visible functionality
+Agile Frameworks: XP Programming
+Agile Framework: XP Programming
+Agile Frameworks: DevOps
+Agile Framework: Devops
+DevOps was created by Patrick DeBois to combine Development and Operations. DevOps attempts to apply agile and lean development principles across the entire software supply chain.The DevOps approach involves several stages that loop continuously until the desired product exists:Continuous developmentSoftware deliverables are broken down and developed in multiple sprints with the increments delivered to the quality assurance14 members of the development team for testingContinuous testingAutomated testing tools are used to help team members test multiple code increments at the same time to ensure they are free of defects prior to integration.Continuous integrationThe code pieces with new functionality are added to the existing code and to the runtime environment and then checked to ensure there are no errors after deployment.Continuous deploymentAt this stage the integrated code is deployed (installed) to the production environment, which might include multiple sites globally that need to be prepared to receive the new functionality.Continuous monitoringOperations staff who are members of the development team help to improve software quality by monitoring its performance in the production environment and proactively looking for possible problems before users find them.
+Agile Frameworks: DevOps
+Agile Framework: Devops
+References
+Titus Winters, Tom Manshreck, and Hyrum Wright. (2020). Software Engineering at Google: Lesson Learned from Programming Over Time. 1st. O’Reilly Media. California. ISBN: 978-1492082798.Roger Pressman and Bruce Maxim. (2020). Software Engineering: A Practitioner's Approach. 9th E. McGraw- Hill. New York. ISBN: 9781259872976. Multimedia : Video Water Fall, V model, http://www.youtube.com/watch?v=KaPC0gsEQ68Software Engineering Incremental Model, http://www.youtube.com/watch?v=9cBkihYP1rYThe Strengths and Weaknesses of Extreme Programming, http://www.youtube.com/watch?v=LkhLZ7_KZ5wAgile project management tutorial: What is agile project managemen,  http://www.youtube.com/watch?v=MJR-EgHTA4E
+
