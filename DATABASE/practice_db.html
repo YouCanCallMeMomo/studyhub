@@ -346,8 +346,8 @@
                 solvedCount++;
             } else {
                 li.textContent = `${i+1}. 0/100 (100)`;
-                // If there are penalties but not solved, it's red. If untouched, it's green like original.
-                li.style.color = (penalties[i] > 0) ? '#dc3545' : '#28a745'; 
+                // Always red because it's not 100
+                li.style.color = '#dc3545'; 
             }
         }
         
