@@ -61,7 +61,9 @@
         
         .editor-container { border: 1px solid #00a4d3; border-radius: 6px; background: white; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,164,211,0.1); }
         .editor-header { background: #f8f9fa; border-bottom: 1px solid #eee; padding: 5px 10px; font-size: 12px; color: #666; display: flex; justify-content: space-between; }
-        #sqlInput { width: 100%; height: 150px; border: none; padding: 15px; font-family: 'Consolas', monospace; font-size: 14px; color: #333; resize: vertical; box-sizing: border-box; outline: none; }
+        
+        /* CodeMirror Overrides */
+        .CodeMirror { height: 180px; font-family: 'Consolas', monospace; font-size: 14px; }
         
         .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .query-length { font-size: 13px; font-weight: bold; color: #333; }
@@ -75,6 +77,11 @@
         .result-table td { border: 1px solid #eee; padding: 10px 12px; color: #444; }
         .result-table tr:nth-child(even) { background-color: #fcfcfc; }
     </style>
+    <!-- CodeMirror for SQL Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/sql/sql.min.js"></script>
+
     <!-- Include sql.js from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
 </head>
@@ -183,7 +190,7 @@
                     <span>1 ⌄ SELECT / CREATE / UPDATE</span>
                     <span>Syntax Highlighter</span>
                 </div>
-                <textarea id="sqlInput" spellcheck="false" onkeyup="updateLength()"></textarea>
+                <textarea id="sqlInput" spellcheck="false"></textarea>
             </div>
             
             <div class="action-bar">
@@ -220,9 +227,18 @@
         document.getElementById('timerDisplay').textContent = `${h}:${m}:${s}`;
     }, 1000);
 
-    function updateLength() {
-        document.getElementById('qLen').textContent = document.getElementById('sqlInput').value.length;
-    }
+    // CodeMirror Initialization
+    let editor = CodeMirror.fromTextArea(document.getElementById("sqlInput"), {
+        mode: "text/x-sql",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        indentUnit: 4
+    });
+
+    editor.on("change", function() {
+        document.getElementById('qLen').textContent = editor.getValue().length;
+    });
 
     // Database Initialization
     let db;
@@ -381,15 +397,16 @@
         document.getElementById('questionBox').innerHTML = `<div class="question-title">Question ${idx+1}</div>` + questions[idx].replace(/\n/g, '<br>');
         
         // Reset Editor & Result
-        document.getElementById('sqlInput').value = "";
-        updateLength();
+        editor.setValue("");
+        document.getElementById('qLen').textContent = 0;
         document.getElementById("resultContainer").innerHTML = '<table class="result-table"><tr><td style="color:#888;">Run a query to see results here.</td></tr></table>';
     }
 
     function runUserQuery() {
         if(!dbReady) return alert("Database is still loading...");
         
-        const sql = document.getElementById("sqlInput").value.trim();
+        // Use CodeMirror getValue instead of textarea value
+        const sql = editor.getValue().trim();
         const resultDiv = document.getElementById("resultContainer");
         
         if(!sql) {
