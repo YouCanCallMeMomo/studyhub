@@ -193,6 +193,67 @@
             padding-left: 4px;
         }
 
+        /* ========== TABS ========== */
+        .tabs-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 16px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-blue);
+            border-radius: 3px 3px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tab-btn.active::after {
+            opacity: 1;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* ========== SUBJECT CARDS GRID ========== */
         .subjects-grid {
             display: grid;
@@ -689,37 +750,68 @@
 
     <!-- SUBJECT CARDS -->
     <div id="home-view">
-        <div class="section-title">📖 Mata Kuliah</div>
-        <div class="subjects-grid">
-            <div class="subject-card card-blue" onclick="openSubject('biology')">
-                <div class="card-icon">🧬</div>
-                <div class="card-title">Computational Biology</div>
-                <div class="card-subtitle">Dogma Sentral, Mutasi, Gene Structure, Evolusi Molekuler, UPGMA</div>
-                <div class="card-badge">📝 UTS • 7 dokumen</div>
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('lec', this)">LEC (Lecture)</button>
+            <button class="tab-btn" onclick="switchTab('lab', this)">LAB (Laboratory)</button>
+        </div>
+
+        <div id="tab-lec" class="tab-content active">
+            <div class="section-title">📖 Mata Kuliah (Lecture)</div>
+            <div class="subjects-grid">
+                <div class="subject-card card-blue" onclick="openSubject('biology')">
+                    <div class="card-icon">🧬</div>
+                    <div class="card-title">Computational Biology</div>
+                    <div class="card-subtitle">Dogma Sentral, Mutasi, Gene Structure, Evolusi Molekuler, UPGMA</div>
+                    <div class="card-badge">📝 UTS • 7 dokumen</div>
+                </div>
+                <div class="subject-card card-red" onclick="openSubject('sna')">
+                    <div class="card-icon">🖧</div>
+                    <div class="card-title">Server Network Admin</div>
+                    <div class="card-subtitle">DevSecOps, CI/CD Pipeline, SonarQube, Harbor, Blue-Green</div>
+                    <div class="card-badge">📝 UTS + UAS • 3 dokumen</div>
+                </div>
+                <div class="subject-card card-teal" onclick="openSubject('sofeng')">
+                    <div class="card-icon">⚙️</div>
+                    <div class="card-title">Software Engineering</div>
+                    <div class="card-subtitle">Kisi-kisi + 20 Latihan Study Case + Diagram UML</div>
+                    <div class="card-badge">📝 UTS • 8 dokumen + diagram</div>
+                </div>
+                <div class="subject-card card-purple" onclick="openSubject('softsec')">
+                    <div class="card-icon">🛡️</div>
+                    <div class="card-title">Software Security</div>
+                    <div class="card-subtitle">Threat Modeling, STRIDE, DREAD, Attack Tree</div>
+                    <div class="card-badge">📝 UTS • 2 dokumen</div>
+                </div>
+                <div class="subject-card card-orange" onclick="openSubject('cyberlaw')">
+                    <div class="card-icon">⚖️</div>
+                    <div class="card-title">Cyber Law</div>
+                    <div class="card-subtitle">UU ITE, UU PDP, Kebebasan Ekspresi vs Privasi, Studi Kasus</div>
+                    <div class="card-badge">📝 UTS • 2 dokumen</div>
+                </div>
             </div>
-            <div class="subject-card card-red" onclick="openSubject('sna')">
-                <div class="card-icon">🖧</div>
-                <div class="card-title">Server Network Admin</div>
-                <div class="card-subtitle">DevSecOps, CI/CD Pipeline, SonarQube, Harbor, Blue-Green</div>
-                <div class="card-badge">📝 UTS + UAS • 3 dokumen</div>
-            </div>
-            <div class="subject-card card-teal" onclick="openSubject('sofeng')">
-                <div class="card-icon">⚙️</div>
-                <div class="card-title">Software Engineering</div>
-                <div class="card-subtitle">Kisi-kisi + 20 Latihan Study Case + Diagram UML</div>
-                <div class="card-badge">📝 UTS • 8 dokumen + diagram</div>
-            </div>
-            <div class="subject-card card-purple" onclick="openSubject('softsec')">
-                <div class="card-icon">🛡️</div>
-                <div class="card-title">Software Security</div>
-                <div class="card-subtitle">Threat Modeling, STRIDE, DREAD, Attack Tree</div>
-                <div class="card-badge">📝 UTS • 2 dokumen</div>
-            </div>
-            <div class="subject-card card-orange" onclick="openSubject('cyberlaw')">
-                <div class="card-icon">⚖️</div>
-                <div class="card-title">Cyber Law</div>
-                <div class="card-subtitle">UU ITE, UU PDP, Kebebasan Ekspresi vs Privasi, Studi Kasus</div>
-                <div class="card-badge">📝 UTS • 2 dokumen</div>
+        </div>
+
+        <div id="tab-lab" class="tab-content">
+            <div class="section-title">🔬 Mata Kuliah (Laboratory)</div>
+            <div class="subjects-grid">
+                <div class="subject-card card-blue" onclick="openSubject('db_lab')">
+                    <div class="card-icon">🗄️</div>
+                    <div class="card-title">Database Technology</div>
+                    <div class="card-subtitle">Select, Union, Order By, Alter, View, DML</div>
+                    <div class="card-badge">📝 Quiz • 1 dokumen</div>
+                </div>
+                <div class="subject-card card-teal" onclick="openSubject('bio_lab')">
+                    <div class="card-icon">🧬</div>
+                    <div class="card-title">Computational Biology</div>
+                    <div class="card-subtitle">GenBank, Python, Sequence Analysis, Plotting</div>
+                    <div class="card-badge">📝 Quiz • 1 dokumen</div>
+                </div>
+                <div class="subject-card card-red" onclick="openSubject('mobile_pentest_lab')">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Mobile Pentest</div>
+                    <div class="card-subtitle">Materi lab akan segera hadir</div>
+                    <div class="card-badge">⏳ Kosong</div>
+                </div>
             </div>
         </div>
     </div>
@@ -861,13 +953,45 @@ const subjects = {
             { name: 'LATIHAN_SOAL_CYBER_LAW.md', label: 'Latihan Soal & Pembahasan (30 Soal)', type: 'md', size: '38 KB' },
         ]
     },
+    db_lab: {
+        icon: '🗄️',
+        name: 'Database Technology (LAB)',
+        color: 'blue',
+        folder: 'DATABASE',
+        files: [
+            { name: 'KISI_KISI_QUIZ_LAB_DB.md', label: 'Kisi-Kisi Kriteria Quiz Lab', type: 'md', size: '1 KB' },
+        ]
+    },
+    bio_lab: {
+        icon: '🧬',
+        name: 'Computational Biology (LAB)',
+        color: 'teal',
+        folder: 'BIOLOGY',
+        files: [
+            { name: 'KISI_KISI_QUIZ_LAB_BIO.md', label: 'Kisi-Kisi Kriteria Quiz Lab', type: 'md', size: '1 KB' },
+        ]
+    },
+    mobile_pentest_lab: {
+        icon: '📱',
+        name: 'Mobile Pentest (LAB)',
+        color: 'red',
+        folder: 'MOBILE_PENTEST',
+        files: []
+    }
 };
 
 let currentSubject = null;
 
 // ============================================================
-// NAVIGATION
+// NAVIGATION & TABS
 // ============================================================
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+}
 function openSubject(key) {
     currentSubject = key;
     const subj = subjects[key];
