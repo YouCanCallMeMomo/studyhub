@@ -62,8 +62,13 @@
         .editor-container { border: 1px solid #00a4d3; border-radius: 6px; background: white; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,164,211,0.1); }
         .editor-header { background: #f8f9fa; border-bottom: 1px solid #eee; padding: 5px 10px; font-size: 12px; color: #666; display: flex; justify-content: space-between; }
         
-        /* CodeMirror Overrides */
-        .CodeMirror { height: 180px; font-family: 'Consolas', monospace; font-size: 14px; }
+        /* CodeMirror Overrides to mimic DBPRK 100% */
+        .CodeMirror { height: 180px; font-family: 'Consolas', monospace; font-size: 14px; background-color: #f4f7f6; }
+        .cm-s-default .cm-keyword { color: #800080 !important; font-weight: bold; } /* Purple for keywords like CREATE, TABLE, PRIMARY KEY, NOT NULL */
+        .cm-s-default .cm-builtin { color: #008000 !important; font-weight: bold; } /* Green for datatypes like VARCHAR, CHAR, DATE */
+        .cm-s-default .cm-type { color: #008000 !important; font-weight: bold; }
+        .cm-s-default .cm-string { color: #008000 !important; } /* Green for strings */
+        .cm-s-default .cm-number { color: #0000ff !important; } /* Blue for numbers */
         
         .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .query-length { font-size: 13px; font-weight: bold; color: #333; }
@@ -229,11 +234,12 @@
 
     // CodeMirror Initialization
     let editor = CodeMirror.fromTextArea(document.getElementById("sqlInput"), {
-        mode: "text/x-sql",
+        mode: "text/x-mysql",
         lineNumbers: true,
         lineWrapping: true,
         matchBrackets: true,
-        indentUnit: 4
+        indentUnit: 4,
+        extraKeys: {"Ctrl-Space": "autocomplete"}
     });
 
     editor.on("change", function() {
