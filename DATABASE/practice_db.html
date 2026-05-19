@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice - DBPRK Clone</title>
+    <style>
+        body { margin:0; font-family: Arial, sans-serif; background: #f4f6f8; }
+        .navbar { background: #00a4d3; color: white; display: flex; justify-content: space-between; padding: 10px 30px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav-left { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; gap: 20px; font-weight: bold; font-size: 15px; }
+        .nav-links div { cursor: pointer; padding: 8px 10px; }
+        .nav-links .active { border-bottom: 3px solid white; }
+        .nav-right { display: flex; align-items: center; gap: 20px; font-size: 14px; font-weight: bold; }
+        
+        .main-wrapper { display: flex; height: calc(100vh - 55px); }
+        .sidebar { width: 220px; background: white; border-right: 1px solid #ddd; overflow-y: auto; padding: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.05); z-index: 10; }
+        .content { flex: 1; padding: 20px 40px; overflow-y: auto; }
+        
+        .timer { font-size: 26px; font-weight: bold; color: #00a4d3; text-align: center; margin-bottom: 30px; letter-spacing: 1px; }
+        
+        .q-list { list-style: none; padding: 0; margin: 0; }
+        .q-list li { padding: 6px 0; color: #28a745; font-size: 14px; cursor: pointer; }
+        .q-list li.active { font-weight: bold; text-decoration: underline; color: #00a4d3; }
+        .q-list li:hover { opacity: 0.8; }
+        
+        .result-score { font-weight: bold; font-size: 16px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
+
+        /* ERD Visualization */
+        .erd-container { position: relative; width: 100%; height: 380px; margin-bottom: 20px; background: white; border: 1px solid #eee; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .erd-table { position: absolute; border: 1px solid #c79a63; border-radius: 4px; background-color: #fcebd1; font-family: Arial, sans-serif; font-size: 11px; width: 220px; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); z-index: 2; }
+        .erd-header { background-color: #f7bd71; font-weight: bold; text-align: center; padding: 5px; border-bottom: 1px solid #c79a63; }
+        .erd-row { display: flex; padding: 3px 8px; border-bottom: 1px dashed #dcb285; color: #333; }
+        .erd-row:last-child { border-bottom: none; }
+        .erd-key { color: #cca42b; font-weight: bold; margin-right: 6px; font-size: 12px; }
+        .erd-col-name { width: 100px; }
+        .erd-col-type { color: #666; }
+        
+        /* Positions */
+        #erd-staff { top: 30px; left: 80px; }
+        #erd-header { top: 30px; left: 360px; }
+        #erd-member { top: 30px; left: 640px; }
+        #erd-detail { top: 160px; left: 360px; }
+        #erd-book { top: 260px; left: 360px; }
+        #erd-category { top: 260px; left: 640px; }
+        
+        /* Relationship Lines */
+        .erd-line { position: absolute; border-top: 1px dashed #666; z-index: 1; }
+        .erd-line-v { position: absolute; border-left: 1px dashed #666; z-index: 1; }
+        .line-h1 { top: 70px; left: 300px; width: 60px; height: 1px; } /* Staff to Header */
+        .line-h2 { top: 70px; left: 580px; width: 60px; height: 1px; } /* Header to Member */
+        .line-h3 { top: 300px; left: 580px; width: 60px; height: 1px; } /* Book to Category */
+        .line-v1 { top: 110px; left: 470px; width: 1px; height: 50px; } /* Header to Detail */
+        .line-v2 { top: 220px; left: 470px; width: 1px; height: 40px; } /* Detail to Book */
+        
+        .erd-foot { position: absolute; bottom: 10px; right: 20px; font-size: 10px; color: #999; font-style: italic; }
+
+        /* Question and Editor */
+        .question-box { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px; font-size: 14.5px; line-height: 1.6; }
+        .question-title { font-weight: bold; margin-bottom: 10px; }
+        
+        .editor-container { border: 1px solid #00a4d3; border-radius: 6px; background: white; margin-bottom: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,164,211,0.1); }
+        .editor-header { background: #f8f9fa; border-bottom: 1px solid #eee; padding: 5px 10px; font-size: 12px; color: #666; display: flex; justify-content: space-between; }
+        #sqlInput { width: 100%; height: 150px; border: none; padding: 15px; font-family: 'Consolas', monospace; font-size: 14px; color: #333; resize: vertical; box-sizing: border-box; outline: none; }
+        
+        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .query-length { font-size: 13px; font-weight: bold; color: #333; }
+        .btn-run { background: #00a4d3; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-run:hover { background: #008eb8; }
+        
+        .result-section h3 { font-size: 16px; margin-bottom: 10px; color: #333; }
+        .result-table-container { overflow-x: auto; border-radius: 8px 8px 0 0; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+        .result-table { width: 100%; border-collapse: collapse; background: white; font-size: 13px; }
+        .result-table th { background: #00a4d3; color: white; padding: 12px; text-align: left; font-weight: bold; }
+        .result-table td { border: 1px solid #eee; padding: 10px 12px; color: #444; }
+        .result-table tr:nth-child(even) { background-color: #fcfcfc; }
+    </style>
+    <!-- Include sql.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="nav-left">
+            <div class="nav-links">
+                <div onclick="window.location.href='../index.html'">Home</div>
+                <div>Quiz</div>
+                <div class="active">Practice</div>
+                <div>Result</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <span id="datetimeDisplay"></span>
+            <span style="cursor:pointer;">Sign Out ➜</span>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="timer" id="timerDisplay">00:00:00</div>
+            <ul class="q-list" id="questionList">
+                <!-- Injected via JS -->
+            </ul>
+            <div class="result-score">Result : 100</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            
+            <!-- ERD VISUALIZER -->
+            <div class="erd-container">
+                <!-- Tables -->
+                <div class="erd-table" id="erd-staff">
+                    <div class="erd-header">MsStaff</div>
+                    <div class="erd-row"><span class="erd-key">🔑</span><span class="erd-col-name">StaffID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">StaffName</span><span class="erd-col-type">varchar(50)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">StaffGender</span><span class="erd-col-type">varchar(10)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">StaffAddress</span><span class="erd-col-type">varchar(50)</span></div>
+                </div>
+
+                <div class="erd-table" id="erd-header">
+                    <div class="erd-header">BorrowingHeader</div>
+                    <div class="erd-row"><span class="erd-key">🔑</span><span class="erd-col-name">BorrowID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="color:#aaa;">🔑</span><span class="erd-col-name">StaffID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="color:#aaa;">🔑</span><span class="erd-col-name">MemberID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">BorrowDate</span><span class="erd-col-type">date</span></div>
+                </div>
+
+                <div class="erd-table" id="erd-member">
+                    <div class="erd-header">MsMember</div>
+                    <div class="erd-row"><span class="erd-key">🔑</span><span class="erd-col-name">MemberID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">MemberName</span><span class="erd-col-type">varchar(50)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">MemberGender</span><span class="erd-col-type">varchar(10)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">MemberEmail</span><span class="erd-col-type">varchar(50)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">MemberDOB</span><span class="erd-col-type">date</span></div>
+                </div>
+
+                <div class="erd-table" id="erd-detail">
+                    <div class="erd-header">BorrowingDetail</div>
+                    <div class="erd-row"><span class="erd-key">🔑</span><span class="erd-col-name">BorrowID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key">🔑</span><span class="erd-col-name">BookID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">Quantity</span><span class="erd-col-type">int</span></div>
+                </div>
+
+                <div class="erd-table" id="erd-book">
+                    <div class="erd-header">MsBook</div>
+                    <div class="erd-row"><span class="erd-key">🔑</span><span class="erd-col-name">BookID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="color:#aaa;">🔑</span><span class="erd-col-name">CategoryID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">BookTitle</span><span class="erd-col-type">varchar(50)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">BookPrice</span><span class="erd-col-type">float</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">BookStock</span><span class="erd-col-type">int</span></div>
+                </div>
+
+                <div class="erd-table" id="erd-category">
+                    <div class="erd-header">MsCategory</div>
+                    <div class="erd-row"><span class="erd-key">🔑</span><span class="erd-col-name">CategoryID</span><span class="erd-col-type">char(5)</span></div>
+                    <div class="erd-row"><span class="erd-key" style="visibility:hidden">🔑</span><span class="erd-col-name">CategoryName</span><span class="erd-col-type">varchar(50)</span></div>
+                </div>
+
+                <!-- Lines -->
+                <div class="erd-line line-h1"></div>
+                <div class="erd-line line-h2"></div>
+                <div class="erd-line line-h3"></div>
+                <div class="erd-line-v line-v1"></div>
+                <div class="erd-line-v line-v2"></div>
+                
+                <div class="erd-foot">Powered By: StudyHub Visualizer ❖</div>
+            </div>
+
+            <!-- QUESTION AREA -->
+            <div class="question-box" id="questionBox">
+                Loading database engine...
+            </div>
+
+            <!-- EDITOR AREA -->
+            <div class="editor-container">
+                <div class="editor-header">
+                    <span>1 ⌄ SELECT / CREATE / UPDATE</span>
+                    <span>Syntax Highlighter</span>
+                </div>
+                <textarea id="sqlInput" spellcheck="false" onkeyup="updateLength()"></textarea>
+            </div>
+            
+            <div class="action-bar">
+                <span class="query-length">Query Length: <span id="qLen">0</span> / 2000</span>
+                <button class="btn-run" onclick="runUserQuery()">Run Query</button>
+            </div>
+
+            <!-- RESULT AREA -->
+            <div class="result-section">
+                <h3>Result</h3>
+                <div class="result-table-container" id="resultContainer">
+                    <table class="result-table">
+                        <tr><td style="color:#888;">Run a query to see results here.</td></tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    // System Clock
+    setInterval(() => {
+        document.getElementById('datetimeDisplay').textContent = new Date().toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', timeZoneName: 'short' });
+    }, 1000);
+
+    // Timer
+    let sec = 0;
+    setInterval(() => {
+        sec++;
+        let h = Math.floor(sec/3600).toString().padStart(2, '0');
+        let m = Math.floor((sec%3600)/60).toString().padStart(2, '0');
+        let s = (sec%60).toString().padStart(2, '0');
+        document.getElementById('timerDisplay').textContent = `${h}:${m}:${s}`;
+    }, 1000);
+
+    function updateLength() {
+        document.getElementById('qLen').textContent = document.getElementById('sqlInput').value.length;
+    }
+
+    // Database Initialization
+    let db;
+    let dbReady = false;
+
+    initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` }).then(function(SQL){
+        db = new SQL.Database();
+        
+        // Define Library Schema & Mock Data
+        const initScript = `
+            CREATE TABLE MsMember (MemberID CHAR(5) PRIMARY KEY, MemberName VARCHAR(50), MemberGender VARCHAR(10), MemberEmail VARCHAR(50), MemberDOB DATE);
+            CREATE TABLE MsStaff (StaffID CHAR(5) PRIMARY KEY, StaffName VARCHAR(50), StaffGender VARCHAR(10), StaffAddress VARCHAR(50));
+            CREATE TABLE MsCategory (CategoryID CHAR(5) PRIMARY KEY, CategoryName VARCHAR(50));
+            CREATE TABLE MsBook (BookID CHAR(5) PRIMARY KEY, CategoryID CHAR(5), BookTitle VARCHAR(50), BookPrice FLOAT, BookStock INT);
+            CREATE TABLE BorrowingHeader (BorrowID CHAR(5) PRIMARY KEY, StaffID CHAR(5), MemberID CHAR(5), BorrowDate DATE);
+            CREATE TABLE BorrowingDetail (BorrowID CHAR(5), BookID CHAR(5), Quantity INT);
+            
+            INSERT INTO MsMember VALUES 
+            ('ME001', 'DUKEY DIANO', 'Male', 'dukey@binus.ac.id', '2001-05-15'),
+            ('ME002', 'JAVIER DREWSON', 'Male', 'javier@binus.ac.id', '1998-10-20'),
+            ('ME003', 'SARAH JANE', 'Female', 'sarah@binus.ac.id', '2000-01-01');
+            
+            INSERT INTO MsStaff VALUES 
+            ('ST001', 'Admin Staff', 'Male', 'Staff Quarters A'),
+            ('ST002', 'Librarian Sarah', 'Female', 'Staff Quarters B');
+            
+            INSERT INTO MsCategory VALUES 
+            ('CA001', 'Programming'),
+            ('CA002', 'Physics'),
+            ('CA003', 'Biology');
+            
+            INSERT INTO MsBook VALUES 
+            ('BO001', 'CA001', 'Wild Python Programming', 150000, 10),
+            ('BO002', 'CA002', 'Physics Organic Concepts', 120000, 5),
+            ('BO003', 'CA003', 'Computational Biology', 250000, 8),
+            ('BO004', 'CA001', 'Wild Java Backend', 185000, 12);
+            
+            INSERT INTO BorrowingHeader VALUES 
+            ('BR001', 'ST001', 'ME001', '2023-01-10'),
+            ('BR002', 'ST002', 'ME002', '2023-01-15'),
+            ('BR003', 'ST001', 'ME003', '2023-02-20');
+            
+            INSERT INTO BorrowingDetail VALUES 
+            ('BR001', 'BO001', 14),
+            ('BR001', 'BO003', 2),
+            ('BR002', 'BO002', 1),
+            ('BR003', 'BO004', 3);
+        `;
+        
+        db.run(initScript);
+        dbReady = true;
+        loadQuestion(0);
+    });
+
+    // Practice Questions List
+    const questions = [
+        "1. Create table MsMember:\n- MemberID CHAR 5 Primary Key.\n- MemberName VARCHAR 50. Cannot be empty\n- MemberGender VARCHAR 10. Cannot be empty\n- MemberEmail VARCHAR 50. Cannot be empty\n- MemberDOB DATE",
+        "2. Display all data from MsBook where BookPrice is greater than 100000.",
+        "3. Insert a new record into MsCategory: CategoryID 'CA004', CategoryName 'Mathematics'.",
+        "4. Display MemberName, MemberEmail, and Age for all members. (Hint: Use strftime to calculate age).",
+        "5. Update BookPrice of 'Computational Biology' to 300000.",
+        "6. Display CategoryName and the total number of books in that category as 'TotalBooks'.",
+        "7. Delete all BorrowingDetails where Quantity is less than 2.",
+        "8. Display BookTitle and CategoryName using INNER JOIN.",
+        "9. Display MemberName and the total Quantity of books they have borrowed using JOIN and GROUP BY.",
+        "10. Display BookTitle in uppercase and BookPrice for books categorized under 'Programming'.",
+        "11. Display BorrowID, BorrowDate, and StaffName for borrowings handled by 'Admin Staff'.",
+        "12. Display BookTitle and BookStock for books with the lowest stock. (Use Subquery).",
+        "13. Display CategoryName of categories that have no books. (Use LEFT JOIN or NOT IN).",
+        "14. Display MemberName, BorrowDate, and BookTitle for all borrowing transactions.",
+        "15. Display StaffName and the number of borrowing transactions they handled, only for staff who handled more than 1 transaction. (Use HAVING).",
+        "16. Display MemberName and BookTitle for members who borrowed a book in January 2023.",
+        "17. Create a View named 'HighPricedBooks' that selects BookTitle and BookPrice where price > 150000.",
+        "18. Display the names of Members and Staff combined into a single column named 'PersonName'. (Use UNION).",
+        "19. Display MemberName and a column 'Status' which is 'Young' if born after 2000, else 'Adult'. (Use CASE WHEN).",
+        "20. Display BorrowingCode (obtained by replacing “BR” in BorrowID with “Lib-”), BookTitle, MemberName (in UPPERCASE format), and Quantity for every book whose title contains “Wild”, is borrowed by a member whose name consists of two words, and quantity more than 12; then combine it with BorrowingCode, BookTitle, MemberName, and Quantity for every book whose title contains “Organic”, borrowed by a member whose name consists of two words, and quantity less than 12. (REPLACE, UNION, LIKE)."
+    ];
+
+    let currentQ = 0;
+
+    // Render Question List
+    const qList = document.getElementById('questionList');
+    for(let i=0; i<20; i++) {
+        let li = document.createElement('li');
+        li.textContent = `${i+1}. 100/100 (100)`;
+        li.onclick = () => loadQuestion(i);
+        li.id = `qLink-${i}`;
+        qList.appendChild(li);
+    }
+
+    function loadQuestion(idx) {
+        currentQ = idx;
+        // Update active class
+        for(let i=0; i<20; i++) {
+            document.getElementById(`qLink-${i}`).classList.remove('active');
+        }
+        document.getElementById(`qLink-${idx}`).classList.add('active');
+        
+        // Render text
+        document.getElementById('questionBox').innerHTML = `<div class="question-title">Question ${idx+1}</div>` + questions[idx].replace(/\n/g, '<br>');
+        
+        // Reset Editor & Result
+        document.getElementById('sqlInput').value = "";
+        updateLength();
+        document.getElementById("resultContainer").innerHTML = '<table class="result-table"><tr><td style="color:#888;">Run a query to see results here.</td></tr></table>';
+    }
+
+    function runUserQuery() {
+        if(!dbReady) return alert("Database is still loading...");
+        
+        const sql = document.getElementById("sqlInput").value.trim();
+        const resultDiv = document.getElementById("resultContainer");
+        
+        if(!sql) {
+            resultDiv.innerHTML = '<table class="result-table"><tr><td style="color:red;">Error: Query is empty!</td></tr></table>';
+            return;
+        }
+
+        // Handle CREATE TABLE parsing for PRAGMA table_info mockup
+        if(sql.toUpperCase().startsWith("CREATE TABLE")) {
+            try {
+                db.run(sql);
+                let match = sql.match(/CREATE\s+TABLE\s+([A-Za-z0-9_]+)/i);
+                if(match) {
+                    let tableName = match[1];
+                    let pragma = db.exec(`PRAGMA table_info(${tableName})`);
+                    renderResult(pragma, `Table ${tableName} Structure`);
+                } else {
+                    resultDiv.innerHTML = '<table class="result-table"><tr><td style="color:green;">Query executed successfully.</td></tr></table>';
+                }
+            } catch(e) {
+                resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:red;">Error: ${e.message}</td></tr></table>`;
+            }
+            return;
+        }
+
+        // Handle generic execute
+        try {
+            // Check if DML
+            if(sql.toUpperCase().startsWith("INSERT") || sql.toUpperCase().startsWith("UPDATE") || sql.toUpperCase().startsWith("DELETE") || sql.toUpperCase().startsWith("DROP") || sql.toUpperCase().startsWith("ALTER")) {
+                db.run(sql);
+                let rowsModified = db.getRowsModified();
+                resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:green;">Query executed successfully. ${rowsModified} row(s) affected.</td></tr></table>`;
+            } else {
+                // Assume SELECT
+                const result = db.exec(sql);
+                renderResult(result, "Query Result");
+            }
+        } catch(e) {
+            resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:red;">Syntax Error: ${e.message}</td></tr></table>`;
+        }
+    }
+
+    function renderResult(execResult, titleMsg) {
+        const resultDiv = document.getElementById("resultContainer");
+        if(execResult.length === 0) {
+            resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:#666;">Query executed successfully but returned 0 rows.</td></tr></table>`;
+            return;
+        }
+        
+        let cols = execResult[0].columns;
+        let vals = execResult[0].values;
+        
+        let html = `<table class="result-table"><thead><tr>`;
+        cols.forEach(c => { html += `<th>${c}</th>`; });
+        html += `</tr></thead><tbody>`;
+        
+        vals.forEach(row => {
+            html += `<tr>`;
+            row.forEach(val => {
+                html += `<td>${val !== null ? val : '<em>NULL</em>'}</td>`;
+            });
+            html += `</tr>`;
+        });
+        
+        html += `</tbody></table>`;
+        resultDiv.innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
