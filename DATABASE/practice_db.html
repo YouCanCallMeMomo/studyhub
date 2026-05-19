@@ -103,7 +103,7 @@
             <ul class="q-list" id="questionList">
                 <!-- Injected via JS -->
             </ul>
-            <div class="result-score">Result : 100</div>
+            <div class="result-score" id="resultTotal">Result : 0</div>
         </div>
 
         <!-- CONTENT -->
@@ -299,16 +299,60 @@
     ];
 
     let currentQ = 0;
+    
+    // Scoring system
+    let potentialScores = Array(20).fill(100);
+    let achievedScores = Array(20).fill(0);
+
+    // Answer Validation Keywords
+    const answers = [
+        ['CREATE TABLE', 'MSMEMBER', 'MEMBERID', 'CHAR', '5', 'PRIMARY KEY'],
+        ['SELECT', 'FROM', 'MSBOOK', 'WHERE', 'BOOKPRICE', '>', '100000'],
+        ['INSERT INTO', 'MSCATEGORY', 'CA004', 'MATHEMATICS'],
+        ['SELECT', 'MEMBERNAME', 'MEMBEREMAIL', 'FROM', 'MSMEMBER'], 
+        ['UPDATE', 'MSBOOK', 'SET', 'BOOKPRICE', '300000'],
+        ['SELECT', 'CATEGORYNAME', 'COUNT', 'FROM', 'MSBOOK', 'JOIN', 'GROUP BY'],
+        ['DELETE FROM', 'BORROWINGDETAIL', 'WHERE', 'QUANTITY', '<', '2'],
+        ['SELECT', 'BOOKTITLE', 'CATEGORYNAME', 'FROM', 'MSBOOK', 'JOIN'],
+        ['SELECT', 'MEMBERNAME', 'SUM', 'FROM', 'MSMEMBER', 'JOIN', 'GROUP BY'],
+        ['SELECT', 'UPPER', 'BOOKTITLE', 'BOOKPRICE', 'FROM', 'MSBOOK', 'JOIN', 'WHERE', 'PROGRAMMING'],
+        ['SELECT', 'BORROWID', 'BORROWDATE', 'STAFFNAME', 'FROM', 'BORROWINGHEADER', 'JOIN', 'WHERE', 'ADMIN STAFF'],
+        ['SELECT', 'BOOKTITLE', 'BOOKSTOCK', 'FROM', 'MSBOOK', 'WHERE', 'BOOKSTOCK', 'SELECT', 'MIN'],
+        ['SELECT', 'CATEGORYNAME', 'FROM', 'MSCATEGORY', 'WHERE', 'NOT IN', 'SELECT'],
+        ['SELECT', 'MEMBERNAME', 'BORROWDATE', 'BOOKTITLE', 'FROM', 'BORROWINGHEADER', 'JOIN', 'MSMEMBER', 'JOIN'],
+        ['SELECT', 'STAFFNAME', 'COUNT', 'FROM', 'MSSTAFF', 'JOIN', 'GROUP BY', 'HAVING', '>'],
+        ['SELECT', 'MEMBERNAME', 'BOOKTITLE', 'FROM', 'BORROWINGHEADER', 'JOIN', 'WHERE', 'LIKE', '2023-01'],
+        ['CREATE VIEW', 'HIGHPRICEDBOOKS', 'SELECT', 'BOOKTITLE', 'BOOKPRICE', 'WHERE', '>', '150000'],
+        ['SELECT', 'MEMBERNAME', 'PERSONNAME', 'FROM', 'MSMEMBER', 'UNION', 'SELECT', 'STAFFNAME'],
+        ['SELECT', 'MEMBERNAME', 'CASE WHEN', 'THEN', 'YOUNG', 'ELSE', 'ADULT', 'END', 'FROM', 'MSMEMBER'],
+        ['SELECT', 'REPLACE', 'BORROWID', 'BR', 'LIB-', 'UPPER', 'MEMBERNAME', 'FROM', 'JOIN', 'WHERE', 'LIKE', 'WILD', 'UNION', 'ORGANIC']
+    ];
+
+    function updateScoreDisplay() {
+        let totalAchieved = 0;
+        for(let i=0; i<20; i++) {
+            let li = document.getElementById(`qLink-${i}`);
+            li.textContent = `${i+1}. ${achievedScores[i]}/${potentialScores[i]} (100)`;
+            if(achievedScores[i] > 0) {
+                li.style.color = '#28a745'; // Green if answered
+            } else {
+                li.style.color = '#666'; // Gray if not answered yet
+            }
+            totalAchieved += achievedScores[i];
+        }
+        let avgScore = Math.round(totalAchieved / 20);
+        document.getElementById('resultTotal').textContent = `Result : ${avgScore}`;
+    }
 
     // Render Question List
     const qList = document.getElementById('questionList');
     for(let i=0; i<20; i++) {
         let li = document.createElement('li');
-        li.textContent = `${i+1}. 100/100 (100)`;
         li.onclick = () => loadQuestion(i);
         li.id = `qLink-${i}`;
         qList.appendChild(li);
     }
+    updateScoreDisplay();
 
     function loadQuestion(idx) {
         currentQ = idx;
@@ -337,39 +381,74 @@
             resultDiv.innerHTML = '<table class="result-table"><tr><td style="color:red;">Error: Query is empty!</td></tr></table>';
             return;
         }
+        
+        let isSuccess = false;
+        let errorMessage = "";
 
-        // Handle CREATE TABLE parsing for PRAGMA table_info mockup
-        if(sql.toUpperCase().startsWith("CREATE TABLE")) {
-            try {
+        // Execute Query
+        try {
+            if(sql.toUpperCase().startsWith("CREATE TABLE")) {
                 db.run(sql);
                 let match = sql.match(/CREATE\s+TABLE\s+([A-Za-z0-9_]+)/i);
                 if(match) {
                     let tableName = match[1];
                     let pragma = db.exec(`PRAGMA table_info(${tableName})`);
                     renderResult(pragma, `Table ${tableName} Structure`);
+                    isSuccess = true;
                 } else {
                     resultDiv.innerHTML = '<table class="result-table"><tr><td style="color:green;">Query executed successfully.</td></tr></table>';
+                    isSuccess = true;
                 }
-            } catch(e) {
-                resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:red;">Error: ${e.message}</td></tr></table>`;
-            }
-            return;
-        }
-
-        // Handle generic execute
-        try {
-            // Check if DML
-            if(sql.toUpperCase().startsWith("INSERT") || sql.toUpperCase().startsWith("UPDATE") || sql.toUpperCase().startsWith("DELETE") || sql.toUpperCase().startsWith("DROP") || sql.toUpperCase().startsWith("ALTER")) {
+            } else if(sql.toUpperCase().startsWith("INSERT") || sql.toUpperCase().startsWith("UPDATE") || sql.toUpperCase().startsWith("DELETE") || sql.toUpperCase().startsWith("DROP") || sql.toUpperCase().startsWith("ALTER") || sql.toUpperCase().startsWith("CREATE VIEW")) {
                 db.run(sql);
                 let rowsModified = db.getRowsModified();
                 resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:green;">Query executed successfully. ${rowsModified} row(s) affected.</td></tr></table>`;
+                isSuccess = true;
             } else {
-                // Assume SELECT
                 const result = db.exec(sql);
                 renderResult(result, "Query Result");
+                isSuccess = true;
             }
         } catch(e) {
-            resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:red;">Syntax Error: ${e.message}</td></tr></table>`;
+            errorMessage = e.message;
+            resultDiv.innerHTML = `<table class="result-table"><tr><td style="color:red;">Syntax Error: ${errorMessage}</td></tr></table>`;
+            isSuccess = false;
+        }
+
+        // Validate Answer if Query didn't throw an error
+        if(isSuccess && achievedScores[currentQ] === 0) {
+            let upperSql = sql.toUpperCase();
+            let kw = answers[currentQ];
+            let isValid = true;
+            
+            for(let word of kw) {
+                if(!upperSql.includes(word)) {
+                    isValid = false;
+                    break;
+                }
+            }
+            
+            if(isValid) {
+                // Correct Answer!
+                achievedScores[currentQ] = potentialScores[currentQ];
+                updateScoreDisplay();
+                // Add a small success indicator
+                const currentHtml = resultDiv.innerHTML;
+                resultDiv.innerHTML = `<div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:10px; border-radius:4px; font-weight:bold;">✅ Correct Syntax! +${potentialScores[currentQ]} Points</div>` + currentHtml;
+            } else {
+                // Query executed, but doesn't match expected logic
+                isSuccess = false;
+                resultDiv.innerHTML = `<div style="background:#f8d7da; color:#721c24; padding:10px; margin-bottom:10px; border-radius:4px; font-weight:bold;">❌ The query ran successfully, but it does not fulfill the question's requirements.</div>` + resultDiv.innerHTML;
+            }
+        }
+        
+        // Deduct points if wrong
+        if(!isSuccess && achievedScores[currentQ] === 0) {
+            if(potentialScores[currentQ] > 0) {
+                potentialScores[currentQ] -= 5;
+                if(potentialScores[currentQ] < 0) potentialScores[currentQ] = 0;
+            }
+            updateScoreDisplay();
         }
     }
 
