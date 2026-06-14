@@ -624,6 +624,74 @@
             border: 1px solid var(--border-color);
         }
 
+        /* ========== UTS / UAS SECTION DIVIDER ========== */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 20px 0 14px;
+            padding: 0 4px;
+        }
+
+        .section-divider:first-child {
+            margin-top: 0;
+        }
+
+        .section-divider-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .section-divider-badge.uts {
+            background: linear-gradient(135deg, rgba(74, 142, 255, 0.2), rgba(74, 142, 255, 0.08));
+            border: 1px solid rgba(74, 142, 255, 0.4);
+            color: var(--accent-blue);
+            box-shadow: 0 0 14px rgba(74, 142, 255, 0.15);
+        }
+
+        .section-divider-badge.uas {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.08));
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: var(--accent-purple);
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.15);
+        }
+
+        .section-divider-badge.quiz {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(20, 184, 166, 0.08));
+            border: 1px solid rgba(20, 184, 166, 0.4);
+            color: var(--accent-teal);
+            box-shadow: 0 0 14px rgba(20, 184, 166, 0.15);
+        }
+
+        .section-divider-badge.all {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.08));
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: var(--accent-orange);
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.15);
+        }
+
+        .section-divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .section-divider-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
         /* ========== FOOTER ========== */
         footer {
             text-align: center;
@@ -890,13 +958,13 @@ const subjects = {
         color: 'blue',
         folder: 'BIOLOGY',
         files: [
-            { name: 'UTS_COMPUTATIONAL_BIOLOGY_MATERI.md', label: 'Materi Utama Biologi Komputasi (Kisi-kisi UTS)', type: 'md', size: '28 KB' },
-            { name: 'LATIHAN_SOAL_COMP_BIO.md', label: 'Latihan Soal & Pembahasan (50 Soal)', type: 'md', size: '45 KB' },
-            { name: 'CENTRAL DOGMA.pdf', label: 'Session 9 — Central Dogma', type: 'pdf', size: 'Slide' },
-            { name: 'DNA&RNA.pdf', label: 'Session 10 — DNA, RNA & Transcription', type: 'pdf', size: 'Slide' },
-            { name: 'MUGEN TSUKOYOMI(mUTASI GENETEIK).pdf', label: 'Session 11 — Mutasi Genetik (Mugen Tsukoyomi)', type: 'pdf', size: 'Slide' },
-            { name: 'MOLECULAR_EVOLUTION.md', label: 'Session 12 — Molecular Evolution (Ringkasan)', type: 'md', size: '18 KB' },
-            { name: 'MOLECULAR_EVOLUTION.pptx', label: 'Session 12 — Molecular Evolution (Slide PPT)', type: 'pptx', size: '3.1 MB' },
+            { name: 'UTS_COMPUTATIONAL_BIOLOGY_MATERI.md', label: 'Materi Utama Biologi Komputasi (Kisi-kisi UTS)', type: 'md', size: '28 KB', section: 'uts' },
+            { name: 'LATIHAN_SOAL_COMP_BIO.md', label: 'Latihan Soal & Pembahasan (50 Soal)', type: 'md', size: '45 KB', section: 'uts' },
+            { name: 'CENTRAL DOGMA.pdf', label: 'Session 9 — Central Dogma', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: 'DNA&RNA.pdf', label: 'Session 10 — DNA, RNA & Transcription', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: 'MUGEN TSUKOYOMI(mUTASI GENETEIK).pdf', label: 'Session 11 — Mutasi Genetik (Mugen Tsukoyomi)', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: 'MOLECULAR_EVOLUTION.md', label: 'Session 12 — Molecular Evolution (Ringkasan)', type: 'md', size: '18 KB', section: 'uts' },
+            { name: 'MOLECULAR_EVOLUTION.pptx', label: 'Session 12 — Molecular Evolution (Slide PPT)', type: 'pptx', size: '3.1 MB', section: 'uts' },
         ]
     },
     sna: {
@@ -905,9 +973,9 @@ const subjects = {
         color: 'red',
         folder: 'SERVER_NETWORK_ADMIN',
         files: [
-            { name: 'UTS_SNA_DEVSECOPS_MATERI.md', label: '⭐ UTS — Istilah Kunci + Study Case + Pembahasan', type: 'md', size: '42 KB' },
-            { name: 'UAS_DEVSECOPS_STUDY_CASE.md', label: 'UAS DevSecOps Study Case', type: 'md', size: '61 KB' },
-            { name: 'UAS_DEVSECOPS_STUDY_CASE.docx', label: 'UAS DevSecOps (Word)', type: 'docx', size: '50 KB' },
+            { name: 'UTS_SNA_DEVSECOPS_MATERI.md', label: '⭐ UTS — Istilah Kunci + Study Case + Pembahasan', type: 'md', size: '42 KB', section: 'uts' },
+            { name: 'UAS_DEVSECOPS_STUDY_CASE.md', label: 'UAS DevSecOps Study Case', type: 'md', size: '61 KB', section: 'uas' },
+            { name: 'UAS_DEVSECOPS_STUDY_CASE.docx', label: 'UAS DevSecOps (Word)', type: 'docx', size: '50 KB', section: 'uas' },
         ]
     },
     sofeng: {
@@ -916,24 +984,24 @@ const subjects = {
         color: 'teal',
         folder: 'SOFENG',
         files: [
-            { name: 'LATIHAN_STUDY_CASE_SOFENG.md', label: '📝 Latihan Study Case (20 Soal + Diagram UML)', type: 'md', size: '48 KB' },
-            { name: 'KISI_KISI_UTS_SOFENG_LENGKAP.md', label: 'Kisi-Kisi UTS Lengkap (Semua Part)', type: 'md', size: '66 KB' },
-            { name: 'KISI_KISI_UTS_SOFENG_PART1.md', label: 'Part 1 — Pengantar & SDLC', type: 'md', size: '12 KB' },
-            { name: 'KISI_KISI_UTS_SOFENG_PART2.md', label: 'Part 2 — Requirements Engineering', type: 'md', size: '8 KB' },
-            { name: 'KISI_KISI_UTS_SOFENG_PART3.md', label: 'Part 3 — Design & Architecture', type: 'md', size: '8 KB' },
-            { name: 'KISI_KISI_UTS_SOFENG_PART4.md', label: 'Part 4 — Testing & QA', type: 'md', size: '16 KB' },
-            { name: 'KISI_KISI_UTS_SOFENG_PART5.md', label: 'Part 5 — Project Management', type: 'md', size: '13 KB' },
-            { name: 'KISI_KISI_UTS_SOFENG.docx', label: 'Kisi-Kisi UTS (Word)', type: 'docx', size: '21 KB' },
-            { name: '03_Agile Principle & Lean Foundations.pdf', label: 'Session 3 — Agile & Lean', type: 'pdf', size: 'Slide' },
-            { name: '04_Scrum Framework.pdf', label: 'Session 4 — Scrum', type: 'pdf', size: 'Slide' },
-            { name: '05_Design Concepts.pdf', label: 'Session 5 — Design Concepts', type: 'pdf', size: 'Slide' },
-            { name: '06_Requirements Engineering.pdf', label: 'Session 6 — Req. Engineering', type: 'pdf', size: 'Slide' },
-            { name: '07_Requirements Modeling and UML.pdf', label: 'Session 7 — UML', type: 'pdf', size: 'Slide' },
-            { name: '08_Software Design Principles.pdf', label: 'Session 8 — Design Principles', type: 'pdf', size: 'Slide' },
-            { name: '09_Software Architecture Design Concepts and Styles  .pdf', label: 'Session 9 — Architecture', type: 'pdf', size: 'Slide' },
-            { name: '10_Software Architecture Design Documentation and Patterns  .pdf', label: 'Session 10 — Design Patterns', type: 'pdf', size: 'Slide' },
-            { name: '11_Project Management and Planning.pdf', label: 'Session 11 — Project Management', type: 'pdf', size: 'Slide' },
-            { name: '20260105095522D7082_Session 12_Project Estimation Techniques.pdf', label: 'Session 12 — Estimation', type: 'pdf', size: 'Slide' },
+            { name: 'LATIHAN_STUDY_CASE_SOFENG.md', label: '📝 Latihan Study Case (20 Soal + Diagram UML)', type: 'md', size: '48 KB', section: 'uts' },
+            { name: 'KISI_KISI_UTS_SOFENG_LENGKAP.md', label: 'Kisi-Kisi UTS Lengkap (Semua Part)', type: 'md', size: '66 KB', section: 'uts' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART1.md', label: 'Part 1 — Pengantar & SDLC', type: 'md', size: '12 KB', section: 'uts' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART2.md', label: 'Part 2 — Requirements Engineering', type: 'md', size: '8 KB', section: 'uts' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART3.md', label: 'Part 3 — Design & Architecture', type: 'md', size: '8 KB', section: 'uts' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART4.md', label: 'Part 4 — Testing & QA', type: 'md', size: '16 KB', section: 'uts' },
+            { name: 'KISI_KISI_UTS_SOFENG_PART5.md', label: 'Part 5 — Project Management', type: 'md', size: '13 KB', section: 'uts' },
+            { name: 'KISI_KISI_UTS_SOFENG.docx', label: 'Kisi-Kisi UTS (Word)', type: 'docx', size: '21 KB', section: 'uts' },
+            { name: '03_Agile Principle & Lean Foundations.pdf', label: 'Session 3 — Agile & Lean', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '04_Scrum Framework.pdf', label: 'Session 4 — Scrum', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '05_Design Concepts.pdf', label: 'Session 5 — Design Concepts', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '06_Requirements Engineering.pdf', label: 'Session 6 — Req. Engineering', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '07_Requirements Modeling and UML.pdf', label: 'Session 7 — UML', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '08_Software Design Principles.pdf', label: 'Session 8 — Design Principles', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '09_Software Architecture Design Concepts and Styles  .pdf', label: 'Session 9 — Architecture', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '10_Software Architecture Design Documentation and Patterns  .pdf', label: 'Session 10 — Design Patterns', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '11_Project Management and Planning.pdf', label: 'Session 11 — Project Management', type: 'pdf', size: 'Slide', section: 'uts' },
+            { name: '20260105095522D7082_Session 12_Project Estimation Techniques.pdf', label: 'Session 12 — Estimation', type: 'pdf', size: 'Slide', section: 'uts' },
         ]
     },
     softsec: {
@@ -942,8 +1010,8 @@ const subjects = {
         color: 'purple',
         folder: 'SOFTSEC',
         files: [
-            { name: 'Materi_UTS_Software_Security_BINUS.md', label: 'Materi UTS Software Security', type: 'md', size: '24 KB' },
-            { name: 'Materi_UTS_Software_Security_BINUS.docx', label: 'Materi UTS (Word)', type: 'docx', size: '46 KB' },
+            { name: 'Materi_UTS_Software_Security_BINUS.md', label: 'Materi UTS Software Security', type: 'md', size: '24 KB', section: 'uts' },
+            { name: 'Materi_UTS_Software_Security_BINUS.docx', label: 'Materi UTS (Word)', type: 'docx', size: '46 KB', section: 'uts' },
         ]
     },
     cyberlaw: {
@@ -952,8 +1020,8 @@ const subjects = {
         color: 'orange',
         folder: 'CYBERLAW',
         files: [
-            { name: 'UTS_CYBER_LAW_MATERI.md', label: 'Materi Utama Cyber Law (Kisi-kisi UTS)', type: 'md', size: '32 KB' },
-            { name: 'LATIHAN_SOAL_CYBER_LAW.md', label: 'Latihan Soal & Pembahasan (30 Soal)', type: 'md', size: '38 KB' },
+            { name: 'UTS_CYBER_LAW_MATERI.md', label: 'Materi Utama Cyber Law (Kisi-kisi UTS)', type: 'md', size: '32 KB', section: 'uts' },
+            { name: 'LATIHAN_SOAL_CYBER_LAW.md', label: 'Latihan Soal & Pembahasan (30 Soal)', type: 'md', size: '38 KB', section: 'uts' },
         ]
     },
     db_lab: {
@@ -1017,10 +1085,36 @@ function openSubject(key) {
     const fileListEl = document.getElementById('file-list');
     fileListEl.innerHTML = '';
 
+    // === Render dengan pemisah UTS / UAS ===
+    const sectionLabels = {
+        uts: { emoji: '📝', label: 'MATERI UTS', desc: 'Ujian Tengah Semester', cls: 'uts' },
+        uas: { emoji: '🎯', label: 'MATERI UAS', desc: 'Ujian Akhir Semester', cls: 'uas' },
+        quiz: { emoji: '⚡', label: 'LATIHAN / QUIZ', desc: 'Soal Latihan', cls: 'quiz' },
+        all:  { emoji: '📚', label: 'SEMUA MATERI', desc: 'Referensi Umum', cls: 'all' },
+    };
+
+    // Check apakah ada section info di file-file ini
+    const hasSections = subj.files.some(f => f.section);
+    let lastSection = null;
+
     subj.files.forEach(file => {
         const iconEmoji = file.type === 'md' ? '📄' : file.type === 'docx' ? '📘' : file.type === 'pdf' ? '📊' : file.type === 'pptx' ? '📑' : file.type === 'slide' ? '📊' : '🖼️';
         const iconClass = file.type;
         const typeLabel = file.type === 'md' ? 'Markdown' : file.type === 'docx' ? 'Microsoft Word' : file.type === 'pdf' ? 'Slide Presentasi' : file.type === 'slide' ? 'Slide (Interactive PDF)' : file.type === 'pptx' ? 'PowerPoint Slide' : 'Gambar';
+
+        // Render pemisah section jika berubah
+        if (hasSections && file.section && file.section !== lastSection) {
+            lastSection = file.section;
+            const sec = sectionLabels[file.section] || sectionLabels.all;
+            const divider = document.createElement('div');
+            divider.className = 'section-divider';
+            divider.innerHTML = `
+                <div class="section-divider-badge ${sec.cls}">${sec.emoji} ${sec.label}</div>
+                <div class="section-divider-line"></div>
+                <div class="section-divider-desc">${sec.desc}</div>
+            `;
+            fileListEl.appendChild(divider);
+        }
 
         const el = document.createElement('div');
         el.className = 'file-item';
