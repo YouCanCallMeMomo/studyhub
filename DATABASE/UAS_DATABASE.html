@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAS Database Technology — BINUS | Ruang Kerja</title>
+<meta name="description" content="Kisi-kisi dan latihan soal lengkap UAS Database Technology BINUS — Aggregate, Subquery, Trigger, Transaction, ERD, 12 soal kompleks dengan pembahasan SQL.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #080C11;
+  --panel:      #0E141C;
+  --panel-2:    #131B25;
+  --panel-3:    #18212D;
+  --line:       #1E2A38;
+  --line-2:     #263342;
+  --text:       #D4E0EC;
+  --muted:      #6B7F94;
+  --muted-2:    #8A9EB5;
+  --keyword:    #79ADFF;
+  --string:     #FFD080;
+  --comment:    #4D6278;
+  --func:       #5EE6A8;
+  --warn:       #FF9966;
+  --warn-bg:    rgba(255,153,102,.08);
+  --warn-border:rgba(255,153,102,.25);
+  --accent:     #5EE6A8;
+  --accent-dim: #0F2A1E;
+  --accent-2:   #3ECFB2;
+  --red:        #FF6B6B;
+  --red-dim:    rgba(255,107,107,.08);
+  --blue:       #79ADFF;
+  --blue-dim:   rgba(121,173,255,.08);
+  --purple:     #C084FC;
+  --purple-dim: rgba(192,132,252,.08);
+  --radius:     10px;
+  --radius-lg:  14px;
+  --shadow:     0 4px 24px rgba(0,0,0,.4);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  line-height: 1.7;
+  font-size: 15px;
+}
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+::selection { background: rgba(94,230,168,.2); }
+
+/* ── SCROLLBAR ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--panel); }
+::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
+
+/* ── LAYOUT ─────────────────────────────────── */
+.shell {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  min-height: 100vh;
+}
+@media (max-width: 900px) { .shell { grid-template-columns: 1fr; } }
+
+/* ── SIDEBAR ─────────────────────────────────── */
+.sidebar {
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+  padding: 26px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.brand-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--accent); }
+  50%       { box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(94,230,168,.3); }
+}
+.brand-label { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+.sidebar-title { font-size: 17px; font-weight: 800; color: #fff; margin: 6px 0 22px; line-height: 1.3; }
+
+.nav-group { margin-bottom: 20px; }
+.nav-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--muted);
+  margin: 0 0 8px 4px;
+  font-family: 'JetBrains Mono';
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--muted-2);
+  text-decoration: none;
+  font-size: 13.5px;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+  transition: all .15s ease;
+  cursor: pointer;
+}
+.nav-link:hover { background: var(--panel-2); color: var(--text); }
+.nav-link.active { background: var(--accent-dim); color: var(--accent); border-color: #1a4a34; }
+.nav-link .nt { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); margin-left: auto; }
+.nav-link .badge-a { font-family: 'JetBrains Mono'; font-size: 9px; padding: 2px 5px; border-radius: 4px; margin-left: auto; }
+.badge-essay { background: rgba(121,173,255,.15); color: var(--blue); border: 1px solid rgba(121,173,255,.2); }
+.badge-sc    { background: rgba(94,230,168,.12);  color: var(--accent); border: 1px solid rgba(94,230,168,.2); }
+
+.score-display {
+  margin-top: 18px;
+  padding: 14px;
+  background: var(--accent-dim);
+  border: 1px solid #1a4a34;
+  border-radius: var(--radius);
+}
+.score-display .sd-label { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono'; margin-bottom: 6px; }
+.score-display .sd-val { font-family: 'JetBrains Mono'; font-size: 20px; color: var(--accent); font-weight: 700; }
+.score-progress { height: 4px; background: var(--line); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.score-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 2px; transition: width .4s ease; }
+
+/* ── PROGRESS BAR (top) ─────────────────────── */
+.progress-wrap { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 100; }
+.progress-bar  { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .1s linear; }
+
+/* ── MAIN ────────────────────────────────────── */
+main { max-width: 960px; padding-bottom: 120px; }
+
+/* ── HERO ────────────────────────────────────── */
+.hero {
+  padding: 60px 60px 52px;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 90% -10%, rgba(94,230,168,.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 110%, rgba(121,173,255,.07) 0%, transparent 50%),
+    var(--bg);
+  margin-bottom: 52px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231E2A38' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: .3;
+  pointer-events: none;
+}
+@media (max-width: 900px) { .hero { padding: 40px 20px; } }
+.hero .eyebrow { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .14em; margin-bottom: 14px; }
+.hero h1 { font-size: 40px; color: #fff; margin: 0 0 14px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; position: relative; }
+.hero h1 span { color: var(--accent); }
+.hero p { color: var(--muted-2); max-width: 580px; font-size: 15px; margin-bottom: 28px; position: relative; }
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  min-width: 110px;
+  transition: border-color .2s;
+}
+.stat-card:hover { border-color: var(--accent); }
+.stat-card .num { font-family: 'JetBrains Mono'; font-size: 22px; color: var(--accent); font-weight: 700; }
+.stat-card .lab { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+/* ── SECTION ─────────────────────────────────── */
+section { margin: 0 60px 72px; scroll-margin-top: 28px; }
+@media (max-width: 900px) { section { margin: 0 20px 52px; } }
+.eyebrow { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .14em; margin-bottom: 10px; }
+h2 { font-size: 26px; color: #fff; margin: 0 0 6px; font-weight: 800; }
+.lede { color: var(--muted-2); font-size: 14.5px; margin-bottom: 24px; max-width: 680px; }
+
+/* ── PANEL ────────────────────────────────────── */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  transition: border-color .2s;
+}
+.panel:hover { border-color: var(--line-2); }
+.panel h3 { margin: 0 0 12px; color: #fff; font-size: 15.5px; font-weight: 700; }
+.panel p  { margin: 0 0 10px; color: var(--text); font-size: 14px; }
+.panel p:last-child { margin-bottom: 0; }
+
+/* ── CODE BLOCKS ─────────────────────────────── */
+.code-wrap { position: relative; margin: 14px 0; }
+.code-label {
+  position: absolute;
+  top: 0; right: 0;
+  font-family: 'JetBrains Mono';
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--panel-2);
+  padding: 4px 10px;
+  border-radius: 0 7px 0 7px;
+  border-left: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  letter-spacing: .04em;
+}
+.code-copy {
+  position: absolute;
+  top: 6px; right: 52px;
+  font-family: 'JetBrains Mono';
+  font-size: 10px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all .15s;
+  opacity: 0;
+}
+.code-wrap:hover .code-copy { opacity: 1; }
+.code-copy:hover { color: var(--accent); border-color: var(--accent); }
+.code {
+  background: #060A0E;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px 20px;
+  font-family: 'JetBrains Mono';
+  font-size: 12.5px;
+  overflow-x: auto;
+  color: #C0D0E0;
+  white-space: pre;
+  line-height: 1.7;
+  tab-size: 2;
+}
+.k  { color: var(--keyword); font-weight: 600; }
+.s  { color: var(--string); }
+.c  { color: var(--comment); font-style: italic; }
+.f  { color: var(--func); font-weight: 600; }
+.n  { color: #FFB86C; }
+.p  { color: var(--purple); }
+.err{ color: var(--red); font-weight: 600; }
+.ok { color: var(--accent); }
+
+/* ── TABLES ──────────────────────────────────── */
+.tablewrap { overflow-x: auto; margin: 12px 0; border-radius: 8px; border: 1px solid var(--line); }
+table.dt { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.dt th { background: var(--panel-2); color: var(--accent); text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+table.dt td { padding: 8px 12px; border-bottom: 1px solid var(--line); color: var(--text); font-size: 13px; }
+table.dt tr:last-child td { border-bottom: none; }
+table.dt tr:hover td { background: rgba(94,230,168,.03); }
+table.dt .pk { color: var(--string); font-family: 'JetBrains Mono'; font-size: 12px; font-weight: 600; }
+table.dt .fk { color: var(--blue);  font-family: 'JetBrains Mono'; font-size: 12px; }
+table.dt .mono-sm { font-family: 'JetBrains Mono'; font-size: 12px; }
+table.dt .tag-ok   { display: inline-block; background: rgba(94,230,168,.12);  color: var(--accent); border: 1px solid rgba(94,230,168,.2);  font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-warn { display: inline-block; background: var(--warn-bg);         color: var(--warn);   border: 1px solid var(--warn-border);        font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-red  { display: inline-block; background: var(--red-dim);          color: var(--red);    border: 1px solid rgba(255,107,107,.2);  font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+
+/* ── TABS ─────────────────────────────────────── */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.tab-btn {
+  font-family: 'JetBrains Mono';
+  font-size: 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 7px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.tab-btn:hover { color: var(--text); border-color: var(--line-2); }
+.tab-btn.active { color: var(--accent); border-color: #1a4a34; background: var(--accent-dim); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── NOTES ──────────────────────────────────── */
+.note {
+  border-radius: 8px;
+  padding: 13px 16px;
+  font-size: 13.5px;
+  margin: 14px 0;
+  border-left: 3px solid;
+}
+.note-warn  { background: var(--warn-bg);   border-color: var(--warn);   color: #FFB59C; }
+.note-info  { background: var(--blue-dim);  border-color: var(--blue);   color: #A8C8FF; }
+.note-ok    { background: rgba(94,230,168,.07); border-color: var(--accent); color: #8AFFD4; }
+.note-red   { background: var(--red-dim);   border-color: var(--red);    color: #FFB0B0; }
+.note b { color: inherit; filter: brightness(1.2); }
+.note code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+/* ── QUESTION CARDS ──────────────────────────── */
+.qsection-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+}
+.qsection-header .label { font-size: 13px; font-weight: 700; color: #fff; }
+.qsection-header .pct { font-family: 'JetBrains Mono'; font-size: 12px; color: var(--muted); margin-left: auto; }
+.pill-blue   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(121,173,255,.2); font-family: 'JetBrains Mono'; font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+.pill-green  { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(94,230,168,.2);  font-family: 'JetBrains Mono'; font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+.pill-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(192,132,252,.2); font-family: 'JetBrains Mono'; font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+
+.qcard {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  background: var(--panel);
+  transition: border-color .2s;
+}
+.qcard.open { border-color: var(--line-2); }
+.qcard:hover { border-color: var(--line-2); }
+.qhead {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.qhead:hover { background: var(--panel-2); }
+.qnum {
+  font-family: 'JetBrains Mono';
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(94,230,168,.2);
+  border-radius: 6px;
+  padding: 4px 9px;
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+.qtype {
+  font-family: 'JetBrains Mono';
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  flex: 0 0 auto;
+  border: 1px solid;
+  margin-top: 1px;
+}
+.qt-essay { color: var(--blue);   background: var(--blue-dim);   border-color: rgba(121,173,255,.2); }
+.qt-sc    { color: var(--accent); background: var(--accent-dim); border-color: rgba(94,230,168,.2); }
+.qt-bonus { color: var(--purple); background: var(--purple-dim); border-color: rgba(192,132,252,.2); }
+.qtitle { flex: 1; font-size: 14px; color: var(--text); font-weight: 600; line-height: 1.5; }
+.chev { color: var(--muted); transition: transform .2s ease; flex: 0 0 auto; font-size: 12px; margin-top: 3px; }
+.qcard.open .chev { transform: rotate(180deg); }
+
+.qbody { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.qcard.open .qbody { max-height: none; border-top: 1px solid var(--line); }
+.qbody-inner { padding: 22px 24px 26px; }
+
+.qprompt {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 18px;
+  border-left: 3px solid var(--blue);
+}
+.qprompt .qp-label { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+
+.answer-toggle {
+  font-family: 'JetBrains Mono';
+  font-size: 12px;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 16px;
+  transition: all .2s;
+  letter-spacing: .03em;
+}
+.answer-toggle:hover { background: var(--accent-2); transform: translateY(-1px); }
+
+.answer { display: none; }
+.answer.show { display: block; }
+
+.answer-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.answer-header h4 {
+  margin: 0;
+  font-family: 'JetBrains Mono';
+  font-size: 11px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+.answer p { font-size: 14px; color: var(--text); margin: 0 0 12px; }
+.answer h5 { font-size: 13px; color: var(--muted-2); font-weight: 700; margin: 16px 0 8px; font-family: 'JetBrains Mono'; text-transform: uppercase; font-size: 10px; letter-spacing: .08em; }
+
+/* ── ERD SVG ─────────────────────────────────── */
+.erd-wrap { overflow-x: auto; background: #060A0E; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px; }
+.ent-rect  { fill: #0E141C; stroke: #1a4a34; stroke-width: 1.5; }
+.ent-head  { fill: #0F2A1E; }
+.ent-title { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: var(--accent); font-weight: 700; }
+.ent-field { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; fill: #A0B8CC; }
+.ent-pk    { fill: #FFD080; }
+.ent-fk    { fill: #79ADFF; }
+.rel-line  { stroke: #263342; stroke-width: 1.4; fill: none; marker-end: url(#arr); }
+.rel-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; fill: #4D6278; }
+
+/* ── DIFF BOX ─────────────────────────────────── */
+.diff-ok  { color: var(--accent); }
+.diff-err { color: var(--red); }
+
+/* ── FOOTER ──────────────────────────────────── */
+footer {
+  padding: 28px 60px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12.5px;
+  font-family: 'JetBrains Mono';
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+@media (max-width: 900px) { footer { padding: 20px; } }
+.footer-score {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(94,230,168,.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+/* ── STEP LIST ───────────────────────────────── */
+.step-list { list-style: none; padding: 0; margin: 12px 0; counter-reset: step; }
+.step-list li {
+  counter-increment: step;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--text);
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li::before {
+  content: counter(step);
+  flex: 0 0 24px;
+  height: 24px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(94,230,168,.2);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono';
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+/* ── COMPARISON GRID ─────────────────────────── */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+@media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.compare-card .cc-title { font-family: 'JetBrains Mono'; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; font-weight: 700; }
+.compare-card ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text); }
+.compare-card ul li { margin-bottom: 6px; line-height: 1.5; }
+.cc-ok   .cc-title { color: var(--accent); }
+.cc-warn .cc-title { color: var(--warn); }
+.cc-blue .cc-title { color: var(--blue); }
+.cc-red  .cc-title { color: var(--red); }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="shell">
+  <!-- ══════════════════════════════ SIDEBAR ══════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="brand"><span class="brand-dot"></span><span class="brand-label">DBT // UAS BINUS</span></div>
+    <div class="sidebar-title">Database<br>Technology UAS</div>
+
+    <div class="nav-group">
+      <div class="nav-label">Materi Inti</div>
+      <a class="nav-link" data-target="aggregate"   href="#aggregate">  ▸ Aggregate Function   <span class="nt">01</span></a>
+      <a class="nav-link" data-target="subquery"    href="#subquery">   ▸ Subquery             <span class="nt">02</span></a>
+      <a class="nav-link" data-target="trigger"     href="#trigger">    ▸ Trigger              <span class="nt">03</span></a>
+      <a class="nav-link" data-target="transaction" href="#transaction"> ▸ SQL Transaction      <span class="nt">04</span></a>
+      <a class="nav-link" data-target="view"        href="#view">       ▸ View & Procedure     <span class="nt">05</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Studi Kasus</div>
+      <a class="nav-link" data-target="erd"      href="#erd">      ▸ ERD &amp; Schema    <span class="nt">06</span></a>
+      <a class="nav-link" data-target="sampledb" href="#sampledb"> ▸ Sample Database  <span class="nt">07</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Simulasi Ujian</div>
+      <a class="nav-link" data-target="essay"   href="#essay">   ▸ Essay (4 Soal)   <span class="badge-a badge-essay">40%</span></a>
+      <a class="nav-link" data-target="sc"      href="#sc">      ▸ Studi Kasus (8)  <span class="badge-a badge-sc">60%</span></a>
+    </div>
+
+    <div class="score-display">
+      <div class="sd-label">// PROGRES BELAJAR</div>
+      <div class="sd-val" id="sidebarScore">0 / 12</div>
+      <div class="score-progress"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════ MAIN ══════════════════════════════ -->
+  <main>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="eyebrow">Kisi-kisi UAS · Database Technology · BINUS</div>
+      <h1>Siap UAS<br><span>Database Tech.</span></h1>
+      <p>Materi komprehensif UAS — Aggregate Function, Subquery, Trigger, Transaction, View, Stored Procedure, ERD. Semua dilengkapi <b style="color:#fff">penjelasan query baris per baris</b> + 12 soal kompleks ala BINUS.</p>
+      <div class="stat-row">
+        <div class="stat-card"><div class="num">5</div><div class="lab">Materi inti</div></div>
+        <div class="stat-card"><div class="num">40/60</div><div class="lab">Essay / Studi Kasus</div></div>
+        <div class="stat-card"><div class="num">12</div><div class="lab">Soal latihan</div></div>
+        <div class="stat-card"><div class="num">5</div><div class="lab">Tabel sample DB</div></div>
+        <div class="stat-card"><div class="num">40+</div><div class="lab">Contoh query</div></div>
+      </div>
+    </div>
+
+    <!-- ══ 01 AGGREGATE ══════════════════════════════════════════════════ -->
+    <section id="aggregate">
+      <div class="eyebrow">01 · Materi Inti</div>
+      <h2>Aggregate Function</h2>
+      <p class="lede">Fungsi yang merangkas banyak baris menjadi satu nilai. Inti dari hampir semua soal analitik — selalu dipasangkan GROUP BY dan disaring HAVING.</p>
+
+      <div class="panel">
+        <h3>Lima fungsi wajib hafal</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Fungsi</th><th>Kegunaan</th><th>Perilaku NULL</th><th>Contoh Konteks</th></tr>
+          <tr><td class="mono-sm">COUNT(*)</td><td>Hitung semua baris termasuk NULL</td><td>Tidak peduli NULL</td><td>Total semua order</td></tr>
+          <tr><td class="mono-sm">COUNT(kolom)</td><td>Hitung baris non-NULL pada kolom</td><td>Skip NULL</td><td>Total order yang ada customer-nya</td></tr>
+          <tr><td class="mono-sm">SUM(kolom)</td><td>Jumlahkan nilai numerik</td><td>NULL diabaikan</td><td>Total revenue</td></tr>
+          <tr><td class="mono-sm">AVG(kolom)</td><td>Rata-rata nilai non-NULL</td><td>Pembagi = baris non-NULL</td><td>Rata-rata harga produk</td></tr>
+          <tr><td class="mono-sm">MIN / MAX</td><td>Nilai terkecil / terbesar</td><td>Abaikan NULL</td><td>Produk termurah/termahal</td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>Urutan eksekusi SQL — ini sering ditanya di essay</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>#</th><th>Klausa</th><th>Kapan jalan</th><th>Boleh pakai aggregate?</th></tr>
+          <tr><td class="mono-sm">1</td><td class="mono-sm">FROM / JOIN</td><td>Tentukan tabel & gabungkan</td><td><span class="tag-red">✗ Tidak</span></td></tr>
+          <tr><td class="mono-sm">2</td><td class="mono-sm">WHERE</td><td>Filter baris mentah</td><td><span class="tag-red">✗ Tidak (error)</span></td></tr>
+          <tr><td class="mono-sm">3</td><td class="mono-sm">GROUP BY</td><td>Kelompokkan baris</td><td><span class="tag-red">✗ Tidak</span></td></tr>
+          <tr><td class="mono-sm">4</td><td class="mono-sm">HAVING</td><td>Filter kelompok</td><td><span class="tag-ok">✓ Ya (wajib di sini)</span></td></tr>
+          <tr><td class="mono-sm">5</td><td class="mono-sm">SELECT</td><td>Pilih & hitung kolom</td><td><span class="tag-ok">✓ Ya</span></td></tr>
+          <tr><td class="mono-sm">6</td><td class="mono-sm">ORDER BY</td><td>Urutkan hasil</td><td><span class="tag-ok">✓ Ya</span></td></tr>
+          <tr><td class="mono-sm">7</td><td class="mono-sm">LIMIT</td><td>Batasi baris output</td><td><span class="tag-red">✗ Tidak</span></td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>Contoh query lengkap — laporan penjualan per kategori</h3>
+        <div class="code-wrap">
+          <button class="code-copy" onclick="copyCode(this)">copy</button>
+          <span class="code-label">SQL</span>
+          <div class="code"><span class="k">SELECT</span>
+  k.nama_kategori,
+  <span class="f">COUNT</span>(p.produk_id)            <span class="k">AS</span> jumlah_produk,   <span class="c">-- hitung produk per kategori</span>
+  <span class="f">AVG</span>(p.harga)                  <span class="k">AS</span> rata_harga,      <span class="c">-- rata-rata harga</span>
+  <span class="f">MAX</span>(p.harga)                  <span class="k">AS</span> harga_tertinggi,
+  <span class="f">SUM</span>(oi.qty)                   <span class="k">AS</span> total_terjual    <span class="c">-- total unit terjual</span>
+<span class="k">FROM</span> kategori k
+<span class="k">JOIN</span> produk p       <span class="k">ON</span> p.kategori_id  <span class="k">=</span> k.kategori_id
+<span class="k">LEFT JOIN</span> order_items oi <span class="k">ON</span> oi.produk_id <span class="k">=</span> p.produk_id  <span class="c">-- LEFT agar produk belum terjual tetap muncul</span>
+<span class="k">LEFT JOIN</span> orders o  <span class="k">ON</span> o.order_id     <span class="k">=</span> oi.order_id
+                   <span class="k">AND</span> o.status <span class="k">=</span> <span class="s">'COMPLETED'</span>          <span class="c">-- filter di ON clause, bukan WHERE</span>
+<span class="k">GROUP BY</span> k.kategori_id, k.nama_kategori
+<span class="k">HAVING</span> <span class="f">COUNT</span>(p.produk_id) <span class="k">>=</span> 2               <span class="c">-- hanya kategori dengan min 2 produk</span>
+  <span class="k">AND</span>  <span class="f">AVG</span>(p.harga)     <span class="k">></span> 300000            <span class="c">-- dan rata-rata harga > 300rb</span>
+<span class="k">ORDER BY</span> total_terjual <span class="k">DESC</span>, rata_harga <span class="k">DESC</span>;</div>
+        </div>
+        <div class="note note-info"><b>Kenapa filter di ON clause bukan WHERE?</b> Kalau <code>o.status = 'COMPLETED'</code> ditaruh di WHERE, LEFT JOIN jadi berperilaku seperti INNER JOIN — produk tanpa order COMPLETED akan hilang dari hasil. Di ON clause, filter hanya mempengaruhi pasangan JOIN, bukan mengeliminasi baris kiri.</div>
+      </div>
+      <div class="note note-warn"><b>Jebakan UAS #1:</b> Soal "tampilkan X yang Y-nya di atas rata-rata" → HAVING + AVG. Soal "filter status sebelum aggregate" → WHERE. Kalau kondisi punya aggregate function, 100% HAVING.</div>
+    </section>
+
+    <!-- ══ 02 SUBQUERY ═══════════════════════════════════════════════════ -->
+    <section id="subquery">
+      <div class="eyebrow">02 · Materi Inti</div>
+      <h2>Subquery</h2>
+      <p class="lede">Query di dalam query. Bisa di SELECT, FROM, WHERE, HAVING, atau setelah IN/EXISTS. Wajib bisa bedain correlated vs non-correlated.</p>
+
+      <div class="panel">
+        <h3>Empat jenis subquery</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-ok">
+            <div class="cc-title">Non-Correlated</div>
+            <ul>
+              <li>Dieksekusi <b>1 kali</b> saja</li>
+              <li>Tidak merujuk kolom tabel luar</li>
+              <li>Hasilnya bisa di-cache</li>
+              <li>Performa: <b>O(1) kali eksekusi</b></li>
+            </ul>
+          </div>
+          <div class="compare-card cc-warn">
+            <div class="cc-title">Correlated</div>
+            <ul>
+              <li>Dieksekusi <b>per baris</b> tabel luar</li>
+              <li>Merujuk kolom dari query luar</li>
+              <li>Tidak bisa di-cache</li>
+              <li>Performa: <b>O(n) kali eksekusi</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs" id="sqTabs">
+        <button class="tab-btn active" data-tab="sq-nc">Non-Correlated</button>
+        <button class="tab-btn" data-tab="sq-c">Correlated</button>
+        <button class="tab-btn" data-tab="sq-exists">EXISTS</button>
+        <button class="tab-btn" data-tab="sq-derived">Derived Table</button>
+      </div>
+
+      <div class="tab-content active" id="sq-nc">
+        <div class="panel">
+          <h3>Non-Correlated — dieksekusi sekali, hasilnya dipakai berulang</h3>
+          <div class="code-wrap">
+            <span class="code-label">SQL</span>
+            <div class="code"><span class="c">-- Produk yang harganya di ATAS rata-rata seluruh produk</span>
+<span class="c">-- Subquery AVG(harga) dieksekusi SEKALI → hasilnya misal 356000</span>
+<span class="c">-- Query luar tinggal bandingkan harga > 356000</span>
+<span class="k">SELECT</span> nama_produk, harga,
+  harga <span class="k">-</span> (<span class="k">SELECT</span> <span class="f">AVG</span>(harga) <span class="k">FROM</span> produk) <span class="k">AS</span> selisih_dari_rata
+<span class="k">FROM</span> produk
+<span class="k">WHERE</span> harga <span class="k">></span> (<span class="k">SELECT</span> <span class="f">AVG</span>(harga) <span class="k">FROM</span> produk)
+<span class="k">ORDER BY</span> selisih_dari_rata <span class="k">DESC</span>;
+
+<span class="c">-- IN: produk yang pernah terjual dalam order COMPLETED</span>
+<span class="k">SELECT</span> nama_produk <span class="k">FROM</span> produk
+<span class="k">WHERE</span> produk_id <span class="k">IN</span> (
+  <span class="k">SELECT DISTINCT</span> oi.produk_id
+  <span class="k">FROM</span> order_items oi
+  <span class="k">JOIN</span> orders o <span class="k">ON</span> o.order_id <span class="k">=</span> oi.order_id
+  <span class="k">WHERE</span> o.status <span class="k">=</span> <span class="s">'COMPLETED'</span>
+);</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sq-c">
+        <div class="panel">
+          <h3>Correlated — referensi ke outer query, jalan ulang tiap baris</h3>
+          <div class="code-wrap">
+            <span class="code-label">SQL</span>
+            <div class="code"><span class="c">-- Customer yang total belanjanya di atas rata-rata semua customer</span>
+<span class="c">-- Subquery dalam dijalankan ULANG untuk tiap baris c (tiap customer)</span>
+<span class="k">SELECT</span> c.nama, c.kota
+<span class="k">FROM</span> customers c
+<span class="k">WHERE</span> (
+  <span class="c">-- subquery ini BERGANTUNG pada c.customer_id dari outer query</span>
+  <span class="k">SELECT</span> <span class="f">COALESCE</span>(<span class="f">SUM</span>(o.total_harga), 0)
+  <span class="k">FROM</span>   orders o
+  <span class="k">WHERE</span>  o.customer_id <span class="k">=</span> c.customer_id  <span class="c">-- ← referensi outer!</span>
+    <span class="k">AND</span>  o.status <span class="k">=</span> <span class="s">'COMPLETED'</span>
+) <span class="k">></span> (
+  <span class="c">-- subquery rata-rata: non-correlated, dieksekusi SEKALI</span>
+  <span class="k">SELECT</span> <span class="f">AVG</span>(total_per_c)
+  <span class="k">FROM</span> (
+    <span class="k">SELECT</span> <span class="f">SUM</span>(total_harga) <span class="k">AS</span> total_per_c
+    <span class="k">FROM</span>   orders
+    <span class="k">WHERE</span>  status <span class="k">=</span> <span class="s">'COMPLETED'</span>
+    <span class="k">GROUP BY</span> customer_id
+  ) sub
+);</div>
+          </div>
+          <div class="note note-warn"><b>Cara deteksi correlated:</b> cek apakah subquery punya kolom yang berasal dari tabel di query luar. Di sini <code>c.customer_id</code> berasal dari tabel <code>customers c</code> di luar. Kalau ada → correlated.</div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sq-exists">
+        <div class="panel">
+          <h3>EXISTS vs IN — kapan pilih yang mana</h3>
+          <div class="code-wrap">
+            <span class="code-label">SQL</span>
+            <div class="code"><span class="c">-- EXISTS: lebih efisien untuk dataset besar, berhenti di baris pertama</span>
+<span class="c">-- Pertanyaan: "ada atau tidak ada?" — hasilnya hanya TRUE/FALSE</span>
+<span class="k">SELECT</span> c.nama
+<span class="k">FROM</span> customers c
+<span class="k">WHERE EXISTS</span> (
+  <span class="k">SELECT</span> 1  <span class="c">-- nilai 1 tidak penting, yang penting ada baris atau tidak</span>
+  <span class="k">FROM</span> orders o
+  <span class="k">WHERE</span> o.customer_id <span class="k">=</span> c.customer_id
+    <span class="k">AND</span> o.status <span class="k">=</span> <span class="s">'COMPLETED'</span>
+);
+
+<span class="c">-- NOT EXISTS: produk yang belum pernah terjual sama sekali</span>
+<span class="c">-- LEBIH AMAN dari NOT IN ketika kolom bisa mengandung NULL</span>
+<span class="k">SELECT</span> p.nama_produk, p.stok
+<span class="k">FROM</span> produk p
+<span class="k">WHERE NOT EXISTS</span> (
+  <span class="k">SELECT</span> 1
+  <span class="k">FROM</span> order_items oi
+  <span class="k">WHERE</span> oi.produk_id <span class="k">=</span> p.produk_id
+);
+
+<span class="c">-- Kenapa NOT EXISTS lebih aman dari NOT IN?</span>
+<span class="c">-- NOT IN (1, 2, NULL) → SELALU FALSE karena NULL tidak bisa dibandingkan</span>
+<span class="c">-- NOT EXISTS tidak punya masalah NULL ini</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sq-derived">
+        <div class="panel">
+          <h3>Derived Table — subquery di FROM, jadi "tabel sementara"</h3>
+          <div class="code-wrap">
+            <span class="code-label">SQL</span>
+            <div class="code"><span class="c">-- Cari customer dengan ranking belanja (tanpa window function)</span>
+<span class="c">-- Langkah 1: hitung total per customer dulu di subquery</span>
+<span class="c">-- Langkah 2: query luar baru pakai hasilnya untuk filter/sort</span>
+<span class="k">SELECT</span>
+  rk.nama,
+  rk.total_belanja,
+  rk.rank_belanja
+<span class="k">FROM</span> (
+  <span class="k">SELECT</span>
+    c.nama,
+    <span class="f">SUM</span>(o.total_harga)                         <span class="k">AS</span> total_belanja,
+    <span class="f">RANK</span>() <span class="k">OVER</span> (<span class="k">ORDER BY</span> <span class="f">SUM</span>(o.total_harga) <span class="k">DESC</span>) <span class="k">AS</span> rank_belanja
+  <span class="k">FROM</span> customers c
+  <span class="k">JOIN</span> orders o <span class="k">ON</span> o.customer_id <span class="k">=</span> c.customer_id
+  <span class="k">WHERE</span> o.status <span class="k">=</span> <span class="s">'COMPLETED'</span>
+  <span class="k">GROUP BY</span> c.customer_id, c.nama
+) rk  <span class="c">-- alias wajib ada untuk derived table</span>
+<span class="k">WHERE</span> rk.rank_belanja <span class="k">&lt;=</span> 3  <span class="c">-- ambil top 3 customer</span>
+<span class="k">ORDER BY</span> rk.rank_belanja;</div>
+          </div>
+        </div>
+      </div>
+      <div class="note note-warn"><b>Jebakan UAS #2:</b> Soal "tampilkan data di atas rata-rata grupnya sendiri" → correlated subquery atau window function. Kuncinya ada kata "rata-rata per kategori / per grup" bukan rata-rata semua.</div>
+    </section>
+
+    <!-- ══ 03 TRIGGER ════════════════════════════════════════════════════ -->
+    <section id="trigger">
+      <div class="eyebrow">03 · Materi Inti</div>
+      <h2>Trigger</h2>
+      <p class="lede">Kode yang otomatis jalan saat INSERT/UPDATE/DELETE terjadi. Tidak dipanggil manual — reaktif terhadap event tabel.</p>
+
+      <div class="panel">
+        <h3>Anatomi lengkap trigger</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Komponen</th><th>Pilihan</th><th>Arti & Kapan Pakai</th></tr>
+          <tr><td class="mono-sm">Timing</td><td><span class="tag-ok">BEFORE</span> / <span class="tag-warn">AFTER</span></td><td>BEFORE: validasi & cegah data masuk. AFTER: aksi turunan (update tabel lain, logging)</td></tr>
+          <tr><td class="mono-sm">Event</td><td class="mono-sm">INSERT / UPDATE / DELETE</td><td>Trigger bereaksi pada operasi mana</td></tr>
+          <tr><td class="mono-sm">Level</td><td class="mono-sm">FOR EACH ROW</td><td>Jalan sekali per baris yang terdampak (MySQL hanya punya ini)</td></tr>
+          <tr><td class="mono-sm">NEW</td><td>INSERT, UPDATE</td><td>Nilai baris baru / setelah diubah. Bisa dimodifikasi di BEFORE INSERT/UPDATE</td></tr>
+          <tr><td class="mono-sm">OLD</td><td>UPDATE, DELETE</td><td>Nilai baris sebelum diubah/dihapus. Read-only</td></tr>
+          <tr><td class="mono-sm">SIGNAL</td><td class="mono-sm">SQLSTATE '45000'</td><td>Lempar error custom → batalkan operasi yang memicu trigger</td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>BEFORE INSERT — validasi stok berlapis sebelum order masuk</h3>
+        <div class="code-wrap">
+          <button class="code-copy" onclick="copyCode(this)">copy</button>
+          <span class="code-label">SQL</span>
+          <div class="code"><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> trg_validasi_order_items
+<span class="k">BEFORE INSERT ON</span> order_items
+<span class="k">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="k">DECLARE</span> v_stok    <span class="k">INT</span>;
+  <span class="k">DECLARE</span> v_harga   <span class="k">DECIMAL</span>(12,2);
+
+  <span class="c">-- Ambil stok & harga dari tabel produk</span>
+  <span class="k">SELECT</span> stok, harga <span class="k">INTO</span> v_stok, v_harga
+  <span class="k">FROM</span> produk
+  <span class="k">WHERE</span> produk_id <span class="k">=</span> NEW.produk_id;
+
+  <span class="c">-- Validasi 1: produk harus ada</span>
+  <span class="k">IF</span> v_stok <span class="k">IS NULL THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Produk tidak ditemukan'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="c">-- Validasi 2: qty harus positif</span>
+  <span class="k">IF</span> NEW.qty <span class="k">&lt;=</span> 0 <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Qty pesanan harus lebih dari 0'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="c">-- Validasi 3: stok mencukupi</span>
+  <span class="k">IF</span> NEW.qty <span class="k">></span> v_stok <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Qty pesanan melebihi stok tersedia'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="c">-- Normalisasi: pastikan harga_satuan sesuai dengan harga di tabel produk</span>
+  <span class="c">-- (modifikasi NEW hanya bisa dilakukan di BEFORE trigger)</span>
+  <span class="k">SET</span> NEW.harga_satuan <span class="k">=</span> v_harga;
+
+<span class="k">END</span>$$
+
+<span class="k">DELIMITER</span> ;</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>AFTER UPDATE — restore stok otomatis saat order di-cancel</h3>
+        <div class="code-wrap">
+          <button class="code-copy" onclick="copyCode(this)">copy</button>
+          <span class="code-label">SQL</span>
+          <div class="code"><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> trg_restore_stok_on_cancel
+<span class="k">AFTER UPDATE ON</span> orders
+<span class="k">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="c">-- Hanya proses jika status berubah PENDING → CANCELLED</span>
+  <span class="c">-- OLD.status = nilai sebelum UPDATE, NEW.status = nilai setelah UPDATE</span>
+  <span class="k">IF</span> OLD.status <span class="k">=</span> <span class="s">'PENDING'</span> <span class="k">AND</span> NEW.status <span class="k">=</span> <span class="s">'CANCELLED'</span> <span class="k">THEN</span>
+
+    <span class="c">-- Kembalikan stok semua produk dalam order ini sekaligus</span>
+    <span class="k">UPDATE</span> produk p
+    <span class="k">JOIN</span>   order_items oi <span class="k">ON</span> p.produk_id <span class="k">=</span> oi.produk_id
+    <span class="k">SET</span>    p.stok <span class="k">=</span> p.stok <span class="k">+</span> oi.qty
+    <span class="k">WHERE</span>  oi.order_id <span class="k">=</span> NEW.order_id;
+
+    <span class="c">-- Catat ke log (OLD & NEW tersedia di body trigger)</span>
+    <span class="k">INSERT INTO</span> order_log (order_id, aksi, old_status, new_status, keterangan, waktu)
+    <span class="k">VALUES</span> (
+      NEW.order_id,
+      <span class="s">'CANCEL_RESTOCK'</span>,
+      OLD.status,
+      NEW.status,
+      <span class="f">CONCAT</span>(<span class="s">'Stok dikembalikan. Refund: Rp '</span>, <span class="f">FORMAT</span>(NEW.total_harga, 0)),
+      <span class="f">NOW</span>()
+    );
+
+  <span class="k">END IF</span>;
+<span class="k">END</span>$$
+
+<span class="k">DELIMITER</span> ;</div>
+        </div>
+      </div>
+      <div class="note note-warn"><b>Jebakan UAS #3:</b> "Cegah data invalid" → <b>BEFORE</b> (data belum masuk, masih bisa ditolak). "Lakukan aksi setelah data berubah" → <b>AFTER</b>. Salah pilih timing = trigger tidak bisa menjalankan tujuannya.</div>
+    </section>
+
+    <!-- ══ 04 TRANSACTION ════════════════════════════════════════════════ -->
+    <section id="transaction">
+      <div class="eyebrow">04 · Materi Inti</div>
+      <h2>SQL Transaction</h2>
+      <p class="lede">Sekumpulan operasi SQL yang dianggap satu unit — semuanya berhasil atau semuanya dibatalkan. Fondasi dari properti ACID.</p>
+
+      <div class="panel">
+        <h3>ACID — hafal definisi + contoh kasusnya</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Huruf</th><th>Properti</th><th>Definisi</th><th>Contoh Pelanggaran</th></tr>
+          <tr><td class="mono-sm ok" style="color:var(--accent)">A</td><td>Atomicity</td><td>Semua langkah sukses, atau tidak ada yang tersimpan sama sekali</td><td>Stok berkurang tapi order tidak terbuat</td></tr>
+          <tr><td class="mono-sm" style="color:var(--blue)">C</td><td>Consistency</td><td>DB berpindah dari satu state valid ke state valid lain</td><td>Total stok di inventory ≠ total di order_items</td></tr>
+          <tr><td class="mono-sm" style="color:var(--purple)">I</td><td>Isolation</td><td>Transaksi concurrent tidak saling melihat perubahan yang belum di-commit</td><td>Dua user beli produk terakhir secara bersamaan</td></tr>
+          <tr><td class="mono-sm" style="color:var(--string)">D</td><td>Durability</td><td>Setelah COMMIT, perubahan permanen meski server mati</td><td>Data order hilang setelah server crash</td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>Transaction dengan error handling penuh — pola production</h3>
+        <div class="code-wrap">
+          <button class="code-copy" onclick="copyCode(this)">copy</button>
+          <span class="code-label">SQL · Stored Procedure</span>
+          <div class="code"><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> sp_checkout(
+  <span class="k">IN</span>  p_customer_id  <span class="k">INT</span>,
+  <span class="k">IN</span>  p_produk_id    <span class="k">INT</span>,
+  <span class="k">IN</span>  p_qty          <span class="k">INT</span>,
+  <span class="k">OUT</span> p_order_id     <span class="k">INT</span>     <span class="c">-- kembalikan ID order ke pemanggil</span>
+)
+<span class="k">BEGIN</span>
+  <span class="k">DECLARE</span> v_harga   <span class="k">DECIMAL</span>(12,2);
+  <span class="k">DECLARE</span> v_stok    <span class="k">INT</span>;
+  <span class="k">DECLARE</span> v_total   <span class="k">DECIMAL</span>(12,2);
+
+  <span class="c">-- EXIT HANDLER: jika SQL error apapun terjadi → rollback otomatis</span>
+  <span class="k">DECLARE EXIT HANDLER FOR SQLEXCEPTION</span>
+  <span class="k">BEGIN</span>
+    <span class="k">ROLLBACK</span>;
+    <span class="k">RESIGNAL</span>;  <span class="c">-- teruskan error ke pemanggil</span>
+  <span class="k">END</span>;
+
+  <span class="c">-- Ambil data produk + kunci baris (FOR UPDATE = pessimistic lock)</span>
+  <span class="c">-- Ini mencegah race condition saat 2 user checkout produk yang sama</span>
+  <span class="k">SELECT</span> harga, stok
+  <span class="k">INTO</span>   v_harga, v_stok
+  <span class="k">FROM</span>   produk
+  <span class="k">WHERE</span>  produk_id <span class="k">=</span> p_produk_id
+  <span class="k">FOR UPDATE</span>;
+
+  <span class="c">-- Validasi sebelum transaction dimulai</span>
+  <span class="k">IF</span> v_stok <span class="k">IS NULL THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span> <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Produk tidak ada'</span>;
+  <span class="k">END IF</span>;
+  <span class="k">IF</span> v_stok <span class="k">&lt;</span> p_qty <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span> <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Stok tidak cukup'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="k">SET</span> v_total <span class="k">=</span> v_harga <span class="k">*</span> p_qty;
+
+  <span class="k">START TRANSACTION</span>;
+
+    <span class="c">-- Step 1: Kurangi stok (dengan defensive AND untuk keamanan ekstra)</span>
+    <span class="k">UPDATE</span> produk
+    <span class="k">SET</span>    stok <span class="k">=</span> stok <span class="k">-</span> p_qty
+    <span class="k">WHERE</span>  produk_id <span class="k">=</span> p_produk_id
+      <span class="k">AND</span>  stok <span class="k">>=</span> p_qty;  <span class="c">-- defensive check</span>
+
+    <span class="c">-- Step 2: Buat order baru</span>
+    <span class="k">INSERT INTO</span> orders (customer_id, tanggal, total_harga, status)
+    <span class="k">VALUES</span> (p_customer_id, <span class="f">CURDATE</span>(), v_total, <span class="s">'PENDING'</span>);
+
+    <span class="k">SET</span> p_order_id <span class="k">=</span> <span class="f">LAST_INSERT_ID</span>();
+
+    <span class="c">-- Step 3: Catat item pesanan</span>
+    <span class="k">INSERT INTO</span> order_items (order_id, produk_id, qty, harga_satuan)
+    <span class="k">VALUES</span> (p_order_id, p_produk_id, p_qty, v_harga);
+
+  <span class="k">COMMIT</span>;
+<span class="k">END</span>$$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Cara pakai:</span>
+<span class="k">SET</span> @new_order_id <span class="k">=</span> 0;
+<span class="k">CALL</span> sp_checkout(3, 104, 1, @new_order_id);
+<span class="k">SELECT</span> @new_order_id <span class="k">AS</span> order_baru;</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>SAVEPOINT — rollback parsial untuk batch processing</h3>
+        <div class="code-wrap">
+          <span class="code-label">SQL</span>
+          <div class="code"><span class="k">START TRANSACTION</span>;
+
+<span class="c">-- ── Order Customer A ─────────────────────────────</span>
+<span class="k">SAVEPOINT</span> sp_customer_a;
+
+<span class="k">UPDATE</span> produk <span class="k">SET</span> stok <span class="k">=</span> stok <span class="k">-</span> 20
+<span class="k">WHERE</span> produk_id <span class="k">=</span> 104 <span class="k">AND</span> stok <span class="k">>=</span> 20;  <span class="c">-- stok hanya 15 → 0 baris terupdate</span>
+
+<span class="c">-- ROW_COUNT() = 0 → update tidak berhasil karena stok kurang</span>
+<span class="c">-- Batalkan hanya order Customer A, bukan seluruh transaksi</span>
+<span class="k">ROLLBACK TO</span> sp_customer_a;  <span class="c">-- ↩ kembali ke checkpoint sp_customer_a</span>
+
+<span class="c">-- ── Order Customer B (lanjut, tidak ikut dibatalkan) ──</span>
+<span class="k">SAVEPOINT</span> sp_customer_b;
+
+<span class="k">UPDATE</span> produk <span class="k">SET</span> stok <span class="k">=</span> stok <span class="k">-</span> 1
+<span class="k">WHERE</span> produk_id <span class="k">=</span> 105 <span class="k">AND</span> stok <span class="k">>=</span> 1;
+
+<span class="k">INSERT INTO</span> orders (customer_id, tanggal, total_harga, status)
+<span class="k">VALUES</span> (5, <span class="f">CURDATE</span>(), 380000, <span class="s">'PENDING'</span>);
+
+<span class="k">INSERT INTO</span> order_items (order_id, produk_id, qty, harga_satuan)
+<span class="k">VALUES</span> (<span class="f">LAST_INSERT_ID</span>(), 105, 1, 380000);
+
+<span class="k">COMMIT</span>;  <span class="c">-- hanya order Customer B yang tersimpan</span>
+
+<span class="c">-- Catatan penting:</span>
+<span class="c">-- ROLLBACK TO SAVEPOINT → tidak mengakhiri transaksi, hanya mundur ke checkpoint</span>
+<span class="c">-- RELEASE SAVEPOINT sp_nama → hapus checkpoint (opsional, otomatis saat COMMIT/ROLLBACK penuh)</span></div>
+        </div>
+      </div>
+      <div class="note note-warn"><b>Jebakan UAS #4:</b> Soal "jelaskan kenapa checkout harus pakai transaction" → jawabannya harus menyebut <b>Atomicity</b> secara eksplisit + skenario konkret jika salah satu langkah gagal di tengah (stok sudah berkurang, order tidak terbuat).</div>
+    </section>
+
+    <!-- ══ 05 VIEW & PROCEDURE ═══════════════════════════════════════════ -->
+    <section id="view">
+      <div class="eyebrow">05 · Materi Inti</div>
+      <h2>View &amp; Stored Procedure</h2>
+      <p class="lede">View = tabel virtual dari query. Stored Procedure = blok kode SQL yang bisa dipanggil berulang. Keduanya wajib muncul di soal studi kasus.</p>
+
+      <div class="panel">
+        <h3>CREATE VIEW — laporan penjualan bulanan</h3>
+        <div class="code-wrap">
+          <button class="code-copy" onclick="copyCode(this)">copy</button>
+          <span class="code-label">SQL</span>
+          <div class="code"><span class="c">-- View merangkum query kompleks jadi "tabel" yang bisa di-query biasa</span>
+<span class="k">CREATE OR REPLACE VIEW</span> v_laporan_penjualan <span class="k">AS</span>
+<span class="k">SELECT</span>
+  p.produk_id,
+  p.nama_produk,
+  k.nama_kategori,
+  <span class="f">MONTH</span>(o.tanggal)              <span class="k">AS</span> bulan,
+  <span class="f">YEAR</span>(o.tanggal)               <span class="k">AS</span> tahun,
+  <span class="f">SUM</span>(oi.qty)                   <span class="k">AS</span> total_qty_terjual,
+  <span class="f">SUM</span>(oi.qty <span class="k">*</span> oi.harga_satuan) <span class="k">AS</span> total_revenue
+<span class="k">FROM</span> produk p
+<span class="k">JOIN</span> kategori k     <span class="k">ON</span> p.kategori_id  <span class="k">=</span> k.kategori_id
+<span class="k">JOIN</span> order_items oi <span class="k">ON</span> p.produk_id    <span class="k">=</span> oi.produk_id
+<span class="k">JOIN</span> orders o       <span class="k">ON</span> oi.order_id    <span class="k">=</span> o.order_id
+<span class="k">WHERE</span> o.status <span class="k">IN</span> (<span class="s">'COMPLETED'</span>, <span class="s">'PENDING'</span>)
+<span class="k">GROUP BY</span>
+  p.produk_id, p.nama_produk, k.nama_kategori,
+  <span class="f">MONTH</span>(o.tanggal), <span class="f">YEAR</span>(o.tanggal);
+
+<span class="c">-- Query view sama persis seperti query tabel biasa:</span>
+<span class="k">SELECT</span> <span class="k">*</span> <span class="k">FROM</span> v_laporan_penjualan <span class="k">WHERE</span> bulan <span class="k">=</span> 5 <span class="k">ORDER BY</span> total_revenue <span class="k">DESC</span>;
+
+<span class="c">-- Produk revenue tertinggi per bulan per kategori (pakai correlated subquery ke view):</span>
+<span class="k">SELECT</span> v.nama_kategori, v.bulan, v.tahun, v.nama_produk, v.total_revenue
+<span class="k">FROM</span> v_laporan_penjualan v
+<span class="k">WHERE</span> v.total_revenue <span class="k">=</span> (
+  <span class="k">SELECT</span> <span class="f">MAX</span>(v2.total_revenue)
+  <span class="k">FROM</span>   v_laporan_penjualan v2
+  <span class="k">WHERE</span>  v2.nama_kategori <span class="k">=</span> v.nama_kategori
+    <span class="k">AND</span>  v2.bulan <span class="k">=</span> v.bulan
+    <span class="k">AND</span>  v2.tahun <span class="k">=</span> v.tahun
+)
+<span class="k">ORDER BY</span> v.tahun <span class="k">DESC</span>, v.bulan <span class="k">DESC</span>;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 06 ERD ════════════════════════════════════════════════════════ -->
+    <section id="erd">
+      <div class="eyebrow">06 · Studi Kasus</div>
+      <h2>ERD — Toko Online (5 Tabel)</h2>
+      <p class="lede">ERD yang diperluas dari versi sebelumnya — sekarang ada 5 tabel termasuk <code>kategori</code> dan kolom <code>harga_satuan</code> di order_items.</p>
+
+      <div class="erd-wrap">
+        <svg viewBox="0 0 1000 480" width="100%" style="min-width:820px;display:block;" aria-label="ERD Toko Online">
+          <defs>
+            <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0,0 L9,4.5 L0,9 Z" fill="#263342"/>
+            </marker>
+          </defs>
+
+          <!-- CUSTOMERS -->
+          <g transform="translate(20,40)">
+            <rect class="ent-rect" width="200" height="148" rx="9"/>
+            <rect class="ent-head" width="200" height="30" rx="9"/>
+            <rect class="ent-head" x="0" y="21" width="200" height="9" rx="0"/>
+            <text class="ent-title" x="12" y="21">CUSTOMERS</text>
+            <text class="ent-field ent-pk" x="12" y="54">PK customer_id INT</text>
+            <text class="ent-field" x="12" y="74">   nama VARCHAR(100)</text>
+            <text class="ent-field" x="12" y="92">   email VARCHAR(150)</text>
+            <text class="ent-field" x="12" y="110">   kota VARCHAR(50)</text>
+            <text class="ent-field" x="12" y="128">   tgl_daftar DATE</text>
+          </g>
+
+          <!-- ORDERS -->
+          <g transform="translate(300,30)">
+            <rect class="ent-rect" width="210" height="166" rx="9"/>
+            <rect class="ent-head" width="210" height="30" rx="9"/>
+            <rect class="ent-head" x="0" y="21" width="210" height="9" rx="0"/>
+            <text class="ent-title" x="12" y="21">ORDERS</text>
+            <text class="ent-field ent-pk" x="12" y="54">PK order_id INT</text>
+            <text class="ent-field ent-fk" x="12" y="74">FK customer_id INT</text>
+            <text class="ent-field" x="12" y="92">   tanggal DATE</text>
+            <text class="ent-field" x="12" y="110">   total_harga DECIMAL</text>
+            <text class="ent-field" x="12" y="128">   status ENUM</text>
+            <text class="ent-field" x="34" y="144">  (PENDING/COMPLETED/</text>
+            <text class="ent-field" x="34" y="160">   CANCELLED)</text>
+          </g>
+
+          <!-- ORDER_ITEMS -->
+          <g transform="translate(600,30)">
+            <rect class="ent-rect" width="220" height="148" rx="9"/>
+            <rect class="ent-head" width="220" height="30" rx="9"/>
+            <rect class="ent-head" x="0" y="21" width="220" height="9" rx="0"/>
+            <text class="ent-title" x="12" y="21">ORDER_ITEMS</text>
+            <text class="ent-field ent-pk" x="12" y="54">PK order_item_id INT</text>
+            <text class="ent-field ent-fk" x="12" y="74">FK order_id INT</text>
+            <text class="ent-field ent-fk" x="12" y="92">FK produk_id INT</text>
+            <text class="ent-field" x="12" y="110">   qty INT</text>
+            <text class="ent-field" x="12" y="128">   harga_satuan DECIMAL</text>
+          </g>
+
+          <!-- PRODUK -->
+          <g transform="translate(580,270)">
+            <rect class="ent-rect" width="240" height="166" rx="9"/>
+            <rect class="ent-head" width="240" height="30" rx="9"/>
+            <rect class="ent-head" x="0" y="21" width="240" height="9" rx="0"/>
+            <text class="ent-title" x="12" y="21">PRODUK</text>
+            <text class="ent-field ent-pk" x="12" y="54">PK produk_id INT</text>
+            <text class="ent-field" x="12" y="74">   nama_produk VARCHAR(200)</text>
+            <text class="ent-field" x="12" y="92">   harga DECIMAL(12,2)</text>
+            <text class="ent-field" x="12" y="110">   stok INT</text>
+            <text class="ent-field ent-fk" x="12" y="128">FK kategori_id INT</text>
+          </g>
+
+          <!-- KATEGORI -->
+          <g transform="translate(280,290)">
+            <rect class="ent-rect" width="200" height="92" rx="9"/>
+            <rect class="ent-head" width="200" height="30" rx="9"/>
+            <rect class="ent-head" x="0" y="21" width="200" height="9" rx="0"/>
+            <text class="ent-title" x="12" y="21">KATEGORI</text>
+            <text class="ent-field ent-pk" x="12" y="54">PK kategori_id INT</text>
+            <text class="ent-field" x="12" y="72">   nama_kategori VARCHAR</text>
+          </g>
+
+          <!-- Lines -->
+          <!-- CUSTOMERS → ORDERS (1 to N) -->
+          <line class="rel-line" x1="220" y1="114" x2="300" y2="114"/>
+          <text class="rel-label" x="228" y="108">1</text>
+          <text class="rel-label" x="282" y="108">N</text>
+
+          <!-- ORDERS → ORDER_ITEMS (1 to N) -->
+          <line class="rel-line" x1="510" y1="110" x2="600" y2="110"/>
+          <text class="rel-label" x="518" y="104">1</text>
+          <text class="rel-label" x="582" y="104">N</text>
+
+          <!-- ORDER_ITEMS → PRODUK (N to 1) -->
+          <line class="rel-line" x1="710" y1="178" x2="710" y2="270"/>
+          <text class="rel-label" x="718" y="200">N</text>
+          <text class="rel-label" x="718" y="260">1</text>
+
+          <!-- PRODUK → KATEGORI (N to 1) -->
+          <line class="rel-line" x1="580" y1="340" x2="480" y2="340"/>
+          <text class="rel-label" x="558" y="334">N</text>
+          <text class="rel-label" x="490" y="334">1</text>
+        </svg>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h3>Cara baca relasi</h3>
+        <ul style="margin:0;padding-left:20px;font-size:14px;color:var(--text)">
+          <li>Satu <b>customer</b> bisa punya banyak <b>order</b> (1–N)</li>
+          <li>Satu <b>order</b> bisa berisi banyak item lewat <b>order_items</b> (1–N)</li>
+          <li>Satu <b>order_item</b> hanya merujuk satu <b>produk</b> (N–1)</li>
+          <li>Satu <b>produk</b> termasuk dalam satu <b>kategori</b> (N–1)</li>
+          <li><b>order_items</b> menyelesaikan relasi N–N antara orders dan produk</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══ 07 SAMPLE DB ══════════════════════════════════════════════════ -->
+    <section id="sampledb">
+      <div class="eyebrow">07 · Studi Kasus</div>
+      <h2>Sample Database — Toko Online</h2>
+      <p class="lede">Data dummy lengkap 5 tabel yang menjadi basis semua soal di bawah. Hafalin relasinya sebelum ngerjain soal.</p>
+
+      <div class="tabs" id="dbTabs">
+        <button class="tab-btn active" data-tab="db-cat">kategori</button>
+        <button class="tab-btn" data-tab="db-prod">produk</button>
+        <button class="tab-btn" data-tab="db-cust">customers</button>
+        <button class="tab-btn" data-tab="db-ord">orders</button>
+        <button class="tab-btn" data-tab="db-oi">order_items</button>
+      </div>
+
+      <div class="tab-content active" id="db-cat"><div class="tablewrap"><table class="dt">
+        <tr><th>kategori_id</th><th>nama_kategori</th></tr>
+        <tr><td class="pk">1</td><td>Elektronik</td></tr>
+        <tr><td class="pk">2</td><td>Fashion</td></tr>
+        <tr><td class="pk">3</td><td>Olahraga</td></tr>
+      </table></div></div>
+
+      <div class="tab-content" id="db-prod"><div class="tablewrap"><table class="dt">
+        <tr><th>produk_id</th><th>nama_produk</th><th>harga</th><th>stok</th><th>kategori_id</th></tr>
+        <tr><td class="pk">101</td><td>Keyboard Mekanik</td><td>450,000</td><td>20</td><td class="fk">1</td></tr>
+        <tr><td class="pk">102</td><td>Mouse Wireless</td><td>150,000</td><td>35</td><td class="fk">1</td></tr>
+        <tr><td class="pk">103</td><td>Kemeja Flanel</td><td>180,000</td><td>50</td><td class="fk">2</td></tr>
+        <tr><td class="pk">104</td><td>Sepatu Lari</td><td>620,000</td><td>15</td><td class="fk">3</td></tr>
+        <tr><td class="pk">105</td><td>Headphone BT</td><td>380,000</td><td>10</td><td class="fk">1</td></tr>
+      </table></div></div>
+
+      <div class="tab-content" id="db-cust"><div class="tablewrap"><table class="dt">
+        <tr><th>customer_id</th><th>nama</th><th>email</th><th>kota</th></tr>
+        <tr><td class="pk">1</td><td>Dewi Lestari</td><td>dewi@mail.com</td><td>Jakarta</td></tr>
+        <tr><td class="pk">2</td><td>Rangga Pratama</td><td>rangga@mail.com</td><td>Bandung</td></tr>
+        <tr><td class="pk">3</td><td>Sinta Wulandari</td><td>sinta@mail.com</td><td>Surabaya</td></tr>
+        <tr><td class="pk">4</td><td>Budi Santoso</td><td>budi@mail.com</td><td>Jakarta</td></tr>
+        <tr><td class="pk">5</td><td>Arief Wijaya</td><td>arief@mail.com</td><td>Surabaya</td></tr>
+      </table></div></div>
+
+      <div class="tab-content" id="db-ord"><div class="tablewrap"><table class="dt">
+        <tr><th>order_id</th><th>customer_id</th><th>tanggal</th><th>total_harga</th><th>status</th></tr>
+        <tr><td class="pk">1001</td><td class="fk">1</td><td>2026-05-01</td><td>600,000</td><td><span class="tag-ok">COMPLETED</span></td></tr>
+        <tr><td class="pk">1002</td><td class="fk">2</td><td>2026-05-03</td><td>180,000</td><td><span class="tag-ok">COMPLETED</span></td></tr>
+        <tr><td class="pk">1003</td><td class="fk">1</td><td>2026-05-10</td><td>620,000</td><td><span class="tag-warn">PENDING</span></td></tr>
+        <tr><td class="pk">1004</td><td class="fk">4</td><td>2026-05-12</td><td>1,200,000</td><td><span class="tag-ok">COMPLETED</span></td></tr>
+        <tr><td class="pk">1005</td><td class="fk">3</td><td>2026-05-14</td><td>380,000</td><td><span class="tag-ok">COMPLETED</span></td></tr>
+        <tr><td class="pk">1006</td><td class="fk">4</td><td>2026-05-20</td><td>450,000</td><td><span class="tag-red">CANCELLED</span></td></tr>
+        <tr><td class="pk">1007</td><td class="fk">5</td><td>2026-05-22</td><td>760,000</td><td><span class="tag-warn">PENDING</span></td></tr>
+      </table></div></div>
+
+      <div class="tab-content" id="db-oi"><div class="tablewrap"><table class="dt">
+        <tr><th>order_item_id</th><th>order_id</th><th>produk_id</th><th>qty</th><th>harga_satuan</th></tr>
+        <tr><td class="pk">1</td><td class="fk">1001</td><td class="fk">101</td><td>1</td><td>450,000</td></tr>
+        <tr><td class="pk">2</td><td class="fk">1001</td><td class="fk">102</td><td>1</td><td>150,000</td></tr>
+        <tr><td class="pk">3</td><td class="fk">1002</td><td class="fk">103</td><td>1</td><td>180,000</td></tr>
+        <tr><td class="pk">4</td><td class="fk">1003</td><td class="fk">104</td><td>1</td><td>620,000</td></tr>
+        <tr><td class="pk">5</td><td class="fk">1004</td><td class="fk">101</td><td>2</td><td>450,000</td></tr>
+        <tr><td class="pk">6</td><td class="fk">1004</td><td class="fk">102</td><td>2</td><td>150,000</td></tr>
+        <tr><td class="pk">7</td><td class="fk">1005</td><td class="fk">105</td><td>1</td><td>380,000</td></tr>
+        <tr><td class="pk">8</td><td class="fk">1007</td><td class="fk">101</td><td>1</td><td>450,000</td></tr>
+        <tr><td class="pk">9</td><td class="fk">1007</td><td class="fk">104</td><td>1</td><td>310,000</td></tr>
+      </table></div></div>
+    </section>
+
+    <!-- ══ SOAL ESSAY ════════════════════════════════════════════════════ -->
+    <section id="essay">
+      <div class="eyebrow">Simulasi UAS · Bagian A</div>
+      <h2>Essay — 4 Soal (40%)</h2>
+      <p class="lede">Soal essay menguji pemahaman konseptual. Jawaban harus pakai terminologi yang tepat dan contoh konkret. Buka tiap soal, coba jawab sendiri dulu.</p>
+
+      <div class="qsection-header">
+        <span class="pill-blue">ESSAY</span>
+        <span class="label">Bagian A — Pemahaman Konsep &amp; Analisis</span>
+        <span class="pct">Bobot: 40% dari total nilai</span>
+      </div>
+
+      <!-- Q1 -->
+      <div class="qcard" data-qid="1">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">01</span>
+          <span class="qtype qt-essay">Essay</span>
+          <span class="qtitle">Jelaskan urutan eksekusi SQL dan mengapa WHERE tidak bisa menyaring hasil aggregate function.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Jelaskan urutan eksekusi klausa-klausa SQL berikut secara berurutan: FROM, JOIN, WHERE, GROUP BY, HAVING, SELECT, ORDER BY, LIMIT. Kemudian berikan contoh query yang <b>salah</b> (menggunakan WHERE dengan aggregate) dan versi yang <b>benar</b>, serta jelaskan mengapa versi salah akan menghasilkan error.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Pembahasan Lengkap</h4></div>
+            <p><b>Urutan eksekusi SQL (bukan urutan penulisan!):</b></p>
+            <ol style="font-size:14px;color:var(--text);padding-left:20px;margin:0 0 14px">
+              <li><b>FROM / JOIN</b> — Database menentukan tabel dan melakukan join; menghasilkan working table mentah</li>
+              <li><b>WHERE</b> — Menyaring baris <i>mentah</i>; pada titik ini aggregate belum dihitung sama sekali</li>
+              <li><b>GROUP BY</b> — Mengelompokkan baris hasil WHERE menjadi grup-grup</li>
+              <li><b>HAVING</b> — Menyaring <i>grup</i> berdasarkan kondisi; aggregate sudah tersedia di sini</li>
+              <li><b>SELECT</b> — Memilih dan menghitung kolom output; alias kolom lahir di sini</li>
+              <li><b>ORDER BY</b> — Mengurutkan hasil (bisa pakai alias dari SELECT)</li>
+              <li><b>LIMIT / OFFSET</b> — Membatasi jumlah baris yang dikembalikan ke client</li>
+            </ol>
+            <div class="code-wrap">
+              <span class="code-label">SQL · Perbandingan</span>
+              <div class="code"><span class="c">-- ❌ SALAH: WHERE tidak bisa menyaring hasil aggregate</span>
+<span class="c">-- Error: "Invalid use of group function"</span>
+<span class="k">SELECT</span> customer_id, <span class="f">SUM</span>(total_harga) <span class="k">AS</span> total
+<span class="k">FROM</span>   orders
+<span class="k">WHERE</span>  <span class="f">SUM</span>(total_harga) <span class="k">></span> 500000  <span class="c">-- ← ERROR! SUM belum ada saat WHERE jalan</span>
+<span class="k">GROUP BY</span> customer_id;
+
+<span class="c">-- ✅ BENAR: pindahkan ke HAVING karena aggregate sudah ada setelah GROUP BY</span>
+<span class="k">SELECT</span>   customer_id, <span class="f">SUM</span>(total_harga) <span class="k">AS</span> total
+<span class="k">FROM</span>     orders
+<span class="k">WHERE</span>    status <span class="k">=</span> <span class="s">'COMPLETED'</span>  <span class="c">-- ← WHERE boleh: filter baris biasa</span>
+<span class="k">GROUP BY</span> customer_id
+<span class="k">HAVING</span>   <span class="f">SUM</span>(total_harga) <span class="k">></span> 500000  <span class="c">-- ← HAVING boleh: filter setelah aggregate</span>
+<span class="k">ORDER BY</span> total <span class="k">DESC</span>;  <span class="c">-- alias 'total' bisa dipakai di sini (lahir di SELECT)</span></div>
+            </div>
+            <p><b>Mengapa error?</b> Saat WHERE dieksekusi (langkah 2), mesin database belum mengelompokkan baris (GROUP BY baru di langkah 3) dan belum menghitung aggregate apapun. SUM(total_harga) tidak memiliki nilai yang bisa dibandingkan. Database tidak bisa mengevaluasi kondisi yang merujuk ke sesuatu yang belum ada.</p>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="qcard" data-qid="2">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">02</span>
+          <span class="qtype qt-essay">Essay</span>
+          <span class="qtitle">Analisis perbedaan Correlated vs Non-Correlated Subquery dari sisi performa dan use case.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Jelaskan perbedaan correlated dan non-correlated subquery. Berikan masing-masing satu contoh SQL menggunakan database Toko Online. Analisis mengapa correlated subquery bisa lebih lambat untuk dataset besar, dan kapan tetap perlu digunakan.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Pembahasan Lengkap</h4></div>
+            <div class="compare-grid">
+              <div class="compare-card cc-ok">
+                <div class="cc-title">Non-Correlated</div>
+                <ul>
+                  <li>Tidak merujuk kolom outer query</li>
+                  <li>Dieksekusi <b>1 kali</b>, hasilnya di-cache</li>
+                  <li>Kompleksitas: O(1) eksekusi subquery</li>
+                  <li>Cocok untuk: perbandingan dengan nilai global (rata-rata semua, max semua)</li>
+                </ul>
+              </div>
+              <div class="compare-card cc-warn">
+                <div class="cc-title">Correlated</div>
+                <ul>
+                  <li>Merujuk kolom dari outer query</li>
+                  <li>Dieksekusi <b>per baris</b> outer table</li>
+                  <li>Kompleksitas: O(n) eksekusi subquery</li>
+                  <li>Cocok untuk: "di atas rata-rata grupnya sendiri"</li>
+                </ul>
+              </div>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">SQL · Non-Correlated</span>
+              <div class="code"><span class="c">-- Non-Correlated: subquery dieksekusi SEKALI, hasilnya 356000</span>
+<span class="c">-- Query luar membandingkan setiap harga dengan 356000</span>
+<span class="k">SELECT</span> nama_produk, harga,
+  harga <span class="k">-</span> (<span class="k">SELECT</span> <span class="f">AVG</span>(harga) <span class="k">FROM</span> produk) <span class="k">AS</span> selisih
+<span class="k">FROM</span> produk
+<span class="k">WHERE</span> harga <span class="k">></span> (<span class="k">SELECT</span> <span class="f">AVG</span>(harga) <span class="k">FROM</span> produk);
+<span class="c">-- Jumlah eksekusi subquery: 2x (sekali per kemunculan di SQL)</span></div>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">SQL · Correlated</span>
+              <div class="code"><span class="c">-- Correlated: cari customer dengan belanja > rata-rata KATEGORI KOTANYA</span>
+<span class="c">-- Subquery dieksekusi ULANG untuk tiap baris c (tiap customer)</span>
+<span class="c">-- Jika ada 1000 customer → subquery jalan 1000x</span>
+<span class="k">SELECT</span> c.nama, c.kota
+<span class="k">FROM</span>   customers c
+<span class="k">WHERE</span>  (<span class="k">SELECT</span> <span class="f">SUM</span>(o.total_harga)
+        <span class="k">FROM</span>   orders o
+        <span class="k">WHERE</span>  o.customer_id <span class="k">=</span> c.customer_id    <span class="c">-- ← referensi outer!</span>
+          <span class="k">AND</span>  o.status <span class="k">=</span> <span class="s">'COMPLETED'</span>)
+       <span class="k">></span>
+       (<span class="k">SELECT</span> <span class="f">AVG</span>(total_per_kota)
+        <span class="k">FROM</span>  (<span class="k">SELECT</span> <span class="f">SUM</span>(o2.total_harga) <span class="k">AS</span> total_per_kota
+               <span class="k">FROM</span>   orders o2
+               <span class="k">JOIN</span>   customers c2 <span class="k">ON</span> o2.customer_id <span class="k">=</span> c2.customer_id
+               <span class="k">WHERE</span>  c2.kota <span class="k">=</span> c.kota            <span class="c">-- ← juga correlated!</span>
+                 <span class="k">AND</span>  o2.status <span class="k">=</span> <span class="s">'COMPLETED'</span>
+               <span class="k">GROUP BY</span> c2.customer_id) sub);</div>
+            </div>
+            <p><b>Kapan tetap pakai correlated?</b> Saat perbandingan harus dilakukan terhadap nilai yang bergantung pada data baris itu sendiri — misalnya "di atas rata-rata kategorinya" atau "produk yang terjual lebih dari stok awalnya". Di MySQL 8.0+, window function seperti AVG() OVER (PARTITION BY ...) bisa menggantikan correlated subquery dengan performa jauh lebih baik.</p>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="qcard" data-qid="3">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">03</span>
+          <span class="qtype qt-essay">Essay</span>
+          <span class="qtitle">Jelaskan BEFORE vs AFTER trigger — kapan WAJIB pakai masing-masing dan konsekuensi salah pilih timing.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Jelaskan perbedaan timing BEFORE dan AFTER pada trigger MySQL secara konseptual. Berikan satu skenario nyata di sistem toko online yang <b>wajib</b> menggunakan BEFORE dan satu yang <b>wajib</b> menggunakan AFTER. Jelaskan konsekuensi jika timing dipilih terbalik.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Pembahasan Lengkap</h4></div>
+            <div class="compare-grid">
+              <div class="compare-card cc-blue">
+                <div class="cc-title">BEFORE Trigger</div>
+                <ul>
+                  <li>Jalan <b>sebelum</b> data tersimpan ke tabel</li>
+                  <li>Bisa <b>modifikasi NEW.kolom</b> (normalisasi data)</li>
+                  <li>Bisa <b>tolak dengan SIGNAL</b> → data tidak pernah masuk</li>
+                  <li>Tujuan: validasi &amp; sanitasi input</li>
+                </ul>
+              </div>
+              <div class="compare-card cc-ok">
+                <div class="cc-title">AFTER Trigger</div>
+                <ul>
+                  <li>Jalan <b>setelah</b> data berhasil tersimpan</li>
+                  <li>Tidak bisa modifikasi NEW (sudah terlanjur masuk)</li>
+                  <li>Punya akses ke ID baru (AUTO_INCREMENT sudah di-assign)</li>
+                  <li>Tujuan: efek samping (update tabel lain, logging)</li>
+                </ul>
+              </div>
+            </div>
+            <p><b>Skenario WAJIB BEFORE — Validasi Stok:</b> Kita harus <i>mencegah</i> baris order_items masuk jika stok tidak cukup. Kalau pakai AFTER, data sudah terlanjur tersimpan ke order_items sebelum kita bisa cek → database dalam state inkonsisten walau SIGNAL akhirnya membatalkan transaksi.</p>
+            <p><b>Skenario WAJIB AFTER — Logging Transaksi:</b> Kita perlu mencatat ke tabel log dengan menyertakan order_item_id yang baru di-insert. ID ini (AUTO_INCREMENT) baru tersedia setelah INSERT selesai. Kalau pakai BEFORE, ID belum di-assign → log akan berisi ID yang salah atau NULL.</p>
+            <div class="note note-red"><b>Konsekuensi salah timing:</b> AFTER untuk validasi → data masuk dulu baru ditolak (state inkonsisten sesaat). BEFORE untuk logging dengan NEW.id → ID belum ada, logging rusak. Keduanya menghasilkan bug yang sulit dideteksi.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="qcard" data-qid="4">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">04</span>
+          <span class="qtype qt-essay">Essay</span>
+          <span class="qtitle">Analisis skenario checkout tanpa Transaction — ACID mana yang dilanggar dan apa dampaknya?</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Seorang developer menulis kode checkout tanpa SQL Transaction. Server mati setelah UPDATE stok berhasil tetapi sebelum INSERT orders. Identifikasi properti ACID mana yang dilanggar, jelaskan dampak konkretnya terhadap data, dan implementasikan solusi yang benar.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Pembahasan Lengkap</h4></div>
+            <p><b>Skenario kegagalan:</b></p>
+            <div class="code-wrap">
+              <span class="code-label">Timeline Kegagalan</span>
+              <div class="code"><span class="ok">✓ Step 1: UPDATE produk SET stok = stok - 1 WHERE produk_id = 104;</span>
+<span class="ok">  → stok berkurang dari 15 → 14. Tersimpan di disk.</span>
+<span class="err">✗ [SERVER CRASH / KONEKSI PUTUS]</span>
+<span class="err">✗ Step 2: INSERT INTO orders ... → TIDAK PERNAH DIEKSEKUSI</span>
+<span class="err">✗ Step 3: INSERT INTO order_items ... → TIDAK PERNAH DIEKSEKUSI</span>
+
+<span class="c">-- Kondisi akhir database:</span>
+<span class="c">-- produk_id=104: stok=14 (berkurang 1, padahal tidak ada order)</span>
+<span class="c">-- orders: tidak ada order baru</span>
+<span class="c">-- order_items: tidak ada data baru</span>
+<span class="c">-- Customer sudah bayar tapi order tidak terbuat → chaos!</span></div>
+            </div>
+            <p><b>ACID yang dilanggar:</b></p>
+            <ul style="font-size:14px;color:var(--text);padding-left:20px;margin:0 0 14px">
+              <li>❌ <b>Atomicity</b> — Operasi tidak diperlakukan sebagai satu unit; hanya sebagian yang tersimpan</li>
+              <li>❌ <b>Consistency</b> — Database jatuh ke state tidak valid: stok berkurang tapi order tidak ada</li>
+              <li>✅ <b>Isolation</b> — Tidak relevan langsung (masalah di single-user scenario)</li>
+              <li>✅ <b>Durability</b> — Yang sempat di-commit memang persisten, tapi inilah masalahnya</li>
+            </ul>
+            <div class="code-wrap">
+              <span class="code-label">SQL · Solusi Benar</span>
+              <div class="code"><span class="k">START TRANSACTION</span>;
+
+  <span class="k">UPDATE</span> produk
+  <span class="k">SET</span>    stok <span class="k">=</span> stok <span class="k">-</span> 1
+  <span class="k">WHERE</span>  produk_id <span class="k">=</span> 104 <span class="k">AND</span> stok <span class="k">>=</span> 1;
+
+  <span class="k">INSERT INTO</span> orders (customer_id, tanggal, total_harga, status)
+  <span class="k">VALUES</span> (3, <span class="f">CURDATE</span>(), 620000, <span class="s">'PENDING'</span>);
+
+  <span class="k">INSERT INTO</span> order_items (order_id, produk_id, qty, harga_satuan)
+  <span class="k">VALUES</span> (<span class="f">LAST_INSERT_ID</span>(), 104, 1, 620000);
+
+<span class="k">COMMIT</span>;  <span class="c">-- semua berhasil → tersimpan permanen</span>
+
+<span class="c">-- Jika ada error di mana pun antara START TRANSACTION dan COMMIT:</span>
+<span class="c">-- ROLLBACK; → semua langkah dibatalkan, stok kembali ke 15</span></div>
+            </div>
+            <p>Dengan Transaction, jika server mati setelah UPDATE stok tetapi sebelum COMMIT, database akan otomatis me-rollback semua perubahan saat server restart (melalui redo log) — memastikan Atomicity terjaga.</p>
+          </div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ══ SOAL STUDI KASUS ══════════════════════════════════════════════ -->
+    <section id="sc">
+      <div class="eyebrow">Simulasi UAS · Bagian B</div>
+      <h2>Studi Kasus — 8 Soal SQL (60%)</h2>
+      <p class="lede">Soal studi kasus menuntut penulisan query SQL yang lengkap, benar, dan efisien. Tiap soal dilengkapi penjelasan per klausa.</p>
+
+      <div class="qsection-header">
+        <span class="pill-green">STUDI KASUS</span>
+        <span class="label">Bagian B — SQL Coding &amp; Query Analysis</span>
+        <span class="pct">Bobot: 60% dari total nilai</span>
+      </div>
+
+      <!-- Q5 -->
+      <div class="qcard" data-qid="5">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">05</span>
+          <span class="qtype qt-sc">Studi Kasus</span>
+          <span class="qtitle">Laporan penjualan per kategori — JOIN + GROUP BY + HAVING + multiple aggregate.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Tampilkan <b>nama kategori</b>, jumlah produk dalam kategori, rata-rata harga produk, produk termahal, dan total unit produk yang pernah terjual. Hanya tampilkan kategori yang rata-rata harganya di atas 250.000 dan memiliki minimal 2 produk. Urutkan dari rata-rata harga tertinggi.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL</span>
+              <div class="code"><span class="k">SELECT</span>
+  k.nama_kategori,
+  <span class="f">COUNT</span>(p.produk_id)             <span class="k">AS</span> jumlah_produk,
+  <span class="f">ROUND</span>(<span class="f">AVG</span>(p.harga), 0)          <span class="k">AS</span> rata_harga,
+  <span class="f">MAX</span>(p.harga)                   <span class="k">AS</span> harga_termahal,
+  <span class="f">COALESCE</span>(<span class="f">SUM</span>(oi.qty), 0)       <span class="k">AS</span> total_unit_terjual
+<span class="k">FROM</span> kategori k
+<span class="k">JOIN</span>      produk p       <span class="k">ON</span> p.kategori_id  <span class="k">=</span> k.kategori_id
+<span class="k">LEFT JOIN</span> order_items oi <span class="k">ON</span> oi.produk_id   <span class="k">=</span> p.produk_id
+<span class="k">GROUP BY</span>  k.kategori_id, k.nama_kategori
+<span class="k">HAVING</span>    <span class="f">AVG</span>(p.harga)      <span class="k">></span> 250000
+  <span class="k">AND</span>     <span class="f">COUNT</span>(p.produk_id) <span class="k">>=</span> 2
+<span class="k">ORDER BY</span>  rata_harga <span class="k">DESC</span>;</div>
+            </div>
+            <h5>// Penjelasan per klausa</h5>
+            <div class="tablewrap"><table class="dt">
+              <tr><th>Klausa</th><th>Penjelasan</th></tr>
+              <tr><td class="mono-sm">JOIN produk</td><td>INNER JOIN — hanya kategori yang punya produk yang muncul</td></tr>
+              <tr><td class="mono-sm">LEFT JOIN order_items</td><td>LEFT karena produk yang belum pernah terjual tetap harus muncul (qty-nya jadi NULL)</td></tr>
+              <tr><td class="mono-sm">COALESCE(SUM(oi.qty), 0)</td><td>NULL dari LEFT JOIN yang tidak punya pasangan diubah jadi 0</td></tr>
+              <tr><td class="mono-sm">GROUP BY k.kategori_id, k.nama_kategori</td><td>Wajib sertakan semua kolom non-aggregate di GROUP BY</td></tr>
+              <tr><td class="mono-sm">HAVING AVG(...) > 250000 AND COUNT(...) >= 2</td><td>Dua kondisi aggregate — keduanya wajib di HAVING, bukan WHERE</td></tr>
+              <tr><td class="mono-sm">ORDER BY rata_harga DESC</td><td>Alias yang lahir di SELECT bisa dipakai di ORDER BY</td></tr>
+            </table></div>
+            <div class="note note-ok"><b>Hasil dengan data dummy:</b> Kategori Elektronik (3 produk, rata-rata 326.667, max 450.000) ✅ muncul. Fashion (1 produk) dan Olahraga (1 produk) tidak muncul karena COUNT &lt; 2.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="qcard" data-qid="6">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">06</span>
+          <span class="qtype qt-sc">Studi Kasus</span>
+          <span class="qtitle">Laporan customer lengkap — JOIN 3 tabel + scalar subquery + perbandingan vs rata-rata.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Tampilkan nama customer, jumlah order COMPLETED, total belanja (dihitung dari qty × harga_satuan di order_items), dan selisih total belanjanya dibanding rata-rata belanja semua customer. Urutkan dari total belanja terbesar.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL</span>
+              <div class="code"><span class="k">SELECT</span>
+  c.nama,
+  c.kota,
+  <span class="f">COUNT</span>(<span class="k">DISTINCT</span> o.order_id)              <span class="k">AS</span> jumlah_order_completed,
+  <span class="f">SUM</span>(oi.qty <span class="k">*</span> oi.harga_satuan)            <span class="k">AS</span> total_belanja,
+  <span class="f">ROUND</span>(
+    <span class="f">SUM</span>(oi.qty <span class="k">*</span> oi.harga_satuan) <span class="k">-</span>
+    (<span class="k">SELECT</span> <span class="f">AVG</span>(total_per_c)
+     <span class="k">FROM</span> (
+       <span class="k">SELECT</span> <span class="f">SUM</span>(oi2.qty <span class="k">*</span> oi2.harga_satuan) <span class="k">AS</span> total_per_c
+       <span class="k">FROM</span>   customers c2
+       <span class="k">JOIN</span>   orders o2    <span class="k">ON</span> o2.customer_id <span class="k">=</span> c2.customer_id
+       <span class="k">JOIN</span>   order_items oi2 <span class="k">ON</span> oi2.order_id <span class="k">=</span> o2.order_id
+       <span class="k">WHERE</span>  o2.status <span class="k">=</span> <span class="s">'COMPLETED'</span>
+       <span class="k">GROUP BY</span> c2.customer_id
+     ) avg_sub)
+  , 0) <span class="k">AS</span> selisih_dari_rata
+<span class="k">FROM</span>   customers c
+<span class="k">JOIN</span>   orders o     <span class="k">ON</span> o.customer_id <span class="k">=</span> c.customer_id
+  <span class="k">AND</span>   o.status <span class="k">=</span> <span class="s">'COMPLETED'</span>    <span class="c">-- filter di ON, lebih efisien dari WHERE</span>
+<span class="k">JOIN</span>   order_items oi <span class="k">ON</span> oi.order_id <span class="k">=</span> o.order_id
+<span class="k">GROUP BY</span> c.customer_id, c.nama, c.kota
+<span class="k">ORDER BY</span> total_belanja <span class="k">DESC</span>;</div>
+            </div>
+            <h5>// Poin kritis yang dinilai dosen</h5>
+            <ul style="font-size:13.5px;color:var(--text);padding-left:20px;margin:0 0 10px">
+              <li><code>SUM(oi.qty * oi.harga_satuan)</code> lebih akurat dari <code>SUM(o.total_harga)</code> karena dihitung dari detail aktual</li>
+              <li><code>COUNT(DISTINCT o.order_id)</code> — DISTINCT penting agar tidak double-count dari JOIN ganda</li>
+              <li>Scalar subquery di SELECT (non-correlated): dieksekusi sekali, hasilnya dipakai berulang untuk tiap baris</li>
+              <li>Filter <code>o.status = 'COMPLETED'</code> di ON clause JOIN (bukan WHERE) agar customer tanpa order COMPLETED tidak hilang dari hasil</li>
+            </ul>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="qcard" data-qid="7">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">07</span>
+          <span class="qtype qt-sc">Studi Kasus</span>
+          <span class="qtitle">Produk belum pernah terjual — NOT EXISTS vs NOT IN, dan IN bertingkat 4 level.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            (a) Tampilkan produk yang belum pernah dipesan menggunakan NOT EXISTS. (b) Tampilkan customer yang pernah membeli produk dari kategori 'Elektronik' menggunakan subquery IN bertingkat (tanpa JOIN).
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL · Part A — NOT EXISTS</span>
+              <div class="code"><span class="c">-- NOT EXISTS: cek "tidak ada baris di order_items untuk produk ini"</span>
+<span class="c">-- Lebih aman dari NOT IN ketika kolom bisa mengandung NULL</span>
+<span class="k">SELECT</span> p.produk_id, p.nama_produk, p.stok
+<span class="k">FROM</span>   produk p
+<span class="k">WHERE NOT EXISTS</span> (
+  <span class="k">SELECT</span> 1                <span class="c">-- nilai '1' tidak penting, hanya cek ada baris atau tidak</span>
+  <span class="k">FROM</span>   order_items oi
+  <span class="k">WHERE</span>  oi.produk_id <span class="k">=</span> p.produk_id  <span class="c">-- ← ini correlated (merujuk p dari luar)</span>
+);</div>
+            </div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL · Part B — IN Bertingkat 4 Level</span>
+              <div class="code"><span class="c">-- IN bertingkat: dari customer_id → order_id → produk_id → kategori_id</span>
+<span class="k">SELECT DISTINCT</span> c.nama, c.email
+<span class="k">FROM</span>   customers c
+<span class="k">WHERE</span>  c.customer_id <span class="k">IN</span> (
+  <span class="c">-- Level 2: customer_id dari order yang berisi produk Elektronik</span>
+  <span class="k">SELECT</span> o.customer_id
+  <span class="k">FROM</span>   orders o
+  <span class="k">WHERE</span>  o.order_id <span class="k">IN</span> (
+    <span class="c">-- Level 3: order_id yang berisi produk Elektronik</span>
+    <span class="k">SELECT</span> oi.order_id
+    <span class="k">FROM</span>   order_items oi
+    <span class="k">WHERE</span>  oi.produk_id <span class="k">IN</span> (
+      <span class="c">-- Level 4: produk_id yang masuk kategori Elektronik</span>
+      <span class="k">SELECT</span> p.produk_id
+      <span class="k">FROM</span>   produk p
+      <span class="k">WHERE</span>  p.kategori_id <span class="k">=</span> (
+        <span class="c">-- Level 5: cari kategori_id untuk 'Elektronik'</span>
+        <span class="k">SELECT</span> k.kategori_id
+        <span class="k">FROM</span>   kategori k
+        <span class="k">WHERE</span>  k.nama_kategori <span class="k">=</span> <span class="s">'Elektronik'</span>
+      )
+    )
+  )
+);
+
+<span class="c">-- Versi JOIN yang ekuivalen (lebih efisien untuk dataset besar):</span>
+<span class="k">SELECT DISTINCT</span> c.nama, c.email
+<span class="k">FROM</span>   customers c
+<span class="k">JOIN</span>   orders o       <span class="k">ON</span> o.customer_id  <span class="k">=</span> c.customer_id
+<span class="k">JOIN</span>   order_items oi <span class="k">ON</span> oi.order_id    <span class="k">=</span> o.order_id
+<span class="k">JOIN</span>   produk p       <span class="k">ON</span> p.produk_id    <span class="k">=</span> oi.produk_id
+<span class="k">JOIN</span>   kategori k     <span class="k">ON</span> k.kategori_id  <span class="k">=</span> p.kategori_id
+<span class="k">WHERE</span>  k.nama_kategori <span class="k">=</span> <span class="s">'Elektronik'</span>;</div>
+            </div>
+            <div class="note note-info"><b>Mengapa NOT EXISTS lebih aman dari NOT IN?</b> Jika subquery NOT IN menghasilkan set yang mengandung NULL, seluruh kondisi NOT IN menjadi FALSE (karena NULL != apapun). NOT EXISTS tidak terpengaruh NULL karena hanya cek ada/tidaknya baris.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="qcard" data-qid="8">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">08</span>
+          <span class="qtype qt-sc">Studi Kasus</span>
+          <span class="qtitle">Trigger BEFORE INSERT — validasi stok berlapis + normalisasi harga_satuan otomatis.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Buat trigger pada tabel <b>order_items</b> yang: (1) mencegah insert jika qty melebihi stok, (2) mencegah insert jika produk tidak ditemukan, (3) mencegah qty negatif atau nol, dan (4) secara otomatis mengisi kolom harga_satuan dengan harga dari tabel produk. Jelaskan timing yang dipilih.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL · BEFORE INSERT Trigger</span>
+              <div class="code"><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> trg_validasi_order_items
+<span class="k">BEFORE INSERT ON</span> order_items     <span class="c">-- BEFORE: karena kita ingin CEGAH data masuk</span>
+<span class="k">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="k">DECLARE</span> v_stok_tersedia  <span class="k">INT</span>;
+  <span class="k">DECLARE</span> v_harga_produk   <span class="k">DECIMAL</span>(12,2);
+
+  <span class="c">-- Step 1: Ambil data produk dari tabel produk</span>
+  <span class="k">SELECT</span> stok, harga
+  <span class="k">INTO</span>   v_stok_tersedia, v_harga_produk
+  <span class="k">FROM</span>   produk
+  <span class="k">WHERE</span>  produk_id <span class="k">=</span> NEW.produk_id;
+
+  <span class="c">-- Validasi 1: produk harus ada di database</span>
+  <span class="k">IF</span> v_stok_tersedia <span class="k">IS NULL THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'ERROR: Produk tidak ditemukan di database'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="c">-- Validasi 2: qty harus bilangan positif</span>
+  <span class="k">IF</span> NEW.qty <span class="k">&lt;=</span> 0 <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'ERROR: Qty pesanan harus lebih dari 0'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="c">-- Validasi 3: stok harus mencukupi</span>
+  <span class="k">IF</span> NEW.qty <span class="k">></span> v_stok_tersedia <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'ERROR: Qty pesanan melebihi stok yang tersedia'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="c">-- Normalisasi: timpa harga_satuan dengan harga resmi dari tabel produk</span>
+  <span class="c">-- Ini mencegah manipulasi harga dari sisi client</span>
+  <span class="c">-- SET NEW.kolom HANYA bisa dilakukan di BEFORE trigger, bukan AFTER</span>
+  <span class="k">SET</span> NEW.harga_satuan <span class="k">=</span> v_harga_produk;
+
+<span class="k">END</span>$$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Test 1: Qty melebihi stok (stok=10, beli 99) → harus error</span>
+<span class="k">INSERT INTO</span> order_items (order_id, produk_id, qty, harga_satuan)
+<span class="k">VALUES</span> (1001, 105, 99, 0);
+<span class="c">-- Expected: ERROR 45000: Qty pesanan melebihi stok yang tersedia</span>
+
+<span class="c">-- Test 2: Order normal</span>
+<span class="k">INSERT INTO</span> order_items (order_id, produk_id, qty, harga_satuan)
+<span class="k">VALUES</span> (1003, 105, 1, 0);
+<span class="c">-- Expected: sukses, harga_satuan otomatis terisi 380000 dari trigger</span></div>
+            </div>
+            <p><b>Alasan BEFORE:</b> Keempat tujuan trigger ini adalah mencegah data buruk masuk dan menormalisasi nilai. Keduanya hanya bisa dilakukan sebelum data tersimpan (BEFORE). Jika pakai AFTER, data yang tidak valid sudah terlanjur masuk ke tabel sebelum bisa ditolak — ini menghasilkan race condition dalam error handling.</p>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="qcard" data-qid="9">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">09</span>
+          <span class="qtype qt-sc">Studi Kasus</span>
+          <span class="qtitle">Trigger AFTER UPDATE — restore stok + logging saat order di-cancel.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Definisikan tabel <b>order_log</b> terlebih dahulu, lalu buat trigger yang aktif saat status order berubah dari PENDING menjadi CANCELLED: mengembalikan stok semua produk terkait dan mencatat perubahan ke order_log.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL</span>
+              <div class="code"><span class="c">-- Langkah 1: Buat tabel log</span>
+<span class="k">CREATE TABLE</span> order_log (
+  log_id     <span class="k">INT PRIMARY KEY AUTO_INCREMENT</span>,
+  order_id   <span class="k">INT NOT NULL</span>,
+  aksi       <span class="k">VARCHAR</span>(50),
+  old_status <span class="k">VARCHAR</span>(20),
+  new_status <span class="k">VARCHAR</span>(20),
+  keterangan <span class="k">TEXT</span>,
+  waktu      <span class="k">DATETIME DEFAULT CURRENT_TIMESTAMP</span>
+);
+
+<span class="c">-- Langkah 2: Buat AFTER UPDATE trigger pada orders</span>
+<span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE TRIGGER</span> trg_cancel_order
+<span class="k">AFTER UPDATE ON</span> orders     <span class="c">-- AFTER: data sudah berubah, kita bereaksi</span>
+<span class="k">FOR EACH ROW</span>
+<span class="k">BEGIN</span>
+  <span class="c">-- Kondisi: hanya proses jika status berubah PENDING → CANCELLED</span>
+  <span class="c">-- OLD = nilai sebelum UPDATE, NEW = nilai setelah UPDATE</span>
+  <span class="k">IF</span> OLD.status <span class="k">=</span> <span class="s">'PENDING'</span> <span class="k">AND</span> NEW.status <span class="k">=</span> <span class="s">'CANCELLED'</span> <span class="k">THEN</span>
+
+    <span class="c">-- Kembalikan stok semua produk dalam order ini sekaligus (satu UPDATE)</span>
+    <span class="k">UPDATE</span> produk p
+    <span class="k">JOIN</span>   order_items oi <span class="k">ON</span> p.produk_id <span class="k">=</span> oi.produk_id
+    <span class="k">SET</span>    p.stok <span class="k">=</span> p.stok <span class="k">+</span> oi.qty
+    <span class="k">WHERE</span>  oi.order_id <span class="k">=</span> NEW.order_id;
+
+    <span class="c">-- Catat ke log: OLD dan NEW tersedia di seluruh body trigger</span>
+    <span class="k">INSERT INTO</span> order_log (order_id, aksi, old_status, new_status, keterangan)
+    <span class="k">VALUES</span> (
+      NEW.order_id,
+      <span class="s">'CANCEL_RESTOCK'</span>,
+      OLD.status,
+      NEW.status,
+      <span class="f">CONCAT</span>(<span class="s">'Stok dikembalikan. Total order: Rp '</span>, <span class="f">FORMAT</span>(NEW.total_harga, 0, <span class="s">'id_ID'</span>))
+    );
+
+  <span class="k">END IF</span>;
+<span class="k">END</span>$$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Test: batalkan order 1007 (status: PENDING)</span>
+<span class="k">UPDATE</span> orders <span class="k">SET</span> status <span class="k">=</span> <span class="s">'CANCELLED'</span> <span class="k">WHERE</span> order_id <span class="k">=</span> 1007;
+
+<span class="c">-- Verifikasi: stok produk 101 dan 104 harus naik masing-masing 1</span>
+<span class="k">SELECT</span> produk_id, stok <span class="k">FROM</span> produk <span class="k">WHERE</span> produk_id <span class="k">IN</span> (101, 104);
+<span class="k">SELECT</span> * <span class="k">FROM</span> order_log <span class="k">ORDER BY</span> log_id <span class="k">DESC</span> <span class="k">LIMIT</span> 1;</div>
+            </div>
+            <p><b>Alasan AFTER:</b> Kita membutuhkan konfirmasi bahwa perubahan status berhasil tersimpan sebelum melakukan efek samping (restore stok dan logging). Kalau BEFORE, dan ada error lain yang mencegah UPDATE orders tersimpan, kita sudah salah restore stok padahal pembatalan tidak jadi terjadi.</p>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="qcard" data-qid="10">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">10</span>
+          <span class="qtype qt-sc">Studi Kasus</span>
+          <span class="qtitle">Transaction dengan SAVEPOINT — batch checkout 2 customer, salah satu gagal tidak ganggu yang lain.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Simulasikan batch checkout: Customer 4 (Budi) memesan 20 unit Sepatu Lari (stok hanya 15 — pasti gagal), dan Customer 5 (Arief) memesan 1 unit Headphone BT. Implementasikan menggunakan SAVEPOINT agar kegagalan Budi tidak membatalkan order Arief.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL · SAVEPOINT</span>
+              <div class="code"><span class="k">START TRANSACTION</span>;
+
+<span class="c">-- ── BATCH ITEM 1: Budi order 20 Sepatu Lari ──────────────────</span>
+<span class="k">SAVEPOINT</span> sp_budi;
+
+<span class="c">-- Coba kurangi stok: kondisi AND stok >= 20 akan gagal (stok=15)</span>
+<span class="k">UPDATE</span> produk
+<span class="k">SET</span>    stok <span class="k">=</span> stok <span class="k">-</span> 20
+<span class="k">WHERE</span>  produk_id <span class="k">=</span> 104 <span class="k">AND</span> stok <span class="k">>=</span> 20;
+<span class="c">-- ROW_COUNT() = 0 → tidak ada baris yang terupdate → stok tidak cukup</span>
+<span class="c">-- Di stored procedure: IF ROW_COUNT() = 0 THEN ROLLBACK TO sp_budi</span>
+
+<span class="k">ROLLBACK TO SAVEPOINT</span> sp_budi;
+<span class="c">-- ↩ Semua perubahan sejak SAVEPOINT sp_budi dibatalkan</span>
+<span class="c">-- TRANSAKSI MASIH AKTIF, belum di-rollback penuh</span>
+
+<span class="c">-- ── BATCH ITEM 2: Arief order 1 Headphone BT ─────────────────</span>
+<span class="k">SAVEPOINT</span> sp_arief;
+
+<span class="k">UPDATE</span> produk
+<span class="k">SET</span>    stok <span class="k">=</span> stok <span class="k">-</span> 1
+<span class="k">WHERE</span>  produk_id <span class="k">=</span> 105 <span class="k">AND</span> stok <span class="k">>=</span> 1;
+<span class="c">-- stok Headphone=10 → cukup, ROW_COUNT() = 1 → sukses</span>
+
+<span class="k">INSERT INTO</span> orders (customer_id, tanggal, total_harga, status)
+<span class="k">VALUES</span> (5, <span class="f">CURDATE</span>(), 380000, <span class="s">'PENDING'</span>);
+
+<span class="k">INSERT INTO</span> order_items (order_id, produk_id, qty, harga_satuan)
+<span class="k">VALUES</span> (<span class="f">LAST_INSERT_ID</span>(), 105, 1, 380000);
+
+<span class="c">-- Semua sukses → simpan permanen</span>
+<span class="k">COMMIT</span>;
+
+<span class="c">-- ── Verifikasi Hasil ──────────────────────────────────────────</span>
+<span class="k">SELECT</span> produk_id, nama_produk, stok
+<span class="k">FROM</span>   produk
+<span class="k">WHERE</span>  produk_id <span class="k">IN</span> (104, 105);
+<span class="c">-- produk 104 (Sepatu Lari): stok TETAP 15 (rollback berhasil)</span>
+<span class="c">-- produk 105 (Headphone BT): stok = 9 (berkurang 1)</span></div>
+            </div>
+            <h5>// Mekanisme SAVEPOINT</h5>
+            <div class="tablewrap"><table class="dt">
+              <tr><th>Perintah</th><th>Efek</th></tr>
+              <tr><td class="mono-sm">SAVEPOINT nama</td><td>Buat checkpoint di tengah transaksi aktif</td></tr>
+              <tr><td class="mono-sm">ROLLBACK TO SAVEPOINT nama</td><td>Batalkan hanya operasi sejak checkpoint tersebut; transaksi masih aktif</td></tr>
+              <tr><td class="mono-sm">RELEASE SAVEPOINT nama</td><td>Hapus checkpoint (opsional; otomatis terhapus saat COMMIT/ROLLBACK)</td></tr>
+              <tr><td class="mono-sm">COMMIT</td><td>Simpan semua perubahan yang belum di-rollback</td></tr>
+              <tr><td class="mono-sm">ROLLBACK (penuh)</td><td>Batalkan semua perubahan sejak START TRANSACTION</td></tr>
+            </table></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="qcard" data-qid="11">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">11</span>
+          <span class="qtype qt-sc">Studi Kasus</span>
+          <span class="qtitle">Ranking produk dalam kategori — correlated subquery vs RANK() window function.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal</div>
+            Tampilkan setiap produk beserta rankingnya dalam kategori masing-masing berdasarkan total qty terjual (produk terlaris = rank 1). Berikan dua solusi: satu menggunakan correlated subquery, satu menggunakan window function RANK().
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL · Solusi 1 — Correlated Subquery</span>
+              <div class="code"><span class="c">-- Ranking dihitung dengan: hitung berapa produk dalam kategori yang</span>
+<span class="c">-- penjualannya LEBIH BANYAK dari produk ini → itulah rankingnya</span>
+<span class="k">SELECT</span>
+  p.nama_produk,
+  k.nama_kategori,
+  <span class="f">COALESCE</span>(<span class="f">SUM</span>(oi.qty), 0) <span class="k">AS</span> total_terjual,
+  (
+    <span class="k">SELECT</span> <span class="f">COUNT</span>(<span class="k">DISTINCT</span> p2.produk_id) <span class="k">+</span> 1
+    <span class="k">FROM</span>   produk p2
+    <span class="k">LEFT JOIN</span> order_items oi2 <span class="k">ON</span> p2.produk_id <span class="k">=</span> oi2.produk_id
+    <span class="k">WHERE</span>  p2.kategori_id <span class="k">=</span> p.kategori_id      <span class="c">-- sama kategori</span>
+    <span class="k">GROUP BY</span> p2.produk_id
+    <span class="k">HAVING</span> <span class="f">COALESCE</span>(<span class="f">SUM</span>(oi2.qty), 0)
+           <span class="k">></span> <span class="f">COALESCE</span>(<span class="f">SUM</span>(oi.qty), 0)        <span class="c">-- terjual lebih banyak</span>
+  ) <span class="k">AS</span> rank_dalam_kategori
+<span class="k">FROM</span>   produk p
+<span class="k">JOIN</span>   kategori k     <span class="k">ON</span> p.kategori_id <span class="k">=</span> k.kategori_id
+<span class="k">LEFT JOIN</span> order_items oi <span class="k">ON</span> p.produk_id  <span class="k">=</span> oi.produk_id
+<span class="k">GROUP BY</span> p.produk_id, p.nama_produk, k.nama_kategori, p.kategori_id
+<span class="k">ORDER BY</span> k.nama_kategori, rank_dalam_kategori;</div>
+            </div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL · Solusi 2 — Window Function RANK() (MySQL 8.0+)</span>
+              <div class="code"><span class="c">-- Jauh lebih clean dan efisien dari correlated subquery</span>
+<span class="c">-- PARTITION BY = reset ranking untuk tiap kategori</span>
+<span class="c">-- ORDER BY ... DESC = produk paling banyak terjual mendapat rank 1</span>
+<span class="k">SELECT</span>
+  p.nama_produk,
+  k.nama_kategori,
+  <span class="f">COALESCE</span>(<span class="f">SUM</span>(oi.qty), 0)   <span class="k">AS</span> total_terjual,
+  <span class="f">RANK</span>() <span class="k">OVER</span> (
+    <span class="k">PARTITION BY</span> p.kategori_id                    <span class="c">-- ranking per kategori</span>
+    <span class="k">ORDER BY</span>     <span class="f">COALESCE</span>(<span class="f">SUM</span>(oi.qty), 0) <span class="k">DESC</span>  <span class="c">-- dari terbanyak</span>
+  )                            <span class="k">AS</span> rank_dalam_kategori
+<span class="k">FROM</span>   produk p
+<span class="k">JOIN</span>   kategori k     <span class="k">ON</span> p.kategori_id <span class="k">=</span> k.kategori_id
+<span class="k">LEFT JOIN</span> order_items oi <span class="k">ON</span> p.produk_id  <span class="k">=</span> oi.produk_id
+<span class="k">GROUP BY</span> p.produk_id, p.nama_produk, k.nama_kategori, p.kategori_id
+<span class="k">ORDER BY</span> k.nama_kategori, rank_dalam_kategori;
+
+<span class="c">-- Catatan: RANK() memberikan rank yang sama untuk nilai yang sama</span>
+<span class="c">-- dan melompati angka berikutnya (1, 1, 3, 4 ...)</span>
+<span class="c">-- ROW_NUMBER() tidak ada lompatan tapi tidak menangani nilai sama</span>
+<span class="c">-- DENSE_RANK() sama nilai = sama rank, tapi tidak ada lompatan (1, 1, 2, 3)</span></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="qcard" data-qid="12">
+        <div class="qhead" onclick="toggleQ(this)">
+          <span class="qnum">12</span>
+          <span class="qtype qt-bonus">Bonus</span>
+          <span class="qtitle">View + Stored Procedure lengkap — transfer stok antar produk dengan error handling penuh.</span>
+          <span class="chev">▾</span>
+        </div>
+        <div class="qbody"><div class="qbody-inner">
+          <div class="qprompt">
+            <div class="qp-label">// Soal Bonus</div>
+            Buat stored procedure <code>sp_transfer_stok(dari, ke, jumlah)</code> yang memindahkan stok dari satu produk ke produk lain. Procedure harus: validasi stok mencukupi, validasi produk tidak sama, gunakan transaction, gunakan FOR UPDATE untuk hindari race condition, dan catat ke order_log.
+          </div>
+          <button class="answer-toggle" onclick="toggleA(this)">Lihat Jawaban</button>
+          <div class="answer">
+            <div class="answer-header"><h4>// Jawaban &amp; Penjelasan</h4></div>
+            <div class="code-wrap">
+              <button class="code-copy" onclick="copyCode(this)">copy</button>
+              <span class="code-label">SQL · Stored Procedure + Transaction</span>
+              <div class="code"><span class="k">DELIMITER</span> $$
+
+<span class="k">CREATE PROCEDURE</span> sp_transfer_stok(
+  <span class="k">IN</span> p_dari  <span class="k">INT</span>,    <span class="c">-- produk_id sumber</span>
+  <span class="k">IN</span> p_ke    <span class="k">INT</span>,    <span class="c">-- produk_id tujuan</span>
+  <span class="k">IN</span> p_jml   <span class="k">INT</span>     <span class="c">-- jumlah unit yang dipindah</span>
+)
+<span class="k">BEGIN</span>
+  <span class="k">DECLARE</span> v_stok_dari  <span class="k">INT</span>           <span class="k">DEFAULT</span> 0;
+  <span class="k">DECLARE</span> v_stok_ke    <span class="k">INT</span>           <span class="k">DEFAULT</span> 0;
+  <span class="k">DECLARE</span> v_nama_dari  <span class="k">VARCHAR</span>(200);
+  <span class="k">DECLARE</span> v_nama_ke    <span class="k">VARCHAR</span>(200);
+
+  <span class="c">-- EXIT HANDLER: tangkap semua SQL error, rollback lalu teruskan error</span>
+  <span class="k">DECLARE EXIT HANDLER FOR SQLEXCEPTION</span>
+  <span class="k">BEGIN</span>
+    <span class="k">ROLLBACK</span>;
+    <span class="k">RESIGNAL</span>;
+  <span class="k">END</span>;
+
+  <span class="c">-- Validasi parameter sebelum membuka transaction</span>
+  <span class="k">IF</span> p_jml <span class="k">&lt;=</span> 0 <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Jumlah transfer harus lebih dari 0'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="k">IF</span> p_dari <span class="k">=</span> p_ke <span class="k">THEN</span>
+    <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+    <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Produk sumber dan tujuan tidak boleh sama'</span>;
+  <span class="k">END IF</span>;
+
+  <span class="k">START TRANSACTION</span>;
+
+    <span class="c">-- Kunci dua baris sekaligus dengan FOR UPDATE (pessimistic locking)</span>
+    <span class="c">-- Ini mencegah dua transfer berjalan bersamaan ke produk yang sama</span>
+    <span class="k">SELECT</span> stok, nama_produk
+    <span class="k">INTO</span>   v_stok_dari, v_nama_dari
+    <span class="k">FROM</span>   produk
+    <span class="k">WHERE</span>  produk_id <span class="k">=</span> p_dari
+    <span class="k">FOR UPDATE</span>;  <span class="c">-- kunci baris ini sampai COMMIT/ROLLBACK</span>
+
+    <span class="k">SELECT</span> stok, nama_produk
+    <span class="k">INTO</span>   v_stok_ke, v_nama_ke
+    <span class="k">FROM</span>   produk
+    <span class="k">WHERE</span>  produk_id <span class="k">=</span> p_ke
+    <span class="k">FOR UPDATE</span>;  <span class="c">-- kunci baris ini juga</span>
+
+    <span class="c">-- Cek produk ada</span>
+    <span class="k">IF</span> v_nama_dari <span class="k">IS NULL THEN</span>
+      <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+      <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Produk sumber tidak ditemukan'</span>;
+    <span class="k">END IF</span>;
+    <span class="k">IF</span> v_nama_ke <span class="k">IS NULL THEN</span>
+      <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+      <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Produk tujuan tidak ditemukan'</span>;
+    <span class="k">END IF</span>;
+
+    <span class="c">-- Cek stok mencukupi</span>
+    <span class="k">IF</span> v_stok_dari <span class="k">&lt;</span> p_jml <span class="k">THEN</span>
+      <span class="k">SIGNAL SQLSTATE</span> <span class="s">'45000'</span>
+      <span class="k">SET MESSAGE_TEXT</span> <span class="k">=</span> <span class="s">'Stok sumber tidak mencukupi untuk transfer'</span>;
+    <span class="k">END IF</span>;
+
+    <span class="c">-- Lakukan transfer stok</span>
+    <span class="k">UPDATE</span> produk <span class="k">SET</span> stok <span class="k">=</span> stok <span class="k">-</span> p_jml <span class="k">WHERE</span> produk_id <span class="k">=</span> p_dari;
+    <span class="k">UPDATE</span> produk <span class="k">SET</span> stok <span class="k">=</span> stok <span class="k">+</span> p_jml <span class="k">WHERE</span> produk_id <span class="k">=</span> p_ke;
+
+    <span class="c">-- Log ke order_log</span>
+    <span class="k">INSERT INTO</span> order_log (order_id, aksi, keterangan)
+    <span class="k">VALUES</span> (0, <span class="s">'TRANSFER_STOK'</span>,
+      <span class="f">CONCAT</span>(<span class="s">'Transfer '</span>, p_jml, <span class="s">' unit dari ['</span>, v_nama_dari,
+             <span class="s">'] ke ['</span>, v_nama_ke, <span class="s">']'</span>));
+
+  <span class="k">COMMIT</span>;
+
+  <span class="c">-- Kembalikan summary ke pemanggil</span>
+  <span class="k">SELECT</span>
+    v_nama_dari   <span class="k">AS</span> produk_sumber,
+    v_stok_dari   <span class="k">AS</span> stok_sumber_sebelum,
+    v_stok_dari <span class="k">-</span> p_jml <span class="k">AS</span> stok_sumber_sesudah,
+    v_nama_ke     <span class="k">AS</span> produk_tujuan,
+    v_stok_ke     <span class="k">AS</span> stok_tujuan_sebelum,
+    v_stok_ke <span class="k">+</span> p_jml   <span class="k">AS</span> stok_tujuan_sesudah,
+    p_jml         <span class="k">AS</span> jumlah_transfer,
+    <span class="s">'SUCCESS'</span>     <span class="k">AS</span> status;
+<span class="k">END</span>$$
+
+<span class="k">DELIMITER</span> ;
+
+<span class="c">-- Cara pakai: pindah 5 unit Keyboard Mekanik (101) ke Mouse Wireless (102)</span>
+<span class="k">CALL</span> sp_transfer_stok(101, 102, 5);</div>
+            </div>
+            <div class="note note-info"><b>FOR UPDATE — Pessimistic Locking:</b> Saat dua sesi database mencoba transfer stok ke produk yang sama secara bersamaan, FOR UPDATE memastikan salah satunya harus menunggu sampai yang pertama COMMIT atau ROLLBACK. Tanpa ini, bisa terjadi race condition di mana kedua sesi membaca stok yang sama (misal 20) lalu keduanya mengurangi stok — hasilnya stok bisa jadi negatif.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </section><!-- /sc -->
+
+    <footer>
+      DBT · BINUS University &nbsp;|&nbsp; Aggregate · Subquery · Trigger · Transaction · View · ERD
+      <span class="footer-score" id="footerScore">Progres: 0 / 12 soal</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+// ── TAB SYSTEM ─────────────────────────────────────────────────
+document.querySelectorAll('.tabs').forEach(group => {
+  group.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const parent = group.parentElement;
+      parent.querySelectorAll(':scope > .tab-content').forEach(tc => tc.classList.remove('active'));
+      const target = parent.querySelector('#' + btn.dataset.tab);
+      if (target) target.classList.add('active');
+    });
+  });
+});
+
+// ── QUESTION ACCORDION ─────────────────────────────────────────
+const openedQ = new Set();
+function toggleQ(headEl) {
+  const card = headEl.closest('.qcard');
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open');
+  if (!isOpen) {
+    openedQ.add(card.dataset.qid);
+    updateScore();
+  }
+}
+function toggleA(btn) {
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent = ans.classList.contains('show') ? 'Sembunyikan Jawaban' : 'Lihat Jawaban';
+}
+
+// ── SCORE ──────────────────────────────────────────────────────
+function updateScore() {
+  const n = openedQ.size, total = 12;
+  const pct = Math.round(n / total * 100);
+  document.getElementById('sidebarScore').textContent = n + ' / ' + total;
+  document.getElementById('footerScore').textContent  = 'Progres: ' + n + ' / ' + total + ' soal';
+  document.getElementById('scoreFill').style.width    = pct + '%';
+  document.getElementById('progressBar').style.width  = pct + '%';
+}
+
+// ── ACTIVE NAV ON SCROLL ───────────────────────────────────────
+const navLinks = document.querySelectorAll('.nav-link[data-target]');
+const sections  = [...navLinks].map(l => document.getElementById(l.dataset.target)).filter(Boolean);
+window.addEventListener('scroll', () => {
+  let current = sections[0];
+  sections.forEach(s => { if (window.scrollY + 140 >= s.offsetTop) current = s; });
+  navLinks.forEach(l => l.classList.toggle('active', l.dataset.target === (current && current.id)));
+}, { passive: true });
+
+// ── COPY CODE ──────────────────────────────────────────────────
+function copyCode(btn) {
+  const codeEl = btn.parentElement.querySelector('.code');
+  const text = codeEl ? codeEl.innerText : '';
+  navigator.clipboard.writeText(text).then(() => {
+    const prev = btn.textContent;
+    btn.textContent = 'copied!';
+    btn.style.color = 'var(--accent)';
+    setTimeout(() => { btn.textContent = prev; btn.style.color = ''; }, 1500);
+  }).catch(() => {
+    btn.textContent = 'error';
+    setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+  });
+}
+</script>
+</body>
+</html>
