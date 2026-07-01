@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAS Cyber Law — BINUS | StudyHub</title>
+<meta name="description" content="Materi lengkap UAS Cyber Law BINUS — Cyber Crime, UU ITE, Forensik Digital, Studi Kasus E-Commerce Breach, Tren Kejahatan Siber 5-10 Tahun ke Depan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #080C11;
+  --panel:      #0E141C;
+  --panel-2:    #131B25;
+  --panel-3:    #18212D;
+  --line:       #1E2A38;
+  --line-2:     #263342;
+  --text:       #D4E0EC;
+  --muted:      #6B7F94;
+  --muted-2:    #8A9EB5;
+  --keyword:    #79ADFF;
+  --string:     #FFD080;
+  --comment:    #4D6278;
+  --func:       #5EE6A8;
+  --warn:       #FF9966;
+  --warn-bg:    rgba(255,153,102,.08);
+  --warn-border:rgba(255,153,102,.25);
+  --accent:     #FF9966;
+  --accent-dim: rgba(255,153,102,.08);
+  --accent-2:   #FFB347;
+  --red:        #FF6B6B;
+  --red-dim:    rgba(255,107,107,.08);
+  --blue:       #79ADFF;
+  --blue-dim:   rgba(121,173,255,.08);
+  --purple:     #C084FC;
+  --purple-dim: rgba(192,132,252,.08);
+  --green:      #5EE6A8;
+  --green-dim:  rgba(94,230,168,.08);
+  --radius:     10px;
+  --radius-lg:  14px;
+  --shadow:     0 4px 24px rgba(0,0,0,.4);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  line-height: 1.7;
+  font-size: 15px;
+}
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+::selection { background: rgba(255,153,102,.2); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--panel); }
+::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
+
+.shell { display: grid; grid-template-columns: 270px 1fr; min-height: 100vh; }
+@media (max-width: 900px) { .shell { grid-template-columns: 1fr; } }
+
+.sidebar {
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+  padding: 26px 18px;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+}
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.brand-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--accent); }
+  50%       { box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(255,153,102,.3); }
+}
+.brand-label { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+.sidebar-title { font-size: 17px; font-weight: 800; color: #fff; margin: 6px 0 22px; line-height: 1.3; }
+
+.nav-group { margin-bottom: 20px; }
+.nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin: 0 0 8px 4px; font-family: 'JetBrains Mono'; }
+.nav-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px; border-radius: 8px; color: var(--muted-2);
+  text-decoration: none; font-size: 13.5px; margin-bottom: 2px;
+  border: 1px solid transparent; transition: all .15s ease; cursor: pointer;
+}
+.nav-link:hover { background: var(--panel-2); color: var(--text); }
+.nav-link.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(255,153,102,.3); }
+.nav-link .nt { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); margin-left: auto; }
+
+.back-btn {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono'; font-size: 11px;
+  color: var(--muted); text-decoration: none;
+  padding: 6px 10px; border-radius: 7px;
+  border: 1px solid var(--line); margin-bottom: 18px; transition: all .15s;
+}
+.back-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+.progress-wrap { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 100; }
+.progress-bar  { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .1s linear; }
+
+main { max-width: 960px; padding-bottom: 120px; }
+
+.hero {
+  padding: 60px 60px 52px;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 90% -10%, rgba(255,153,102,.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 110%, rgba(121,173,255,.07) 0%, transparent 50%),
+    var(--bg);
+  margin-bottom: 52px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231E2A38' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: .3; pointer-events: none;
+}
+@media (max-width: 900px) { .hero { padding: 40px 20px; } }
+.hero .eyebrow { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .14em; margin-bottom: 14px; }
+.hero h1 { font-size: 40px; color: #fff; margin: 0 0 14px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; position: relative; }
+.hero h1 span { color: var(--accent); }
+.hero p { color: var(--muted-2); max-width: 580px; font-size: 15px; margin-bottom: 28px; position: relative; }
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
+.stat-card { background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--radius); padding: 14px 18px; min-width: 110px; transition: border-color .2s; }
+.stat-card:hover { border-color: var(--accent); }
+.stat-card .num { font-family: 'JetBrains Mono'; font-size: 22px; color: var(--accent); font-weight: 700; }
+.stat-card .lab { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+section { margin: 0 60px 72px; scroll-margin-top: 28px; }
+@media (max-width: 900px) { section { margin: 0 20px 52px; } }
+.eyebrow { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .14em; margin-bottom: 10px; }
+h2 { font-size: 26px; color: #fff; margin: 0 0 6px; font-weight: 800; }
+h3 { font-size: 18px; color: #e0eaf5; margin: 20px 0 10px; font-weight: 700; }
+.lede { color: var(--muted-2); font-size: 14.5px; margin-bottom: 24px; max-width: 680px; }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px 24px; margin-bottom: 16px; transition: border-color .2s; }
+.panel:hover { border-color: var(--line-2); }
+.panel h3 { margin: 0 0 12px; color: #fff; font-size: 15.5px; font-weight: 700; }
+.panel p  { margin: 0 0 10px; color: var(--text); font-size: 14px; }
+.panel p:last-child { margin-bottom: 0; }
+
+.tablewrap { overflow-x: auto; margin: 12px 0; border-radius: 8px; border: 1px solid var(--line); }
+table.dt { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.dt th { background: var(--panel-2); color: var(--accent); text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+table.dt td { padding: 8px 12px; border-bottom: 1px solid var(--line); color: var(--text); font-size: 13px; vertical-align: top; }
+table.dt tr:last-child td { border-bottom: none; }
+table.dt tr:hover td { background: rgba(255,153,102,.03); }
+table.dt .mono-sm { font-family: 'JetBrains Mono'; font-size: 12px; }
+table.dt .tag-ok    { display: inline-block; background: var(--green-dim); color: var(--green); border: 1px solid rgba(94,230,168,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-warn  { display: inline-block; background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-red   { display: inline-block; background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,107,107,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-blue  { display: inline-block; background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(121,173,255,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-purple{ display: inline-block; background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(192,132,252,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+
+.note { border-radius: 8px; padding: 13px 16px; font-size: 13.5px; margin: 14px 0; border-left: 3px solid; }
+.note-warn  { background: var(--warn-bg); border-color: var(--warn); color: #FFB59C; }
+.note-info  { background: var(--blue-dim); border-color: var(--blue); color: #A8C8FF; }
+.note-ok    { background: var(--green-dim); border-color: var(--green); color: #8AFFD4; }
+.note-red   { background: var(--red-dim); border-color: var(--red); color: #FFB0B0; }
+.note-purple{ background: var(--purple-dim); border-color: var(--purple); color: #DDB0FF; }
+.note b { color: inherit; filter: brightness(1.2); }
+.note code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+.step-list { list-style: none; padding: 0; margin: 12px 0; counter-reset: step; }
+.step-list li {
+  counter-increment: step; display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; color: var(--text);
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li::before {
+  content: counter(step); flex: 0 0 24px; height: 24px;
+  background: var(--accent-dim); border: 1px solid rgba(255,153,102,.2);
+  color: var(--accent); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 700; margin-top: 1px;
+}
+
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+@media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.compare-card .cc-title { font-family: 'JetBrains Mono'; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; font-weight: 700; }
+.compare-card ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text); }
+.compare-card ul li { margin-bottom: 6px; line-height: 1.5; }
+.cc-ok     .cc-title { color: var(--green); }
+.cc-warn   .cc-title { color: var(--warn); }
+.cc-blue   .cc-title { color: var(--blue); }
+.cc-red    .cc-title { color: var(--red); }
+.cc-purple .cc-title { color: var(--purple); }
+.cc-orange .cc-title { color: var(--accent); }
+
+/* Case study box */
+.case-box {
+  background: #0A0F18; border: 1px solid rgba(255,153,102,.3); border-radius: 12px;
+  padding: 24px 28px; margin: 16px 0;
+}
+.case-box .case-title {
+  font-family: 'JetBrains Mono'; font-size: 12px; color: var(--accent);
+  text-transform: uppercase; letter-spacing: .1em;
+  margin-bottom: 16px; border-bottom: 1px solid rgba(255,153,102,.2); padding-bottom: 10px;
+}
+.case-timeline { border-left: 2px solid rgba(255,153,102,.3); padding-left: 18px; margin: 12px 0; }
+.ct-item { position: relative; margin-bottom: 16px; }
+.ct-item::before {
+  content: ''; position: absolute; left: -23px; top: 6px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 6px var(--accent);
+}
+.ct-item .ct-tag { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+.ct-item .ct-body { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+
+/* Pasal card */
+.pasal-card {
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius); padding: 14px 18px; margin-bottom: 10px;
+}
+.pasal-card .pc-num { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 4px; }
+.pasal-card .pc-title { font-size: 14px; color: #fff; font-weight: 700; margin-bottom: 6px; }
+.pasal-card .pc-body { font-size: 13px; color: var(--muted-2); line-height: 1.6; }
+.pasal-card .pc-sanction { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--red); margin-top: 8px; }
+
+/* Evidence tag */
+.evidence-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 12px 0; }
+.evidence-card {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px 14px;
+}
+.evidence-card .ec-icon { font-size: 22px; margin-bottom: 8px; }
+.evidence-card .ec-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.evidence-card .ec-desc { font-size: 12px; color: var(--muted-2); line-height: 1.5; }
+
+/* Trend card */
+.trend-item {
+  display: flex; gap: 16px; padding: 16px 0;
+  border-bottom: 1px solid var(--line); align-items: flex-start;
+}
+.trend-item:last-child { border-bottom: none; }
+.trend-num { font-family: 'JetBrains Mono'; font-size: 28px; color: var(--accent); font-weight: 700; opacity: .3; flex: 0 0 40px; margin-top: -4px; }
+.trend-body h4 { margin: 0 0 4px; color: #fff; font-size: 15px; font-weight: 700; }
+.trend-body p { margin: 0; color: var(--muted-2); font-size: 13.5px; line-height: 1.6; }
+.trend-tag { display: inline-block; font-family: 'JetBrains Mono'; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+.tt-high { background: rgba(255,107,107,.15); color: var(--red); border: 1px solid rgba(255,107,107,.2); }
+.tt-med  { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+.tt-em   { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(192,132,252,.2); }
+
+footer { padding: 28px 60px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; font-family: 'JetBrains Mono'; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+@media (max-width: 900px) { footer { padding: 20px; } }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="shell">
+  <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+  <nav class="sidebar">
+    <div class="brand"><span class="brand-dot"></span><span class="brand-label">CYBERLAW // UAS BINUS</span></div>
+    <div class="sidebar-title">Cyber Law<br>UAS</div>
+
+    <a class="back-btn" href="../index.html">← Kembali ke StudyHub</a>
+
+    <div class="nav-group">
+      <div class="nav-label">Materi UAS</div>
+      <a class="nav-link active" href="#cybercrime">▸ Cyber Crime — Konsep <span class="nt">01</span></a>
+      <a class="nav-link" href="#hukum-indo">▸ Hukum Perspektif Indonesia <span class="nt">02</span></a>
+      <a class="nav-link" href="#tren">▸ Tren Kejahatan Siber <span class="nt">03</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Studi Kasus</div>
+      <a class="nav-link" href="#case2">▸ Case 2 — E-Commerce Breach</a>
+      <a class="nav-link" href="#forensik">▸ Forensik & Alat Bukti</a>
+      <a class="nav-link" href="#preventif">▸ Preventif & Mitigasi</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════ MAIN ═══════════════════════ -->
+  <main>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="eyebrow">Kisi-kisi UAS · Cyber Law · BINUS</div>
+      <h1>Siap UAS<br><span>Cyber Law</span></h1>
+      <p>Materi komprehensif UAS — Cyber Crime (definisi & istilah), Hukum di Indonesia (UU ITE, UU PDP), Tren kejahatan siber 5–10 tahun ke depan, dan analisis mendalam Studi Kasus E-Commerce Data Breach beserta forensik digital.</p>
+      <div class="stat-row">
+        <div class="stat-card"><div class="num">2</div><div class="lab">Soal Essay</div></div>
+        <div class="stat-card"><div class="num">3</div><div class="lab">Sub-topik UU</div></div>
+        <div class="stat-card"><div class="num">5+</div><div class="lab">Jenis Alat Bukti</div></div>
+        <div class="stat-card"><div class="num">10</div><div class="lab">Tren 2026–2036</div></div>
+      </div>
+    </div>
+
+    <!-- ══ SOAL 1 — CYBER CRIME ══════════════════════════════════════════ -->
+    <section id="cybercrime">
+      <div class="eyebrow">Essay 1 — Cyber Crime</div>
+      <h2>Cyber Crime — Definisi & Ketepatan Istilah</h2>
+      <p class="lede">Diminta menjelaskan: (1) Apakah sudah tepat istilah "cyber crime"? (2) Bagaimana hukum di Indonesia mengaturnya? (3) Tren kejahatan siber 5-10 tahun ke depan.</p>
+
+      <div class="panel">
+        <h3>1a. Apakah "Cyber Crime" Sudah Tepat Istilahnya?</h3>
+        <p>Jawaban: <b>Ya, tepat — namun lebih tepat menggunakan variasi terminologi sesuai konteks.</b></p>
+
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Terminologi</th><th>Digunakan oleh</th><th>Cakupan</th><th>Keterangan</th></tr>
+          <tr><td><b>Cyber Crime</b></td><td>Umum, media, akademik</td><td>Kejahatan yang melibatkan komputer/internet</td><td><span class="tag-ok">Tepat</span> untuk penggunaan umum</td></tr>
+          <tr><td><b>Computer Crime</b></td><td>Hukum Amerika (18 USC), literatur lama</td><td>Kejahatan terhadap/menggunakan komputer</td><td>Lebih sempit — fokus hardware/software</td></tr>
+          <tr><td><b>Cybercrime</b></td><td>UNODC, Council of Europe, Interpol</td><td>Identik dengan Cyber Crime (tanpa spasi)</td><td>Penulisan bervariasi, makna sama</td></tr>
+          <tr><td><b>Electronic Crime (e-crime)</b></td><td>FBI, UK law enforcement</td><td>Kejahatan elektronik termasuk non-internet</td><td>Lebih luas (mencakup ATM skimming dll.)</td></tr>
+          <tr><td><b>Kejahatan Siber</b></td><td>Indonesia (UU ITE, BSSN)</td><td>Terjemahan resmi cyber crime dalam BI</td><td>Istilah resmi di regulasi Indonesia</td></tr>
+          <tr><td><b>Digital Crime</b></td><td>Akademik kontemporer</td><td>Kejahatan di era digital (termasuk IoT, AI)</td><td>Tren terbaru — lebih inklusif</td></tr>
+        </table></div>
+
+        <div class="note note-ok"><b>Kesimpulan Istilah:</b> "Cyber Crime" sudah <b>tepat dan diterima secara internasional</b>. Konvensi Budapest 2001 (Convention on Cybercrime) menggunakan istilah ini sebagai standar hukum internasional. Di Indonesia, UU ITE menggunakan padanan "Kejahatan Siber" secara resmi.</div>
+
+        <h3 style="margin-top:20px">Klasifikasi Cyber Crime</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-red">
+            <div class="cc-title">🎯 Cyber Crime sebagai TARGET</div>
+            <ul>
+              <li>Hacking / Unauthorized Access</li>
+              <li>Distributed Denial of Service (DDoS)</li>
+              <li>Malware (virus, ransomware, spyware)</li>
+              <li>Data Breach / Kebocoran Data</li>
+              <li>Defacement (merusak tampilan website)</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-warn">
+            <div class="cc-title">🔧 Cyber Crime sebagai ALAT</div>
+            <ul>
+              <li>Penipuan online (e-fraud, phishing)</li>
+              <li>Cyberbullying & online harassment</li>
+              <li>Identity theft & account takeover</li>
+              <li>Money laundering via cryptocurrency</li>
+              <li>Distribusi konten ilegal (CSAM, dll.)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ HUKUM INDONESIA ═══════════════════════════════════════════════ -->
+    <section id="hukum-indo">
+      <div class="eyebrow">Essay 1 — Bagian 2</div>
+      <h2>Perspektif Hukum Indonesia — Regulasi Siber</h2>
+      <p class="lede">Undang-undang yang mengatur kejahatan siber di Indonesia, beserta pasal-pasal kunci yang relevan.</p>
+
+      <div class="panel">
+        <h3>Hierarki Regulasi Siber Indonesia</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Regulasi</th><th>Tahun</th><th>Cakupan Utama</th></tr>
+          <tr><td><b>UU No. 11/2008 tentang ITE</b></td><td>2008</td><td>Transaksi elektronik, konten ilegal, kejahatan siber</td></tr>
+          <tr><td><b>UU No. 19/2016 (Revisi UU ITE)</b></td><td>2016</td><td>Penyesuaian pasal pornografi dan pencemaran nama baik</td></tr>
+          <tr><td><b>UU No. 27/2022 tentang PDP</b></td><td>2022</td><td>Perlindungan Data Pribadi (mirip GDPR Eropa)</td></tr>
+          <tr><td><b>UU No. 2/2002 tentang Kepolisian</b></td><td>2002</td><td>Kewenangan Polri dalam penyelidikan cybercrime</td></tr>
+          <tr><td><b>KUHP (Pasal 362, 378, 406)</b></td><td>Berlaku</td><td>Pencurian, penipuan, perusakan sebagai fallback</td></tr>
+          <tr><td><b>PP No. 71/2019 tentang PSTE</b></td><td>2019</td><td>Penyelenggaraan Sistem Transaksi Elektronik</td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>UU ITE — Pasal-Pasal Kunci yang Wajib Diketahui</h3>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 30 UU ITE</div>
+          <div class="pc-title">Akses Ilegal (Unauthorized Access)</div>
+          <div class="pc-body">
+            Dilarang mengakses komputer/sistem elektronik milik orang lain <b>tanpa izin</b> atau melampaui wewenang yang diberikan. Juga melarang akses yang melanggar keamanan sistem (breaking security measures).
+          </div>
+          <div class="pc-sanction">⚖️ Sanksi: Pidana penjara max 6–8 tahun dan/atau denda max Rp600 juta–Rp800 juta</div>
+        </div>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 32 UU ITE</div>
+          <div class="pc-title">Perubahan, Penambahan, Pengurangan, atau Transmisi Informasi Ilegal</div>
+          <div class="pc-body">
+            Dilarang mengubah, menambah, mengurangi, melakukan transmisi, merusak, menghilangkan, memindahkan, menyembunyikan informasi elektronik milik orang lain. <b>Termasuk disclosure data yang seharusnya dirahasiakan.</b>
+          </div>
+          <div class="pc-sanction">⚖️ Sanksi: Pidana penjara max 8–10 tahun dan/atau denda max Rp2 miliar–Rp5 miliar</div>
+        </div>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 33 UU ITE</div>
+          <div class="pc-title">Serangan terhadap Sistem Elektronik (Sabotase Siber)</div>
+          <div class="pc-body">
+            Dilarang melakukan tindakan apa pun yang mengakibatkan gangguan/kerusakan pada sistem elektronik dan/atau jaringan internet (termasuk DDoS attack, malware deployment).
+          </div>
+          <div class="pc-sanction">⚖️ Sanksi: Pidana penjara max 10 tahun dan/atau denda max Rp10 miliar</div>
+        </div>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 35 UU ITE</div>
+          <div class="pc-title">Manipulasi Informasi Elektronik (Pemalsuan Digital)</div>
+          <div class="pc-body">
+            Dilarang memanipulasi, membuat, mengubah, menghilangkan, merusak informasi elektronik dengan tujuan agar informasi tersebut dianggap seolah-olah autentik.
+          </div>
+          <div class="pc-sanction">⚖️ Sanksi: Pidana penjara max 12 tahun dan/atau denda max Rp12 miliar</div>
+        </div>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 48 UU ITE</div>
+          <div class="pc-title">Intersepsi Ilegal (Illegal Interception)</div>
+          <div class="pc-body">
+            Dilarang melakukan intersepsi (penyadapan) atas transmisi informasi elektronik dan/atau dokumen elektronik yang bukan publik dari, ke, atau di dalam sistem elektronik.
+          </div>
+          <div class="pc-sanction">⚖️ Sanksi: Pidana penjara max 15 tahun dan/atau denda max Rp15 miliar</div>
+        </div>
+
+        <div class="pasal-card" style="border-left-color: var(--blue)">
+          <div class="pc-num" style="color:var(--blue)">UU PDP (No. 27/2022) — PASAL KUNCI</div>
+          <div class="pc-title">Kewajiban Pengendali Data Pribadi</div>
+          <div class="pc-body">
+            <b>Pasal 20:</b> Pengendali wajib melindungi data pribadi dari akses tidak sah<br>
+            <b>Pasal 46:</b> Wajib notifikasi breach kepada pemilik data dalam <b>14 hari kerja</b><br>
+            <b>Pasal 67:</b> Pidana penjara max 4 tahun jika sengaja mengumpulkan data tanpa hak<br>
+            <b>Pasal 68:</b> Denda administratif max 2% dari pendapatan tahunan Indonesia
+          </div>
+          <div class="pc-sanction">⚖️ Mulai berlaku penuh: Oktober 2024 — masa transisi 2 tahun sejak disahkan 2022</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Lembaga Penegak Hukum Siber Indonesia</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-blue">
+            <div class="cc-title">🏛️ Lembaga Pemerintah</div>
+            <ul>
+              <li><b>Direktorat Tindak Pidana Siber (Dittipidsiber) Bareskrim POLRI</b> — penyelidikan kasus</li>
+              <li><b>BSSN</b> (Badan Siber dan Sandi Negara) — kebijakan & respons insiden nasional</li>
+              <li><b>KOMINFO</b> — regulasi konten & platform digital</li>
+              <li><b>OJK</b> — cybercrime di sektor keuangan</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-ok">
+            <div class="cc-title">🔬 Kemampuan Forensik</div>
+            <ul>
+              <li>Pusat Laboratorium Forensik (Puslabfor) POLRI</li>
+              <li>Digital forensics lab di Bareskrim</li>
+              <li>Kerja sama dengan Interpol & Europol</li>
+              <li>Akses ke ID-CERT (Computer Emergency Response Team)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ TREN CYBER CRIME ══════════════════════════════════════════════ -->
+    <section id="tren">
+      <div class="eyebrow">Essay 1 — Bagian 3</div>
+      <h2>Tren Kejahatan Siber — 5 hingga 10 Tahun Ke Depan (2026–2036)</h2>
+      <p class="lede">Perspektif keamanan siber: ancaman yang akan mendominasi dan menjadi tren dalam dekade mendatang.</p>
+
+      <div class="panel">
+        <div class="trend-item">
+          <div class="trend-num">01</div>
+          <div class="trend-body">
+            <h4>AI-Powered Attacks & Autonomous Malware <span class="trend-tag tt-high">Kritikal</span></h4>
+            <p>Serangan menggunakan Artificial Intelligence untuk mengotomatisasi reconnaissance, exploit generation, dan evasion. <b>Autonomous malware</b> dapat beradaptasi secara real-time terhadap pertahanan. Phishing hyper-personalized dengan LLM (seperti GPT) membuat social engineering hampir tidak terdeteksi. Deepfake audio/video digunakan untuk Business Email Compromise (BEC) bermiliar-miliar dolar.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">02</div>
+          <div class="trend-body">
+            <h4>Quantum Computing Threat — "Harvest Now, Decrypt Later" <span class="trend-tag tt-high">Kritikal</span></h4>
+            <p>Komputer kuantum berpotensi memecahkan enkripsi RSA/ECC yang saat ini digunakan. Aktor jahat mulai <b>mengumpulkan data terenkripsi SEKARANG</b> untuk didekripsi ketika quantum computer cukup kuat. Ini disebut "Y2Q" (Years to Quantum). NIST telah merilis standar Post-Quantum Cryptography (PQC) 2024 sebagai respons.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">03</div>
+          <div class="trend-body">
+            <h4>IoT & OT/ICS Attacks (Critical Infrastructure) <span class="trend-tag tt-high">Kritikal</span></h4>
+            <p>Miliaran perangkat IoT (smart home, smart city, medical devices) dengan keamanan lemah menjadi attack surface masif. Serangan terhadap Operational Technology (OT) dan Industrial Control Systems (ICS) pada pembangkit listrik, pipa air, dan infrastruktur kritis. Contoh historis: Serangan Stuxnet pada sentrifugal nuklir Iran.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">04</div>
+          <div class="trend-body">
+            <h4>Ransomware-as-a-Service (RaaS) & Double Extortion <span class="trend-tag tt-high">Tinggi</span></h4>
+            <p>Model bisnis criminal franchise: operator menjual akses tool ransomware ke affiliates. <b>Double extortion</b>: enkripsi data SEKALIGUS ancam bocorkan data jika tidak bayar. <b>Triple extortion</b>: tambah serangan DDoS. Target bergeser ke RS, utilitas publik, dan pemerintah.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">05</div>
+          <div class="trend-body">
+            <h4>Supply Chain Attacks <span class="trend-tag tt-high">Tinggi</span></h4>
+            <p>Menyerang vendor/pihak ketiga untuk menjangkau ribuan target sekaligus. Contoh: SolarWinds (2020) — satu pembaruan software menyebar ke 18.000+ organisasi. Serangan terhadap library open-source (npm, PyPI), CI/CD pipeline, dan software update mechanism. Kode berbahaya dimasukkan ke supply chain sah.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">06</div>
+          <div class="trend-body">
+            <h4>State-Sponsored Cyber Warfare <span class="trend-tag tt-med">Sedang-Tinggi</span></h4>
+            <p>Negara menggunakan cyber sebagai instrumen geopolitik — espionase, sabotase, disinformasi. APT (Advanced Persistent Threat) groups disponsori negara melakukan serangan jangka panjang dan tersembunyi. Contoh: serangan pada infrastruktur Ukraina, espionase industri China, operasi DPRK untuk curi aset kripto.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">07</div>
+          <div class="trend-body">
+            <h4>Deepfake & Synthetic Media Crime <span class="trend-tag tt-med">Sedang-Tinggi</span></h4>
+            <p>Deepfake video CFO "memerintahkan" transfer miliaran dolar (Hongkong 2024, $25M). Pemalsuan identitas biometrik untuk bypass face recognition/KYC. Disinformasi politik masif dengan kandidat "palsu" berucap sesuatu yang tidak pernah dikatakan. Pembuatan materi ilegal (CSAM) dengan AI generatif.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">08</div>
+          <div class="trend-body">
+            <h4>Cryptocurrency & DeFi Crime <span class="trend-tag tt-med">Sedang</span></h4>
+            <p>Smart contract vulnerability exploits — ratusan juta dolar hilang dari protokol DeFi. Crypto mixers untuk laundering hasil kejahatan. NFT fraud dan rug pulls. Regulasi crypto yang ketat mulai diterapkan (MiCA di Eropa, OJK di Indonesia) — tapi aktor jahat bermigrasi ke yurisdiksi lemah.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">09</div>
+          <div class="trend-body">
+            <h4>Cloud Security Threats & Misconfiguration Attacks <span class="trend-tag tt-med">Sedang</span></h4>
+            <p>Migrasi massal ke cloud menciptakan permukaan serangan baru. <b>Misconfigured S3 buckets, unsecured APIs, weak IAM policies</b> menjadi pintu masuk. Serverless function injection, container escape, dan Kubernetes cluster takeover. Cloud-native malware yang menghindari tools keamanan tradisional.</p>
+          </div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-num">10</div>
+          <div class="trend-body">
+            <h4>Privacy Erosion & Data Brokering Crime <span class="trend-tag tt-em">Emerging</span></h4>
+            <p>Komodifikasi data pribadi tanpa consent menjadi industri bawah tanah. Database data pribadi dari breach dijual di dark web dan digunakan untuk targeted scam. Surveillance capitalism — aggregasi data dari ratusan sumber menciptakan profil lengkap individu. Regulasi UU PDP Indonesia mulai menjawab ini, tapi penegakan masih lemah.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ STUDI KASUS 2 ═══════════════════════════════════════════════ -->
+    <section id="case2">
+      <div class="eyebrow">Studi Kasus 2 — E-Commerce Data Breach</div>
+      <h2>Analisis Kasus: Penyalahgunaan Akses Karyawan di E-Commerce</h2>
+      <p class="lede">Skenario: Toko A (e-commerce, pembayaran lewat admin). Satu karyawan diberi akses laptop ke akun kantor yang tidak di-limit. Dia mengakses rahasia perusahaan (voucher dll.), menjual info ke Toko B. Toko B menggunakan strategi Toko A dan menghubungi klien Toko A. Pelakunya ternyata orang yang diberi akses.</p>
+
+      <div class="case-box">
+        <div class="case-title">⚠️ Rekonstruksi Kronologi Kejadian</div>
+        <div class="case-timeline">
+          <div class="ct-item">
+            <div class="ct-tag">Fase 1 — Pemberian Akses</div>
+            <div class="ct-body">Toko A memberikan akses laptop ke sistem/akun kantor kepada seorang karyawan (internal) untuk keperluan operasional. Akses diberikan <b>tanpa pembatasan (tidak di-limit)</b> — ini adalah <b>pelanggaran prinsip Least Privilege</b>.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-tag">Fase 2 — Eksplorasi & Pencurian Data</div>
+            <div class="ct-body">Karyawan memanfaatkan akses tak terbatas untuk menjangkau <b>informasi rahasia bisnis</b>: daftar voucher/diskon, data pelanggan, strategi bisnis, dan komunikasi internal. Ini adalah <b>insider threat</b> — ancaman dari dalam organisasi.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-tag">Fase 3 — Penjualan Informasi</div>
+            <div class="ct-body">Informasi rahasia <b>dijual ke Toko B</b> (kompetitor). Ini merupakan <b>penjualan rahasia dagang</b> (trade secret theft) yang melanggar UU ITE dan berpotensi melanggar hukum persaingan usaha.</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-tag">Fase 4 — Eksploitasi oleh Toko B</div>
+            <div class="ct-body">Toko B menggunakan data tersebut untuk meniru strategi Toko A dan <b>menghubungi langsung pelanggan Toko A</b> (customer poaching). Ini melanggar UU Persaingan Usaha Tidak Sehat (UU No. 5/1999).</div>
+          </div>
+          <div class="ct-item">
+            <div class="ct-tag">Fase 5 — Identifikasi Pelaku</div>
+            <div class="ct-body">Investigasi menunjukkan bahwa sumber kebocoran adalah karyawan yang diberi akses — bukan serangan eksternal. Ini membuktikan pentingnya insider threat detection dan audit log.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="">
+        <h3>2a. Apakah Melanggar Hukum? — Analisis Pasal per Pasal</h3>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 30 Ayat (2) UU ITE — AKSES MELAMPAUI WEWENANG</div>
+          <div class="pc-title">✅ Dilanggar — Akses Melebihi Otorisasi</div>
+          <div class="pc-body">
+            Karyawan menerima akses untuk tugas tertentu, namun mengakses data <b>di luar scope tugasnya</b> (rahasia perusahaan, daftar voucher, data pelanggan). Ini termasuk "melampaui wewenang yang diberikan" dalam Pasal 30 Ayat (2).<br>
+            <b>Persamaan:</b> Seperti security guard yang diberikan kunci kantor untuk jaga malam, tapi membuka laci pimpinan untuk mengambil dokumen rahasia.
+          </div>
+          <div class="pc-sanction">⚖️ Ancaman: Penjara max 7 tahun dan/atau denda max Rp700 juta</div>
+        </div>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 32 Ayat (2) UU ITE — TRANSMISI ILEGAL INFORMASI RAHASIA</div>
+          <div class="pc-title">✅ Dilanggar — Memindahkan & Mengungkapkan Informasi Rahasia</div>
+          <div class="pc-body">
+            Pelaku <b>memindahkan/mengungkapkan</b> informasi elektronik rahasia (voucher, strategi, data pelanggan) kepada pihak tidak berwenang (Toko B). Ini secara eksplisit dilarang Pasal 32 Ayat (2) UU ITE yang melarang pengiriman informasi yang seharusnya dirahasiakan.
+          </div>
+          <div class="pc-sanction">⚖️ Ancaman: Penjara max 9 tahun dan/atau denda max Rp3 miliar</div>
+        </div>
+
+        <div class="pasal-card">
+          <div class="pc-num">PASAL 378 KUHP — PENIPUAN (Jika ada unsur menipu)</div>
+          <div class="pc-title">✅ Mungkin Dilanggar — Jika Ada Unsur Menyesatkan</div>
+          <div class="pc-body">
+            Jika karyawan menyembunyikan niatnya ketika menerima akses (berakting seolah-olah untuk keperluan kerja, padahal niat dari awal adalah mencuri data), maka ada unsur penipuan (menggunakan tipu muslihat untuk menguntungkan diri sendiri dengan merugikan orang lain).
+          </div>
+          <div class="pc-sanction">⚖️ Ancaman: Penjara max 4 tahun</div>
+        </div>
+
+        <div class="pasal-card">
+          <div class="pc-num">UU No. 5/1999 — PERSAINGAN USAHA TIDAK SEHAT (untuk Toko B)</div>
+          <div class="pc-title">✅ Dilanggar oleh Toko B — Persaingan Curang</div>
+          <div class="pc-body">
+            Toko B menggunakan informasi rahasia kompetitor yang diperoleh secara tidak sah. Ini merupakan <b>persaingan curang</b> (unfair competition) yang dilarang KUHP Pasal 382 bis dan UU No. 5/1999. Menghubungi pelanggan Toko A dengan data curian adalah customer poaching yang melanggar hukum.
+          </div>
+          <div class="pc-sanction">⚖️ Ancaman KPPU: Denda hingga 25% keuntungan + ganti rugi perdata</div>
+        </div>
+
+        <div class="pasal-card" style="border-left-color: var(--blue)">
+          <div class="pc-num" style="color:var(--blue)">UU PDP No. 27/2022 — PELANGGARAN DATA PELANGGAN</div>
+          <div class="pc-title">✅ Dilanggar — Data Pribadi Pelanggan Bocor tanpa Consent</div>
+          <div class="pc-body">
+            Data pelanggan Toko A (nama, kontak, preferensi pembelian) bocor ke Toko B tanpa consent pelanggan. Ini melanggar UU PDP yang mewajibkan perlindungan data pribadi dan melarang transfer ke pihak ketiga tanpa izin. Toko A juga berpotensi terkena sanksi administratif karena gagal melindungi data (tidak ada akses kontrol memadai).
+          </div>
+          <div class="pc-sanction">⚖️ Sanksi: Pidana penjara max 4 tahun (pelaku) + Denda admin Toko A max 2% revenue</div>
+        </div>
+
+        <div class="note note-red">
+          <b>Ringkasan Pelanggaran:</b><br>
+          • <b>Karyawan pelaku:</b> Pasal 30(2) UU ITE + Pasal 32(2) UU ITE + Pasal 378 KUHP<br>
+          • <b>Toko B:</b> UU Persaingan Usaha (No. 5/1999) + KUHP Pasal 382 bis + UU PDP<br>
+          • <b>Toko A (sebagai korban):</b> Mungkin kena sanksi administratif UU PDP karena gagal mengamankan data pelanggan (kewajiban pengendali data)
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FORENSIK ════════════════════════════════════════════════════ -->
+    <section id="forensik">
+      <div class="eyebrow">Studi Kasus 2 — Bagian 2</div>
+      <h2>2b. Peran Forensik Digital & Alat Bukti</h2>
+      <p class="lede">Bagaimana membuktikan pelanggaran ini secara hukum menggunakan digital forensics.</p>
+
+      <div class="panel">
+        <h3>Alat Bukti Digital yang Dapat Digunakan</h3>
+        <div class="note note-info"><b>Dasar Hukum Alat Bukti Elektronik:</b> Pasal 5 UU ITE menyatakan bahwa <b>informasi/dokumen elektronik SAH sebagai alat bukti</b> yang diakui dalam persidangan Indonesia, setara dengan surat pada KUHAP.</div>
+
+        <div class="evidence-grid">
+          <div class="evidence-card">
+            <div class="ec-icon">📋</div>
+            <div class="ec-name">Access Log / Audit Log</div>
+            <div class="ec-desc">Log akses sistem mencatat kapan, dari mana, dan data apa yang diakses oleh akun karyawan. Timestamp, IP address, dan aktivitas tersimpan. <b>Kunci utama membuktikan akses tidak sah.</b></div>
+          </div>
+          <div class="evidence-card">
+            <div class="ec-icon">💾</div>
+            <div class="ec-name">Hard Disk / Storage Forensics</div>
+            <div class="ec-desc">Analisis forensik storage laptop karyawan menggunakan tools seperti <b>Autopsy, FTK, EnCase</b>. Dapat menemukan file yang dihapus, browsing history, file yang disalin ke USB/cloud.</div>
+          </div>
+          <div class="evidence-card">
+            <div class="ec-icon">🌐</div>
+            <div class="ec-name">Network Packet Capture</div>
+            <div class="ec-desc">Capture traffic jaringan (Wireshark, NetworkMiner) untuk melihat data apa yang di-upload ke luar. Dapat membuktikan transfer data ke email eksternal atau cloud storage tidak sah.</div>
+          </div>
+          <div class="evidence-card">
+            <div class="ec-icon">📧</div>
+            <div class="ec-name">Email & Chat Logs</div>
+            <div class="ec-desc">Email server logs, WhatsApp/Telegram backup, komunikasi antara karyawan dan Toko B. Dapat membuktikan konspirasi dan intent (niat) pelaku. Koordinasi jual-beli informasi.</div>
+          </div>
+          <div class="evidence-card">
+            <div class="ec-icon">🔐</div>
+            <div class="ec-name">Database Query Logs</div>
+            <div class="ec-desc">Log query SQL/NoSQL yang dieksekusi oleh akun karyawan. Bisa membuktikan bahwa dia mengakses tabel pelanggan, tabel voucher, dan data bisnis yang di luar job description-nya.</div>
+          </div>
+          <div class="evidence-card">
+            <div class="ec-icon">📱</div>
+            <div class="ec-name">Mobile Device Forensics</div>
+            <div class="ec-desc">Forensik HP karyawan menggunakan <b>Cellebrite UFED, Oxygen Forensics</b>. Foto screenshot data rahasia, chat dengan Toko B, transfer uang dari Toko B sebagai pembayaran.</div>
+          </div>
+          <div class="evidence-card">
+            <div class="ec-icon">💳</div>
+            <div class="ec-name">Financial Forensics</div>
+            <div class="ec-desc">Mutasi rekening karyawan — apakah ada transfer masuk dari Toko B setelah kebocoran data? Dapat membuktikan <b>unsur "untuk kepentingan diri sendiri"</b> dalam pasal penipuan.</div>
+          </div>
+          <div class="evidence-card">
+            <div class="ec-icon">☁️</div>
+            <div class="ec-name">Cloud Storage Logs</div>
+            <div class="ec-desc">Log Google Drive, Dropbox, OneDrive. Apakah file perusahaan di-upload ke akun pribadi? Timestamp upload + nama file jadi bukti konkret pemindahan data rahasia.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Prosedur Digital Forensics yang Benar (Chain of Custody)</h3>
+        <ul class="step-list">
+          <li><b>Preservasi (Seizure)</b> — Amankan barang bukti digital secepat mungkin. Laptop, HP, dan server harus di-imaging (bit-by-bit copy) menggunakan <b>write blocker</b> agar tidak mengubah data asli. Segel fisik barang bukti.</li>
+          <li><b>Identifikasi (Identification)</b> — Daftar semua media penyimpanan, sistem, dan akun yang terlibat. Dokumentasi dengan foto dan berita acara penyitaan. Tandatangani chain of custody form.</li>
+          <li><b>Akuisisi (Acquisition)</b> — Buat forensic image (clone) dari storage menggunakan tools seperti <b>dd, FTK Imager, Guymager</b>. Hash MD5/SHA-256 dari image harus sama dengan original untuk verifikasi integritas.</li>
+          <li><b>Analisis (Analysis)</b> — Analisis image dengan tools forensik. Recover deleted files, parse logs, extract metadata, analisis timeline aktivitas. Cari pattern yang membuktikan TKP digital.</li>
+          <li><b>Pelaporan (Reporting)</b> — Buat laporan forensik yang komprehensif, terperinci, dan dapat dipertanggungjawabkan di pengadilan. Harus ditandatangani oleh ahli forensik tersertifikasi.</li>
+          <li><b>Presentasi (Presentation)</b> — Ahli digital forensics bersaksi di pengadilan sebagai <b>ahli (expert witness)</b>. Laporan forensik + hash verification + chain of custody mendukung validitas bukti.</li>
+        </ul>
+        <div class="note note-warn"><b>Chain of Custody WAJIB dijaga!</b> Jika ada celah dalam rantai pengamanan barang bukti (misalnya laptop yang tidak di-seal atau akses oleh pihak tidak berwenang), bukti dapat ditolak di pengadilan karena dianggap terkontaminasi.</div>
+      </div>
+    </section>
+
+    <!-- ══ PREVENTIF ══════════════════════════════════════════════════ -->
+    <section id="preventif">
+      <div class="eyebrow">Studi Kasus 2 — Bagian 3</div>
+      <h2>2c. Langkah Preventif & Mitigasi</h2>
+      <p class="lede">Langkah-langkah yang seharusnya diambil Toko A untuk mencegah kejadian serupa.</p>
+
+      <div class="panel">
+        <h3>Preventif Teknis (Technical Controls)</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-ok">
+            <div class="cc-title">🔑 Access Control & Least Privilege</div>
+            <ul>
+              <li><b>Principle of Least Privilege (PoLP):</b> Berikan akses HANYA yang diperlukan untuk pekerjaan — tidak lebih.</li>
+              <li><b>Role-Based Access Control (RBAC):</b> Akses berdasarkan jabatan/peran, bukan per individu</li>
+              <li><b>Time-based Access:</b> Akses hanya aktif saat jam kerja</li>
+              <li><b>Just-in-Time (JIT) Access:</b> Akses sensitif hanya diberikan saat dibutuhkan dan otomatis dicabut</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-blue">
+            <div class="cc-title">👁️ Monitoring & Audit</div>
+            <ul>
+              <li><b>User Activity Monitoring (UAM):</b> Pantau semua aktivitas user real-time</li>
+              <li><b>Data Loss Prevention (DLP):</b> Cegah upload data sensitif ke luar</li>
+              <li><b>SIEM (Security Information & Event Management):</b> Korelasi log dari semua sumber</li>
+              <li><b>Anomaly Detection:</b> Alert jika ada akses di luar pola normal user</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-warn">
+            <div class="cc-title">🔒 Data Protection</div>
+            <ul>
+              <li><b>Data Classification:</b> Klasifikasikan data (Public, Internal, Confidential, Secret)</li>
+              <li><b>Enkripsi at-rest dan in-transit</b> untuk semua data sensitif</li>
+              <li><b>Database Activity Monitoring (DAM):</b> Monitor semua query database</li>
+              <li><b>Watermarking dokumen:</b> Tandai dokumen sensitif untuk tracing kebocoran</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-red">
+            <div class="cc-title">🛡️ Endpoint Security</div>
+            <ul>
+              <li><b>MDM (Mobile Device Management):</b> Kontrol perangkat yang digunakan karyawan</li>
+              <li><b>USB Blocking:</b> Cegah copy data ke USB drive</li>
+              <li><b>Full Disk Encryption (FDE):</b> BitLocker, FileVault di semua laptop</li>
+              <li><b>Disable personal cloud sync</b> (Google Drive personal, Dropbox) di device kerja</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Preventif Administratif (Administrative Controls)</h3>
+        <ul class="step-list">
+          <li><b>Background Check Karyawan</b> — Lakukan verifikasi latar belakang sebelum memberikan akses ke sistem sensitif. Termasuk pengecekan riwayat kriminal dan referensi kerja.</li>
+          <li><b>Non-Disclosure Agreement (NDA)</b> — Pastikan SEMUA karyawan menandatangani NDA yang jelas mencakup data perusahaan, strategi bisnis, dan data pelanggan. NDA harus mencantumkan konsekuensi hukum pelanggaran.</li>
+          <li><b>Acceptable Use Policy (AUP)</b> — Kebijakan penggunaan aset IT perusahaan yang jelas dan ditandatangani karyawan. Mencakup larangan akses data di luar tugas, larangan membawa data keluar, dan prosedur insiden.</li>
+          <li><b>Security Awareness Training</b> — Pelatihan rutin keamanan siber: social engineering, phishing, pentingnya melindungi data perusahaan. Buat karyawan memahami konsekuensi hukum kebocoran data.</li>
+          <li><b>Offboarding Procedure</b> — Prosedur terstruktur saat karyawan keluar: cabut SEMUA akses dalam 24 jam, kembalikan perangkat, backup kerja karyawan untuk audit.</li>
+          <li><b>Regular Access Review (Recertification)</b> — Review berkala (quarterly) apakah akses karyawan masih sesuai dengan peran saat ini. Cabut akses yang tidak lagi diperlukan.</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h3>Preventif Legal (Legal Controls)</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Mekanisme Legal</th><th>Implementasi</th><th>Perlindungan yang Diberikan</th></tr>
+          <tr><td><b>NDA + Non-Compete Clause</b></td><td>Di kontrak kerja awal</td><td>Melarang karyawan bekerja untuk kompetitor dalam periode tertentu setelah resign</td></tr>
+          <tr><td><b>IP Assignment Agreement</b></td><td>Ditandatangani saat onboarding</td><td>Semua karya/data yang dibuat selama bekerja adalah milik perusahaan</td></tr>
+          <tr><td><b>Trade Secret Protection</b></td><td>Klasifikasikan & dokumentasikan rahasia bisnis</td><td>Dasar gugatan hukum jika trade secret dicuri (KUHP + UU ITE)</td></tr>
+          <tr><td><b>Cyber Insurance</b></td><td>Asuransi khusus risiko siber</td><td>Cover biaya forensik, notifikasi breach, dan ganti rugi ke pelanggan</td></tr>
+          <tr><td><b>Incident Response Plan</b></td><td>Dokumen prosedur tertulis</td><td>Respons cepat dan terstruktur saat insiden, preservasi bukti hukum</td></tr>
+        </table></div>
+      </div>
+
+      <div class="note note-ok">
+        <b>Ringkasan Akhir Studi Kasus:</b><br>
+        <b>Pelanggaran:</b> Pasal 30(2) + 32(2) UU ITE, UU PDP, UU Persaingan Usaha<br>
+        <b>Alat Bukti Kunci:</b> Access log, database query log, email/chat, financial records, mobile forensics<br>
+        <b>Preventif Utama:</b> Least Privilege, DLP, monitoring UAM, NDA, regular access review
+      </div>
+    </section>
+
+    <footer>
+      <span>⚖️ StudyHub · Cyber Law UAS · BINUS Cyber Security</span>
+      <span>Semester 4 — 2025/2026</span>
+      <span style="margin-left:auto; color:var(--accent)">UU ITE + UU PDP + Forensik Digital</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// Nav active highlight
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
+  navLinks.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+  });
+});
+</script>
+</body>
+</html>

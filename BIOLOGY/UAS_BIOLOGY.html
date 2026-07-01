@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAS Computational Biology — BINUS | StudyHub</title>
+<meta name="description" content="Materi lengkap UAS Computational Biology BINUS — Bioinformatics DB, BLAST, FASTA, Pairwise Alignment, MSA, Evolutionary Biology, UPGMA, WPGMA dengan perhitungan step-by-step.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #080C11;
+  --panel:      #0E141C;
+  --panel-2:    #131B25;
+  --panel-3:    #18212D;
+  --line:       #1E2A38;
+  --line-2:     #263342;
+  --text:       #D4E0EC;
+  --muted:      #6B7F94;
+  --muted-2:    #8A9EB5;
+  --keyword:    #79ADFF;
+  --string:     #FFD080;
+  --comment:    #4D6278;
+  --func:       #5EE6A8;
+  --warn:       #FF9966;
+  --warn-bg:    rgba(255,153,102,.08);
+  --warn-border:rgba(255,153,102,.25);
+  --accent:     #5EE6A8;
+  --accent-dim: #0F2A1E;
+  --accent-2:   #3ECFB2;
+  --red:        #FF6B6B;
+  --red-dim:    rgba(255,107,107,.08);
+  --blue:       #79ADFF;
+  --blue-dim:   rgba(121,173,255,.08);
+  --purple:     #C084FC;
+  --purple-dim: rgba(192,132,252,.08);
+  --yellow:     #FFD080;
+  --yellow-dim: rgba(255,208,128,.08);
+  --radius:     10px;
+  --radius-lg:  14px;
+  --shadow:     0 4px 24px rgba(0,0,0,.4);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  line-height: 1.7;
+  font-size: 15px;
+}
+code, .mono { font-family: 'JetBrains Mono', monospace; }
+::selection { background: rgba(94,230,168,.2); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--panel); }
+::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
+
+.shell {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  min-height: 100vh;
+}
+@media (max-width: 900px) { .shell { grid-template-columns: 1fr; } }
+
+.sidebar {
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+  padding: 26px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 900px) {
+  .sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+}
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.brand-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--accent); }
+  50%       { box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(94,230,168,.3); }
+}
+.brand-label { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+.sidebar-title { font-size: 17px; font-weight: 800; color: #fff; margin: 6px 0 22px; line-height: 1.3; }
+
+.nav-group { margin-bottom: 20px; }
+.nav-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--muted);
+  margin: 0 0 8px 4px;
+  font-family: 'JetBrains Mono';
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--muted-2);
+  text-decoration: none;
+  font-size: 13.5px;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+  transition: all .15s ease;
+  cursor: pointer;
+}
+.nav-link:hover { background: var(--panel-2); color: var(--text); }
+.nav-link.active { background: var(--accent-dim); color: var(--accent); border-color: #1a4a34; }
+.nav-link .nt { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted); margin-left: auto; }
+
+.back-btn {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono'; font-size: 11px;
+  color: var(--muted); text-decoration: none;
+  padding: 6px 10px; border-radius: 7px;
+  border: 1px solid var(--line);
+  margin-bottom: 18px;
+  transition: all .15s;
+}
+.back-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+.progress-wrap { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 100; }
+.progress-bar  { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .1s linear; }
+
+main { max-width: 960px; padding-bottom: 120px; }
+
+.hero {
+  padding: 60px 60px 52px;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 90% -10%, rgba(94,230,168,.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 110%, rgba(121,173,255,.07) 0%, transparent 50%),
+    var(--bg);
+  margin-bottom: 52px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231E2A38' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: .3;
+  pointer-events: none;
+}
+@media (max-width: 900px) { .hero { padding: 40px 20px; } }
+.hero .eyebrow { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .14em; margin-bottom: 14px; }
+.hero h1 { font-size: 40px; color: #fff; margin: 0 0 14px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; position: relative; }
+.hero h1 span { color: var(--accent); }
+.hero p { color: var(--muted-2); max-width: 580px; font-size: 15px; margin-bottom: 28px; position: relative; }
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  min-width: 110px;
+  transition: border-color .2s;
+}
+.stat-card:hover { border-color: var(--accent); }
+.stat-card .num { font-family: 'JetBrains Mono'; font-size: 22px; color: var(--accent); font-weight: 700; }
+.stat-card .lab { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+section { margin: 0 60px 72px; scroll-margin-top: 28px; }
+@media (max-width: 900px) { section { margin: 0 20px 52px; } }
+.eyebrow { font-family: 'JetBrains Mono'; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .14em; margin-bottom: 10px; }
+h2 { font-size: 26px; color: #fff; margin: 0 0 6px; font-weight: 800; }
+h3 { font-size: 18px; color: #e0eaf5; margin: 20px 0 10px; font-weight: 700; }
+h4 { font-size: 15px; color: var(--accent); margin: 16px 0 8px; font-weight: 700; font-family: 'JetBrains Mono'; text-transform: uppercase; letter-spacing: .06em; }
+.lede { color: var(--muted-2); font-size: 14.5px; margin-bottom: 24px; max-width: 680px; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  transition: border-color .2s;
+}
+.panel:hover { border-color: var(--line-2); }
+.panel h3 { margin: 0 0 12px; color: #fff; font-size: 15.5px; font-weight: 700; }
+.panel p  { margin: 0 0 10px; color: var(--text); font-size: 14px; }
+.panel p:last-child { margin-bottom: 0; }
+
+.code-wrap { position: relative; margin: 14px 0; }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted);
+  background: var(--panel-2); padding: 4px 10px;
+  border-radius: 0 7px 0 7px;
+  border-left: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  letter-spacing: .04em;
+}
+.code-copy {
+  position: absolute; top: 6px; right: 52px;
+  font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted);
+  background: transparent; border: 1px solid var(--line);
+  padding: 3px 8px; border-radius: 5px; cursor: pointer;
+  transition: all .15s; opacity: 0;
+}
+.code-wrap:hover .code-copy { opacity: 1; }
+.code-copy:hover { color: var(--accent); border-color: var(--accent); }
+.code {
+  background: #060A0E; border: 1px solid var(--line); border-radius: 8px;
+  padding: 18px 20px; font-family: 'JetBrains Mono'; font-size: 12.5px;
+  overflow-x: auto; color: #C0D0E0; white-space: pre; line-height: 1.7; tab-size: 2;
+}
+.k  { color: var(--keyword); font-weight: 600; }
+.s  { color: var(--string); }
+.c  { color: var(--comment); font-style: italic; }
+.f  { color: var(--func); font-weight: 600; }
+.n  { color: #FFB86C; }
+.p  { color: var(--purple); }
+.ok { color: var(--accent); }
+.hi { color: var(--yellow); font-weight: 700; }
+
+.tablewrap { overflow-x: auto; margin: 12px 0; border-radius: 8px; border: 1px solid var(--line); }
+table.dt { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.dt th { background: var(--panel-2); color: var(--accent); text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+table.dt td { padding: 8px 12px; border-bottom: 1px solid var(--line); color: var(--text); font-size: 13px; }
+table.dt tr:last-child td { border-bottom: none; }
+table.dt tr:hover td { background: rgba(94,230,168,.03); }
+table.dt .mono-sm { font-family: 'JetBrains Mono'; font-size: 12px; }
+table.dt .tag-ok   { display: inline-block; background: rgba(94,230,168,.12); color: var(--accent); border: 1px solid rgba(94,230,168,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-warn { display: inline-block; background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-red  { display: inline-block; background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,107,107,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-blue { display: inline-block; background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(121,173,255,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+table.dt .tag-purple { display: inline-block; background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(192,132,252,.2); font-family: 'JetBrains Mono'; font-size: 10px; padding: 1px 6px; border-radius: 4px; }
+
+.note { border-radius: 8px; padding: 13px 16px; font-size: 13.5px; margin: 14px 0; border-left: 3px solid; }
+.note-warn  { background: var(--warn-bg);   border-color: var(--warn);   color: #FFB59C; }
+.note-info  { background: var(--blue-dim);  border-color: var(--blue);   color: #A8C8FF; }
+.note-ok    { background: rgba(94,230,168,.07); border-color: var(--accent); color: #8AFFD4; }
+.note-red   { background: var(--red-dim);   border-color: var(--red);    color: #FFB0B0; }
+.note-purple{ background: var(--purple-dim);border-color: var(--purple); color: #DDB0FF; }
+.note b { color: inherit; filter: brightness(1.2); }
+.note code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+.step-list { list-style: none; padding: 0; margin: 12px 0; counter-reset: step; }
+.step-list li {
+  counter-increment: step;
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--line);
+  font-size: 13.5px; color: var(--text);
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li::before {
+  content: counter(step);
+  flex: 0 0 24px; height: 24px;
+  background: var(--accent-dim); border: 1px solid rgba(94,230,168,.2);
+  color: var(--accent); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 700; margin-top: 1px;
+}
+
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+@media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.compare-card .cc-title { font-family: 'JetBrains Mono'; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; font-weight: 700; }
+.compare-card ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text); }
+.compare-card ul li { margin-bottom: 6px; line-height: 1.5; }
+.cc-ok   .cc-title { color: var(--accent); }
+.cc-warn .cc-title { color: var(--warn); }
+.cc-blue .cc-title { color: var(--blue); }
+.cc-red  .cc-title { color: var(--red); }
+.cc-purple .cc-title { color: var(--purple); }
+
+/* Calc box */
+.calc-box {
+  background: #060A0E; border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 24px; margin: 14px 0; font-family: 'JetBrains Mono'; font-size: 13px;
+}
+.calc-box .cb-title {
+  color: var(--yellow); font-weight: 700; font-size: 12px;
+  text-transform: uppercase; letter-spacing: .1em;
+  margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px;
+}
+.calc-step {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,.05);
+  font-size: 12.5px;
+}
+.calc-step:last-child { border-bottom: none; }
+.calc-step .cs-num {
+  flex: 0 0 22px; height: 22px;
+  background: rgba(255,208,128,.1); border: 1px solid rgba(255,208,128,.2);
+  color: var(--yellow); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; margin-top: 2px;
+}
+.calc-step .cs-body { flex: 1; line-height: 1.6; color: var(--text); }
+.calc-step .cs-math { color: var(--accent); display: block; margin-top: 4px; }
+.calc-step .cs-result { color: var(--yellow); font-weight: 700; }
+
+/* Matrix table */
+.matrix-table { border-collapse: collapse; font-family: 'JetBrains Mono'; font-size: 12px; margin: 10px 0; }
+.matrix-table th, .matrix-table td { padding: 6px 10px; border: 1px solid var(--line); text-align: center; }
+.matrix-table th { background: var(--panel-2); color: var(--accent); }
+.matrix-table td { background: var(--panel); color: var(--text); }
+.matrix-table .diag { color: var(--muted); font-style: italic; }
+.matrix-table .merged { background: rgba(94,230,168,.1); color: var(--accent); font-weight: 700; }
+.matrix-table .min-val { background: rgba(255,208,128,.15); color: var(--yellow); font-weight: 700; }
+
+/* Alignment vis */
+.align-box {
+  background: #060A0E; border: 1px solid var(--line); border-radius: 8px;
+  padding: 16px 20px; margin: 12px 0; font-family: 'JetBrains Mono'; font-size: 13px;
+  overflow-x: auto;
+}
+.align-row { display: flex; gap: 0; align-items: center; margin-bottom: 4px; }
+.align-label { width: 60px; color: var(--muted); font-size: 11px; flex-shrink: 0; }
+.align-char { width: 22px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 13px; border-radius: 4px; }
+.ac-match { background: rgba(94,230,168,.15); color: var(--accent); font-weight: 700; }
+.ac-mismatch { background: rgba(255,107,107,.12); color: var(--red); }
+.ac-gap { background: rgba(255,153,102,.1); color: var(--warn); }
+.ac-neutral { color: var(--text); }
+.align-pipe { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 14px; }
+.align-dot  { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: var(--warn); font-size: 12px; }
+.align-blank{ width: 22px; height: 22px; }
+
+/* DP matrix */
+.dp-table { border-collapse: collapse; font-family: 'JetBrains Mono'; font-size: 11.5px; margin: 10px 0; }
+.dp-table th, .dp-table td { padding: 5px 8px; border: 1px solid var(--line); text-align: center; min-width: 32px; }
+.dp-table th { background: var(--panel-2); color: var(--blue); }
+.dp-table td { background: var(--panel); color: var(--text); }
+.dp-table .dp-trace { background: rgba(94,230,168,.12); color: var(--accent); font-weight: 700; }
+.dp-table .dp-header-row th { color: var(--yellow); }
+
+footer {
+  padding: 28px 60px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 12.5px; font-family: 'JetBrains Mono';
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+@media (max-width: 900px) { footer { padding: 20px; } }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="shell">
+  <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+  <nav class="sidebar">
+    <div class="brand"><span class="brand-dot"></span><span class="brand-label">COMPBIO // UAS BINUS</span></div>
+    <div class="sidebar-title">Computational<br>Biology UAS</div>
+
+    <a class="back-btn" href="../index.html">← Kembali ke StudyHub</a>
+
+    <div class="nav-group">
+      <div class="nav-label">Materi UAS</div>
+      <a class="nav-link active" href="#bioinformatics">▸ Bioinformatics DB <span class="nt">01</span></a>
+      <a class="nav-link" href="#pairwise">▸ Pairwise Alignment <span class="nt">02</span></a>
+      <a class="nav-link" href="#msa">▸ Multiple Sequence Alignment <span class="nt">03</span></a>
+      <a class="nav-link" href="#evo">▸ Evolutionary Biology <span class="nt">04</span></a>
+      <a class="nav-link" href="#phylo">▸ Phylogenetic Tree <span class="nt">05</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Kalkulasi</div>
+      <a class="nav-link" href="#upgma-calc">▸ UPGMA Step-by-Step</a>
+      <a class="nav-link" href="#wpgma-calc">▸ WPGMA Step-by-Step</a>
+      <a class="nav-link" href="#nw-calc">▸ Needleman-Wunsch</a>
+      <a class="nav-link" href="#sw-calc">▸ Smith-Waterman</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════ MAIN ═══════════════════════ -->
+  <main>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="eyebrow">Kisi-kisi UAS · Computational Biology · BINUS</div>
+      <h1>Siap UAS<br><span>Comp. Biology</span></h1>
+      <p>Materi komprehensif UAS — Bioinformatics DB, BLAST, FASTA, Pairwise Alignment (Global & Local), MSA, Evolutionary Biology, UPGMA & WPGMA. Semua dilengkapi <b style="color:#fff">perhitungan step-by-step super detail</b>.</p>
+      <div class="stat-row">
+        <div class="stat-card"><div class="num">5</div><div class="lab">Topik UAS</div></div>
+        <div class="stat-card"><div class="num">2</div><div class="lab">Metode Phylo</div></div>
+        <div class="stat-card"><div class="num">2</div><div class="lab">Jenis Alignment</div></div>
+        <div class="stat-card"><div class="num">100</div><div class="lab">Menit ujian</div></div>
+      </div>
+    </div>
+
+    <!-- ══ 01 BIOINFORMATICS DATABASE ═══════════════════════════════════ -->
+    <section id="bioinformatics">
+      <div class="eyebrow">01 · Materi UAS</div>
+      <h2>Bioinformatics Database</h2>
+      <p class="lede">Database Types, DB Access, BLAST, dan FASTA file — fondasi kerja bioinformatika komputasional.</p>
+
+      <div class="panel">
+        <h3>Tipe-tipe Database Bioinformatika</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Tipe DB</th><th>Contoh</th><th>Isi</th><th>Format Kunci</th></tr>
+          <tr><td><b>Sequence DB</b></td><td>GenBank, EMBL, DDBJ</td><td>Sekuens DNA/RNA/Protein</td><td>FASTA, GenBank format</td></tr>
+          <tr><td><b>Structure DB</b></td><td>PDB (Protein Data Bank)</td><td>Struktur 3D protein/asam nukleat</td><td>PDB, mmCIF</td></tr>
+          <tr><td><b>Protein DB</b></td><td>UniProt, Swiss-Prot, TrEMBL</td><td>Sekuens + anotasi protein</td><td>FASTA, UniProt format</td></tr>
+          <tr><td><b>Genome DB</b></td><td>Ensembl, UCSC Genome Browser</td><td>Genom lengkap + anotasi gen</td><td>FASTA, GFF, BED</td></tr>
+          <tr><td><b>Pathway DB</b></td><td>KEGG, Reactome</td><td>Jalur metabolisme & sinyal</td><td>KGML, BioPAX</td></tr>
+          <tr><td><b>Taxonomy DB</b></td><td>NCBI Taxonomy</td><td>Klasifikasi taksonomi organisme</td><td>Newick, XML</td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>Format FASTA — Anatomi & Contoh</h3>
+        <p>FASTA adalah format teks paling universal untuk menyimpan sekuens biologis.</p>
+        <div class="code-wrap">
+          <span class="code-label">FASTA</span>
+          <div class="code"><span class="ok">></span><span class="f">NM_007294.4</span> <span class="s">Homo sapiens BRCA1 mRNA, complete cds</span>
+<span class="c">|_________| |__________|  |_________________________________|</span>
+<span class="c">  Accession  Gene Name         Description</span>
+
+<span class="n">ATGGATTTATCTGCTCTTCGCGTTGAAGAAGTACAAAATGTCATTAATGCTATGCAGAA</span>
+<span class="n">AATCTTAGAGTGTCCCATCTGTCTGGAGTTGATCAAGGAACCTGTCTCCACAAAGTGTG</span>
+<span class="n">ACCACATATTTTGCAAATTTTGCATGCTGAAACTTCTCAACCAGAAGAAAGGGCCTTCAC</span></div>
+        </div>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Komponen</th><th>Format</th><th>Penjelasan</th></tr>
+          <tr><td><b>Header Line</b></td><td><code>&gt;</code> di awal baris</td><td>Identifier + deskripsi sekuens</td></tr>
+          <tr><td><b>Accession</b></td><td>e.g. <code>NM_007294.4</code></td><td>ID unik di database; angka setelah titik = versi</td></tr>
+          <tr><td><b>Sequence</b></td><td>Baris berikutnya</td><td>Huruf IUPAC: A, T, G, C (DNA); A, U, G, C (RNA); 20 AA (protein)</td></tr>
+          <tr><td><b>Multi-FASTA</b></td><td>Multiple &gt; headers</td><td>Satu file bisa menyimpan banyak sekuens</td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>BLAST — Basic Local Alignment Search Tool</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-blue">
+            <div class="cc-title">🔍 Apa itu BLAST?</div>
+            <ul>
+              <li>Tool pencarian sekuens di database berdasarkan <b>kemiripan lokal</b></li>
+              <li>Menemukan sekuens yang mirip (homolog) dengan query</li>
+              <li>Berdasarkan algoritma Smith-Waterman yang dioptimasi</li>
+              <li>Output: daftar <b>hits</b> dengan skor & E-value</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-ok">
+            <div class="cc-title">📊 Metrik Output BLAST</div>
+            <ul>
+              <li><b>Score / Bit Score:</b> skor alignment (lebih besar = lebih baik)</li>
+              <li><b>E-value:</b> probabilitas hasil secara kebetulan (lebih kecil = lebih signifikan)</li>
+              <li><b>Identity %:</b> persentase posisi identik</li>
+              <li><b>Coverage %:</b> panjang query yang tercakup alignment</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tablewrap"><table class="dt" style="margin-top:14px">
+          <tr><th>Varian BLAST</th><th>Query</th><th>Database</th><th>Kegunaan</th></tr>
+          <tr><td><code class="mono-sm">blastn</code></td><td>Nucleotide</td><td>Nucleotide</td><td>Cari sekuens DNA/RNA mirip</td></tr>
+          <tr><td><code class="mono-sm">blastp</code></td><td>Protein</td><td>Protein</td><td>Cari protein homolog</td></tr>
+          <tr><td><code class="mono-sm">blastx</code></td><td>Nucleotide (translated)</td><td>Protein</td><td>Translasi DNA lalu cari di protein DB</td></tr>
+          <tr><td><code class="mono-sm">tblastn</code></td><td>Protein</td><td>Nucleotide (translated)</td><td>Cari ORF di genom</td></tr>
+          <tr><td><code class="mono-sm">tblastx</code></td><td>Nucleotide (translated)</td><td>Nucleotide (translated)</td><td>Bandingkan dua genom secara protein</td></tr>
+        </table></div>
+        <div class="note note-warn"><b>Jebakan UAS:</b> E-value <code>1e-50</code> LEBIH SIGNIFIKAN dari <code>1e-5</code> karena nilainya lebih kecil. E-value &lt; 0.001 umumnya dianggap signifikan secara statistik.</div>
+      </div>
+
+      <div class="panel">
+        <h3>Database Access — NCBI & Cara Kerja</h3>
+        <ul class="step-list">
+          <li>Buka <code>https://www.ncbi.nlm.nih.gov/</code> → pilih database (GenBank, PubMed, dll.)</li>
+          <li>Masukkan <b>Accession Number</b> (contoh: <code>NM_007294</code>) di search box → klik Search</li>
+          <li>Klik sequence → pilih <b>Send to → File → Format: FASTA</b> untuk download</li>
+          <li>Gunakan <b>BLAST</b> di NCBI: paste FASTA query → pilih database → Run BLAST</li>
+          <li>Baca hasil: lihat <b>E-value</b>, <b>Identity %</b>, dan <b>Description</b> hits teratas</li>
+          <li>Untuk akses programatik: gunakan <b>Biopython Entrez</b> atau <b>REST API NCBI E-utilities</b></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══ 02 PAIRWISE ALIGNMENT ════════════════════════════════════════ -->
+    <section id="pairwise">
+      <div class="eyebrow">02 · Materi UAS</div>
+      <h2>Pairwise Sequence Alignment</h2>
+      <p class="lede">Global Alignment (Needleman-Wunsch), Local Alignment (Smith-Waterman), Identity Score, dan analisis terkait.</p>
+
+      <div class="panel">
+        <h3>Global vs Local Alignment</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-ok">
+            <div class="cc-title">🌐 Global Alignment (Needleman-Wunsch)</div>
+            <ul>
+              <li>Menyelaraskan <b>seluruh panjang</b> kedua sekuens</li>
+              <li>Cocok untuk sekuens <b>serupa panjangnya</b></li>
+              <li>Digunakan saat sekuens diduga homolog penuh</li>
+              <li>Seluruh sekuens harus ter-align (dari ujung ke ujung)</li>
+              <li>Contoh use: membandingkan gen ortolog dua spesies</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-blue">
+            <div class="cc-title">🎯 Local Alignment (Smith-Waterman)</div>
+            <ul>
+              <li>Mencari <b>sub-region terbaik</b> dari kedua sekuens</li>
+              <li>Cocok untuk sekuens <b>berbeda panjang</b> atau berbeda domain</li>
+              <li>Digunakan untuk menemukan domain konservatif</li>
+              <li>Skor tidak bisa negatif → diset ke 0</li>
+              <li>Contoh use: menemukan motif protein dalam sekuens panjang</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Scoring System — Dasar Perhitungan</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Kondisi</th><th>Skor Umum</th><th>Penjelasan</th></tr>
+          <tr><td><b>Match</b></td><td>+1 atau +2</td><td>Basa/asam amino identik di posisi yang sama</td></tr>
+          <tr><td><b>Mismatch</b></td><td>−1 atau −1</td><td>Basa/asam amino berbeda di posisi yang sama</td></tr>
+          <tr><td><b>Gap Open</b></td><td>−2 atau −8</td><td>Penalti awal membuka gap (insertion/deletion)</td></tr>
+          <tr><td><b>Gap Extend</b></td><td>−1 per posisi</td><td>Penalti tambahan per perpanjangan gap</td></tr>
+        </table></div>
+        <div class="note note-info"><b>Identity Score</b> = (Jumlah posisi identik) / (Panjang alignment) × 100%<br>
+        <b>Similarity Score</b> termasuk posisi yang <i>similar</i> (misal: asam amino dengan sifat kimia mirip), bukan hanya identik.</div>
+      </div>
+
+      <!-- NEEDLEMAN-WUNSCH STEP BY STEP -->
+      <div id="nw-calc" class="panel">
+        <h3>⚙️ Needleman-Wunsch — Perhitungan Step-by-Step</h3>
+        <p>Contoh: align <b>Seq A = AGCT</b> dan <b>Seq B = AGT</b><br>
+        Scoring: Match = +1, Mismatch = −1, Gap = −2</p>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Step 1 — Inisialisasi Matriks DP</div>
+          <p style="color:var(--muted-2); font-size:13px; margin:0 0 12px">Buat matriks (len_A+1) × (len_B+1). Isi baris 0 dan kolom 0 dengan gap penalties: F(i,0) = i × gap_penalty, F(0,j) = j × gap_penalty</p>
+          <div style="overflow-x:auto">
+          <table class="matrix-table">
+            <tr><th></th><th>–</th><th>A</th><th>G</th><th>C</th><th>T</th></tr>
+            <tr><th>–</th><td class="merged">0</td><td class="merged">−2</td><td class="merged">−4</td><td class="merged">−6</td><td class="merged">−8</td></tr>
+            <tr><th>A</th><td class="merged">−2</td><td>?</td><td>?</td><td>?</td><td>?</td></tr>
+            <tr><th>G</th><td class="merged">−4</td><td>?</td><td>?</td><td>?</td><td>?</td></tr>
+            <tr><th>T</th><td class="merged">−6</td><td>?</td><td>?</td><td>?</td><td>?</td></tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Step 2 — Isi Matriks (Recurrence Relation)</div>
+          <p style="color:var(--muted-2); font-size:13px; margin:0 0 12px">Untuk setiap sel F(i,j), ambil MAXIMUM dari 3 kemungkinan:</p>
+          <div class="code" style="font-size:12px">F(i,j) = MAX of:
+  ① F(i-1, j-1) + score(A[i], B[j])   ← diagonal (match/mismatch)
+  ② F(i-1, j)   + gap_penalty          ← dari atas (gap di B)
+  ③ F(i, j-1)   + gap_penalty          ← dari kiri (gap di A)</div>
+
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              <b>F(1,1) — A vs A (MATCH)</b>
+              <span class="cs-math">① F(0,0) + score(A,A) = 0 + 1 = +1</span>
+              <span class="cs-math">② F(0,1) + gap = −2 + (−2) = −4</span>
+              <span class="cs-math">③ F(1,0) + gap = −2 + (−2) = −4</span>
+              <span class="cs-result">→ MAX(+1, −4, −4) = <b>+1</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              <b>F(1,2) — A vs G (MISMATCH)</b>
+              <span class="cs-math">① F(0,1) + score(A,G) = −2 + (−1) = −3</span>
+              <span class="cs-math">② F(0,2) + gap = −4 + (−2) = −6</span>
+              <span class="cs-math">③ F(1,1) + gap = +1 + (−2) = −1</span>
+              <span class="cs-result">→ MAX(−3, −6, −1) = <b>−1</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              <b>F(1,3) — A vs C (MISMATCH)</b>
+              <span class="cs-math">① F(0,2) + score(A,C) = −4 + (−1) = −5</span>
+              <span class="cs-math">② F(0,3) + gap = −6 + (−2) = −8</span>
+              <span class="cs-math">③ F(1,2) + gap = −1 + (−2) = −3</span>
+              <span class="cs-result">→ MAX(−5, −8, −3) = <b>−3</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">4</div>
+            <div class="cs-body">
+              <b>F(1,4) — A vs T (MISMATCH)</b>
+              <span class="cs-math">① F(0,3) + score(A,T) = −6 + (−1) = −7</span>
+              <span class="cs-math">② F(0,4) + gap = −8 + (−2) = −10</span>
+              <span class="cs-math">③ F(1,3) + gap = −3 + (−2) = −5</span>
+              <span class="cs-result">→ MAX(−7, −10, −5) = <b>−5</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">5</div>
+            <div class="cs-body">
+              <b>F(2,1) — G vs A (MISMATCH)</b>
+              <span class="cs-math">① F(1,0) + score(G,A) = −2 + (−1) = −3</span>
+              <span class="cs-math">② F(1,1) + gap = +1 + (−2) = −1</span>
+              <span class="cs-math">③ F(2,0) + gap = −4 + (−2) = −6</span>
+              <span class="cs-result">→ MAX(−3, −1, −6) = <b>−1</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">6</div>
+            <div class="cs-body">
+              <b>F(2,2) — G vs G (MATCH)</b>
+              <span class="cs-math">① F(1,1) + score(G,G) = +1 + 1 = +2</span>
+              <span class="cs-math">② F(1,2) + gap = −1 + (−2) = −3</span>
+              <span class="cs-math">③ F(2,1) + gap = −1 + (−2) = −3</span>
+              <span class="cs-result">→ MAX(+2, −3, −3) = <b>+2</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">7</div>
+            <div class="cs-body">
+              <b>F(2,3) — G vs C (MISMATCH)</b>
+              <span class="cs-math">① F(1,2) + score(G,C) = −1 + (−1) = −2</span>
+              <span class="cs-math">② F(1,3) + gap = −3 + (−2) = −5</span>
+              <span class="cs-math">③ F(2,2) + gap = +2 + (−2) = 0</span>
+              <span class="cs-result">→ MAX(−2, −5, 0) = <b>0</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">8</div>
+            <div class="cs-body">
+              <b>F(2,4) — G vs T (MISMATCH)</b>
+              <span class="cs-math">① F(1,3) + score(G,T) = −3 + (−1) = −4</span>
+              <span class="cs-math">② F(1,4) + gap = −5 + (−2) = −7</span>
+              <span class="cs-math">③ F(2,3) + gap = 0 + (−2) = −2</span>
+              <span class="cs-result">→ MAX(−4, −7, −2) = <b>−2</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">9</div>
+            <div class="cs-body">
+              <b>F(3,1) — T vs A (MISMATCH)</b>
+              <span class="cs-math">① F(2,0) + score(T,A) = −4 + (−1) = −5</span>
+              <span class="cs-math">② F(2,1) + gap = −1 + (−2) = −3</span>
+              <span class="cs-math">③ F(3,0) + gap = −6 + (−2) = −8</span>
+              <span class="cs-result">→ MAX(−5, −3, −8) = <b>−3</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">10</div>
+            <div class="cs-body">
+              <b>F(3,2) — T vs G (MISMATCH)</b>
+              <span class="cs-math">① F(2,1) + score(T,G) = −1 + (−1) = −2</span>
+              <span class="cs-math">② F(2,2) + gap = +2 + (−2) = 0</span>
+              <span class="cs-math">③ F(3,1) + gap = −3 + (−2) = −5</span>
+              <span class="cs-result">→ MAX(−2, 0, −5) = <b>0</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">11</div>
+            <div class="cs-body">
+              <b>F(3,3) — T vs C (MISMATCH)</b>
+              <span class="cs-math">① F(2,2) + score(T,C) = +2 + (−1) = +1</span>
+              <span class="cs-math">② F(2,3) + gap = 0 + (−2) = −2</span>
+              <span class="cs-math">③ F(3,2) + gap = 0 + (−2) = −2</span>
+              <span class="cs-result">→ MAX(+1, −2, −2) = <b>+1</b> ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">12</div>
+            <div class="cs-body">
+              <b>F(3,4) — T vs T (MATCH) ← Skor Akhir!</b>
+              <span class="cs-math">① F(2,3) + score(T,T) = 0 + 1 = +1</span>
+              <span class="cs-math">② F(2,4) + gap = −2 + (−2) = −4</span>
+              <span class="cs-math">③ F(3,3) + gap = +1 + (−2) = −1</span>
+              <span class="cs-result">→ MAX(+1, −4, −1) = <b>+1</b> ← OPTIMAL SCORE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Matriks DP Final (lengkap)</div>
+          <div style="overflow-x:auto">
+          <table class="matrix-table">
+            <tr><th></th><th>–</th><th>A</th><th>G</th><th>C</th><th>T</th></tr>
+            <tr><th>–</th><td>0</td><td>−2</td><td>−4</td><td>−6</td><td>−8</td></tr>
+            <tr><th>A</th><td>−2</td><td class="merged">+1</td><td>−1</td><td>−3</td><td>−5</td></tr>
+            <tr><th>G</th><td>−4</td><td>−1</td><td class="merged">+2</td><td class="merged">0</td><td>−2</td></tr>
+            <tr><th>T</th><td>−6</td><td>−3</td><td>0</td><td>+1</td><td class="min-val">+1</td></tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Step 3 — Traceback (dari F(3,4) ke F(0,0))</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              F(3,4)=+1 berasal dari F(2,3)=0 + score(T,T)=1 → <b>diagonal</b> (T vs T = MATCH)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              F(2,3)=0 berasal dari F(2,2)=+2 + gap=(−2) = 0 → <b>kiri</b> (gap di B, skip C di A)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              F(2,2)=+2 berasal dari F(1,1)=+1 + score(G,G)=1 → <b>diagonal</b> (G vs G = MATCH)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">4</div>
+            <div class="cs-body">
+              F(1,1)=+1 berasal dari F(0,0)=0 + score(A,A)=1 → <b>diagonal</b> (A vs A = MATCH)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">5</div>
+            <div class="cs-body">
+              Selesai! Traceback path: (3,4)→(2,3)→(2,2)→(1,1)→(0,0)
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">✅ Hasil Alignment Global</div>
+          <div class="align-box">
+            <div class="align-row">
+              <span class="align-label">Seq A:</span>
+              <span class="align-char ac-match">A</span>
+              <span class="align-char ac-match">G</span>
+              <span class="align-char ac-gap">C</span>
+              <span class="align-char ac-match">T</span>
+            </div>
+            <div class="align-row">
+              <span class="align-label">Match:</span>
+              <span class="align-pipe">|</span>
+              <span class="align-pipe">|</span>
+              <span class="align-blank"> </span>
+              <span class="align-pipe">|</span>
+            </div>
+            <div class="align-row">
+              <span class="align-label">Seq B:</span>
+              <span class="align-char ac-match">A</span>
+              <span class="align-char ac-match">G</span>
+              <span class="align-char ac-gap">–</span>
+              <span class="align-char ac-match">T</span>
+            </div>
+          </div>
+          <div style="font-family:'JetBrains Mono'; font-size:13px; margin-top:10px; color:var(--text)">
+            Skor = <span style="color:var(--accent)">+1 (A-A) + 1 (G-G) + (−2) gap + 1 (T-T) = +1</span><br>
+            Identity = 3 match / 4 posisi = <span style="color:var(--yellow)">75%</span>
+          </div>
+        </div>
+        <div class="note note-ok"><b>Cara Hitung Identity Score:</b><br>
+        Identity % = (Jumlah posisi IDENTIK) ÷ (Total panjang alignment) × 100%<br>
+        Contoh di atas: 3 match dari 4 posisi = 3/4 × 100% = <b>75%</b></div>
+      </div>
+
+      <!-- SMITH-WATERMAN -->
+      <div id="sw-calc" class="panel">
+        <h3>⚙️ Smith-Waterman (Local Alignment) — Step-by-Step</h3>
+        <p>Contoh: align <b>Seq A = ACGT</b> dan <b>Seq B = CGT</b><br>
+        Scoring: Match = +2, Mismatch = −1, Gap = −2</p>
+
+        <div class="calc-box">
+          <div class="cb-title">Perbedaan Kunci dari Needleman-Wunsch</div>
+          <div class="calc-step">
+            <div class="cs-num">!</div>
+            <div class="cs-body">
+              <b>Inisialisasi:</b> Baris 0 dan kolom 0 semua diisi <span class="cs-result">0</span> (bukan gap penalty!)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">!</div>
+            <div class="cs-body">
+              <b>Recurrence:</b> F(i,j) = MAX(0, diagonal, atas, kiri) — nilai TIDAK BOLEH negatif
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">!</div>
+            <div class="cs-body">
+              <b>Skor optimal:</b> Ambil nilai <span class="cs-result">TERBESAR</span> di SELURUH matriks (bukan sel pojok kanan bawah)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">!</div>
+            <div class="cs-body">
+              <b>Traceback:</b> Mulai dari sel dengan nilai TERBESAR, mundur hingga mencapai <span class="cs-result">sel bernilai 0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Matriks SW — Pengisian</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              <b>F(1,1) — A vs C (MISMATCH)</b>
+              <span class="cs-math">MAX(0, F(0,0)+score(A,C), F(0,1)+gap, F(1,0)+gap) = MAX(0, 0−1, 0−2, 0−2) = MAX(0,−1,−2,−2)</span>
+              <span class="cs-result">= 0</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              <b>F(1,2) — A vs G (MISMATCH)</b>
+              <span class="cs-math">MAX(0, F(0,1)+score(A,G)=0−1=−1, F(0,2)+gap=0−2=−2, F(1,1)+gap=0−2=−2)</span>
+              <span class="cs-result">= 0</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              <b>F(2,1) — C vs C (MATCH!)</b>
+              <span class="cs-math">MAX(0, F(1,0)+score(C,C)=0+2=+2, F(1,1)+gap=0−2=−2, F(2,0)+gap=0−2=−2)</span>
+              <span class="cs-result">= +2 ✓</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">4</div>
+            <div class="cs-body">
+              <b>F(2,2) — C vs G (MISMATCH)</b>
+              <span class="cs-math">MAX(0, F(1,1)+score(C,G)=0−1=−1, F(1,2)+gap=0−2=−2, F(2,1)+gap=2−2=0)</span>
+              <span class="cs-result">= 0</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">5</div>
+            <div class="cs-body">
+              <b>F(3,1) — G vs C (MISMATCH)</b>
+              <span class="cs-math">MAX(0, F(2,0)+score(G,C)=0−1=−1, F(2,1)+gap=2−2=0, F(3,0)+gap=0−2=−2)</span>
+              <span class="cs-result">= 0</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">6</div>
+            <div class="cs-body">
+              <b>F(3,2) — G vs G (MATCH!)</b>
+              <span class="cs-math">MAX(0, F(2,1)+score(G,G)=2+2=+4, F(2,2)+gap=0−2=−2, F(3,1)+gap=0−2=−2)</span>
+              <span class="cs-result">= +4 ✓ ← NILAI TERBESAR!</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">7</div>
+            <div class="cs-body">
+              <b>F(3,3) — G vs T (MISMATCH)</b>
+              <span class="cs-math">MAX(0, F(2,2)+score(G,T)=0−1=−1, F(2,3)+gap, F(3,2)+gap=4−2=+2)</span>
+              <span class="cs-result">= +2</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">8</div>
+            <div class="cs-body">
+              <b>F(4,1) — T vs C (MISMATCH)</b>
+              <span class="cs-math">MAX(0, F(3,0)+score(T,C)=0−1=−1, F(3,1)+gap=0−2=−2, F(4,0)+gap=0−2=−2)</span>
+              <span class="cs-result">= 0</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">9</div>
+            <div class="cs-body">
+              <b>F(4,2) — T vs G (MISMATCH)</b>
+              <span class="cs-math">MAX(0, F(3,1)+score(T,G)=0−1=−1, F(3,2)+gap=4−2=+2, F(4,1)+gap=0−2=−2)</span>
+              <span class="cs-result">= +2</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">10</div>
+            <div class="cs-body">
+              <b>F(4,3) — T vs T (MATCH!)</b>
+              <span class="cs-math">MAX(0, F(3,2)+score(T,T)=4+2=+6, F(3,3)+gap=2−2=0, F(4,2)+gap=2−2=0)</span>
+              <span class="cs-result">= +6 ✓ ← NILAI TERBESAR di seluruh matriks!</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Matriks SW Final</div>
+          <div style="overflow-x:auto">
+          <table class="matrix-table">
+            <tr><th></th><th>–</th><th>C</th><th>G</th><th>T</th></tr>
+            <tr><th>–</th><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><th>A</th><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><th>C</th><td>0</td><td class="merged">+2</td><td>0</td><td>0</td></tr>
+            <tr><th>G</th><td>0</td><td>0</td><td class="min-val">+4</td><td>+2</td></tr>
+            <tr><th>T</th><td>0</td><td>0</td><td>+2</td><td class="min-val">+6</td></tr>
+          </table>
+          </div>
+          <p style="color:var(--muted-2); font-size:13px; margin-top:10px">Nilai terbesar: <span style="color:var(--yellow); font-weight:700">+6</span> di F(4,3)</p>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">✅ Hasil Local Alignment</div>
+          <div class="align-box">
+            <div class="align-row">
+              <span class="align-label">Seq A:</span>
+              <span class="align-char ac-match">C</span>
+              <span class="align-char ac-match">G</span>
+              <span class="align-char ac-match">T</span>
+            </div>
+            <div class="align-row">
+              <span class="align-label">Match:</span>
+              <span class="align-pipe">|</span>
+              <span class="align-pipe">|</span>
+              <span class="align-pipe">|</span>
+            </div>
+            <div class="align-row">
+              <span class="align-label">Seq B:</span>
+              <span class="align-char ac-match">C</span>
+              <span class="align-char ac-match">G</span>
+              <span class="align-char ac-match">T</span>
+            </div>
+          </div>
+          <div style="font-family:'JetBrains Mono'; font-size:13px; margin-top:10px; color:var(--text)">
+            Skor = <span style="color:var(--accent)">2+2+2 = +6</span> | Local region: posisi 2–4 di A, posisi 1–3 di B<br>
+            Identity = 3/3 = <span style="color:var(--yellow)">100%</span> (untuk sub-region ini)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 03 MSA ══════════════════════════════════════════════════════════ -->
+    <section id="msa">
+      <div class="eyebrow">03 · Materi UAS</div>
+      <h2>Multiple Sequence Alignment (MSA)</h2>
+      <p class="lede">Theory, Basic Analysis dari Slide — Kasus MSA hingga Distance Tree, Pandemic, dan Vaccine Development.</p>
+
+      <div class="panel">
+        <h3>Apa itu MSA?</h3>
+        <p>MSA (Multiple Sequence Alignment) adalah proses menyelaraskan <b>3 atau lebih sekuens</b> secara bersamaan untuk mengidentifikasi wilayah konservatif, divergen, dan hubungan evolusioner.</p>
+        <div class="compare-grid">
+          <div class="compare-card cc-ok">
+            <div class="cc-title">🎯 Tujuan MSA</div>
+            <ul>
+              <li>Mengidentifikasi <b>conserved regions</b> (wilayah penting fungsional)</li>
+              <li>Membangun <b>phylogenetic tree</b></li>
+              <li>Prediksi struktur protein</li>
+              <li>Desain <b>primer PCR</b> universal</li>
+              <li>Identifikasi mutasi/variasi antar strain</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-blue">
+            <div class="cc-title">🛠️ Tools MSA Populer</div>
+            <ul>
+              <li><b>ClustalW / ClustalOmega</b> — progressive alignment</li>
+              <li><b>MUSCLE</b> — cepat, akurat untuk protein</li>
+              <li><b>MAFFT</b> — iterative refinement</li>
+              <li><b>T-Coffee</b> — high accuracy, lambat</li>
+              <li><b>Biopython AlignIO</b> — analisis programatik</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Progressive Alignment (ClustalW) — Algoritma</h3>
+        <ul class="step-list">
+          <li><b>Hitung pairwise distance</b> — semua pasangan sekuens di-align, dihitung skor similarity</li>
+          <li><b>Buat distance matrix</b> — konversi skor ke jarak (distance = 1 − similarity)</li>
+          <li><b>Buat Guide Tree</b> — menggunakan UPGMA atau NJ (Neighbor Joining) dari distance matrix</li>
+          <li><b>Progressive alignment</b> — align sekuens/grup mengikuti guide tree dari yang paling similar ke yang paling berbeda</li>
+          <li><b>Output</b> — MSA final dalam format CLUSTAL, FASTA, atau PHYLIP</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h3>Aplikasi MSA — Kasus Pandemi & Vaksin</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-warn">
+            <div class="cc-title">🦠 MSA untuk Pandemi</div>
+            <ul>
+              <li>MSA sekuens virus dari berbagai wilayah → tracking <b>mutasi varian</b></li>
+              <li>Identifikasi <b>conserved epitopes</b> yang tidak bermutasi → target vaksin</li>
+              <li>Membangun <b>phylogenetic tree</b> untuk tracing asal-usul virus</li>
+              <li>Contoh: MSA 1000+ sekuens SARS-CoV-2 dari GISAID</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-purple">
+            <div class="cc-title">💉 MSA untuk Desain Vaksin</div>
+            <ul>
+              <li>Identifikasi <b>highly conserved regions</b> sebagai antigen target</li>
+              <li>Pilih epitopes yang tidak mengalami mutasi antar varian</li>
+              <li><b>Consensus sequence</b> dari MSA → desain antigen vaksin</li>
+              <li>MSA protein Spike SARS-CoV-2: konservasi di receptor binding domain</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note note-info"><b>Key Concept:</b> "Conserved" = posisi dalam MSA yang sama (atau sangat mirip) di semua/mayoritas sekuens → menandakan fungsi <b>esensial</b> (seleksi purifying). "Variable" = posisi berbeda-beda → tekanan seleksi rendah atau adaptasi.</div>
+      </div>
+
+      <div class="panel">
+        <h3>MSA Output & Interpretasi</h3>
+        <div class="code-wrap">
+          <span class="code-label">CLUSTAL format (MSA Output)</span>
+          <div class="code"><span class="c">CLUSTAL W(1.83) multiple sequence alignment</span>
+
+<span class="f">SARS-CoV-2_WH01</span>   ATGTTTGTTTTTCTTGTTTTATTGCCACTAGTCTCTAGTCAGTGTGTTAATCTTACAACC
+<span class="f">SARS-CoV-2_Alpha</span>   ATGTTTGTTTTTCTTGTTTTATTGCCACTAGTCTCTAGTCAGTGTGTTAATCTTACAACC
+<span class="f">SARS-CoV-2_Delta</span>   ATGTTTGTTTTTCTTGTTTTATTGCCACTAGTCTCTAGTCAGTGTGTTAATCTTACAACC
+<span class="f">SARS-CoV-2_Omicron</span> ATGTTTGTTTTTCTTGTTTTATTGCCACTAGTCTCTAGTCAGTGTGTTAATCTTACAACC
+                   <span class="ok">************************************************************</span>
+
+<span class="c">   ↑ Asterisk (*) = identik di semua sekuens = CONSERVED</span>
+<span class="c">   Titik (.) = mirip tapi tidak identik = semi-conserved</span>
+<span class="c">   Spasi = tidak mirip = variable region</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 04 EVOLUTIONARY BIOLOGY ══════════════════════════════════════ -->
+    <section id="evo">
+      <div class="eyebrow">04 · Materi UAS</div>
+      <h2>Evolutionary Biology</h2>
+      <p class="lede">Theory dan Basic Analysis dari Slide — Dasar evolusi molekuler yang mendasari analisis phylogenetic.</p>
+
+      <div class="panel">
+        <h3>Teori Evolusi Molekuler — Konsep Kunci</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Konsep</th><th>Definisi</th><th>Relevansi ke Bioinformatika</th></tr>
+          <tr><td><b>Homolog</b></td><td>Sekuens yang berasal dari nenek moyang yang sama</td><td>Dasar semua analisis alignment & phylogeny</td></tr>
+          <tr><td><b>Ortholog</b></td><td>Gen homolog di spesies berbeda akibat spesiasi</td><td>Perbandingan fungsi gen antar spesies</td></tr>
+          <tr><td><b>Paralog</b></td><td>Gen homolog dalam spesies sama akibat duplikasi gen</td><td>Analisis keluarga gen</td></tr>
+          <tr><td><b>Molecular Clock</b></td><td>Asumsi: mutasi terakumulasi pada laju konstan</td><td>Estimasi waktu divergensi dari sekuens</td></tr>
+          <tr><td><b>Neutral Theory</b></td><td>Sebagian besar mutasi bersifat netral (Kimura, 1968)</td><td>Model substitusi JC69, K2P, dll.</td></tr>
+          <tr><td><b>Substitution Rate</b></td><td>Laju perubahan nukleotida/asam amino per posisi per waktu</td><td>Kalibrasi molecular clock</td></tr>
+        </table></div>
+      </div>
+
+      <div class="panel">
+        <h3>Model Substitusi Nukleotida</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-ok">
+            <div class="cc-title">Jukes-Cantor (JC69)</div>
+            <ul>
+              <li>Model paling sederhana</li>
+              <li>Asumsi: semua substitusi terjadi dengan laju yang SAMA</li>
+              <li>4 nukleotida dengan frekuensi yang SAMA (25% each)</li>
+              <li>Koreksi: d = −3/4 × ln(1 − 4/3 × p)</li>
+              <li>p = proporsi posisi berbeda (observed distance)</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-blue">
+            <div class="cc-title">Kimura 2-Parameter (K2P)</div>
+            <ul>
+              <li>Membedakan <b>transitions</b> (Ti) dan <b>transversions</b> (Tv)</li>
+              <li>Transitions (A↔G, C↔T) lebih sering terjadi</li>
+              <li>Ti/Tv ratio biasanya 2:1 atau lebih</li>
+              <li>Lebih realistis dari JC69</li>
+              <li>Umum digunakan untuk data DNA</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note note-info"><b>Transition vs Transversion:</b><br>
+        • <b>Transition:</b> Purine↔Purine (A↔G) atau Pyrimidine↔Pyrimidine (C↔T)<br>
+        • <b>Transversion:</b> Purine↔Pyrimidine (A/G ↔ C/T)<br>
+        Transitions lebih sering karena perubahan kimia lebih kecil.</div>
+      </div>
+
+      <div class="panel">
+        <h3>Konsep Distance (Jarak Evolusioner)</h3>
+        <div class="calc-box">
+          <div class="cb-title">Menghitung Observed Distance (p)</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              Hitung jumlah <b>perbedaan posisi</b> antara dua sekuens dari alignment
+              <span class="cs-math">Seq 1: ACGTTAGC | Seq 2: ACGCTAGC</span>
+              <span class="cs-math">Posisi berbeda: posisi 4 (T vs C) = 1 perbedaan</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              Hitung observed distance p:
+              <span class="cs-math">p = jumlah perbedaan / panjang alignment = 1/8 = 0.125</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              Koreksi dengan JC69 untuk multiple hits:
+              <span class="cs-math">d = −(3/4) × ln(1 − (4/3) × p)</span>
+              <span class="cs-math">d = −0.75 × ln(1 − 1.333 × 0.125)</span>
+              <span class="cs-math">d = −0.75 × ln(1 − 0.1667) = −0.75 × ln(0.8333)</span>
+              <span class="cs-result">d = −0.75 × (−0.1823) ≈ 0.1368</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 05 PHYLOGENETIC TREE ══════════════════════════════════════════ -->
+    <section id="phylo">
+      <div class="eyebrow">05 · Materi UAS</div>
+      <h2>Phylogenetic Tree — UPGMA & WPGMA</h2>
+      <p class="lede">Metode clustering untuk membangun pohon filogenetik dari distance matrix — dengan perhitungan SANGAT detail step-by-step.</p>
+
+      <div class="panel">
+        <h3>UPGMA vs WPGMA — Perbedaan Utama</h3>
+        <div class="compare-grid">
+          <div class="compare-card cc-ok">
+            <div class="cc-title">UPGMA (Unweighted Pair Group Method with Arithmetic Mean)</div>
+            <ul>
+              <li>Merata-ratakan jarak dengan <b>mempertimbangkan ukuran grup</b></li>
+              <li>Formula: d(AB,C) = (|A|·d(A,C) + |B|·d(B,C)) / (|A|+|B|)</li>
+              <li>|A| = jumlah taksa dalam grup A</li>
+              <li>Menghasilkan <b>ultrametric tree</b> (jarak akar ke semua daun sama)</li>
+              <li>Asumsi: <b>constant evolutionary rate</b> (molecular clock)</li>
+            </ul>
+          </div>
+          <div class="compare-card cc-warn">
+            <div class="cc-title">WPGMA (Weighted Pair Group Method with Arithmetic Mean)</div>
+            <ul>
+              <li>Merata-ratakan jarak <b>TANPA mempertimbangkan ukuran grup</b></li>
+              <li>Formula: d(AB,C) = (d(A,C) + d(B,C)) / 2</li>
+              <li>Ukuran grup tidak diikutsertakan dalam perhitungan</li>
+              <li>Memberikan bobot sama untuk setiap sub-kelompok</li>
+              <li>Kadang lebih robust jika ukuran sampel tidak seimbang</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note note-warn"><b>Mudah Bingung?</b> Ingat: meski namanya "Weighted" WPGMA, justru TANPA bobot ukuran. "Unweighted" UPGMA justru PAKAI bobot ukuran (n). Nama historis memang membingungkan!</div>
+      </div>
+
+      <!-- UPGMA STEP BY STEP -->
+      <div id="upgma-calc" class="panel">
+        <h3>⚙️ UPGMA — Perhitungan Lengkap Step-by-Step</h3>
+        <p>Contoh: 4 taksa A, B, C, D dengan distance matrix berikut:</p>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Distance Matrix Awal</div>
+          <div style="overflow-x:auto">
+          <table class="matrix-table">
+            <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+            <tr><th>A</th><td class="diag">0</td><td class="min-val">4</td><td>8</td><td>8</td></tr>
+            <tr><th>B</th><td class="min-val">4</td><td class="diag">0</td><td>8</td><td>8</td></tr>
+            <tr><th>C</th><td>8</td><td>8</td><td class="diag">0</td><td>6</td></tr>
+            <tr><th>D</th><td>8</td><td>8</td><td>6</td><td class="diag">0</td></tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 ITERASI 1 — Gabungkan pasangan jarak minimum</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              <b>Cari jarak minimum:</b> Scan semua nilai (hanya segitiga bawah/atas saja):<br>
+              d(A,B)=4 ← <span class="cs-result">MINIMUM</span>, d(A,C)=8, d(A,D)=8, d(B,C)=8, d(B,D)=8, d(C,D)=6
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              <b>Gabungkan A dan B menjadi cluster (AB):</b><br>
+              Branch length ke A = d(A,B)/2 = 4/2 = <span class="cs-result">2.0</span><br>
+              Branch length ke B = d(A,B)/2 = 4/2 = <span class="cs-result">2.0</span><br>
+              (Kedua taksa bergabung pada tinggi 2.0 dari akar masing-masing)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              <b>Hitung jarak (AB) ke C menggunakan UPGMA:</b><br>
+              |A|=1, |B|=1, |AB|=|A|+|B|=2<br>
+              <span class="cs-math">d(AB,C) = (|A|×d(A,C) + |B|×d(B,C)) / (|A|+|B|)</span>
+              <span class="cs-math">d(AB,C) = (1×8 + 1×8) / (1+1) = 16/2 = <span class="cs-result">8.0</span></span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">4</div>
+            <div class="cs-body">
+              <b>Hitung jarak (AB) ke D menggunakan UPGMA:</b><br>
+              <span class="cs-math">d(AB,D) = (|A|×d(A,D) + |B|×d(B,D)) / (|A|+|B|)</span>
+              <span class="cs-math">d(AB,D) = (1×8 + 1×8) / (1+1) = 16/2 = <span class="cs-result">8.0</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Distance Matrix Setelah Iterasi 1</div>
+          <div style="overflow-x:auto">
+          <table class="matrix-table">
+            <tr><th></th><th>(AB)</th><th>C</th><th>D</th></tr>
+            <tr><th>(AB)</th><td class="diag">0</td><td>8</td><td>8</td></tr>
+            <tr><th>C</th><td>8</td><td class="diag">0</td><td class="min-val">6</td></tr>
+            <tr><th>D</th><td>8</td><td class="min-val">6</td><td class="diag">0</td></tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 ITERASI 2 — Gabungkan pasangan jarak minimum berikutnya</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              <b>Cari jarak minimum:</b> d(AB,C)=8, d(AB,D)=8, d(C,D)=6 ← <span class="cs-result">MINIMUM</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              <b>Gabungkan C dan D menjadi cluster (CD):</b><br>
+              Tinggi node (CD) = d(C,D)/2 = 6/2 = <span class="cs-result">3.0</span><br>
+              Branch length C dari node (CD) = 3.0<br>
+              Branch length D dari node (CD) = 3.0
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              <b>Hitung jarak (AB) ke (CD) menggunakan UPGMA:</b><br>
+              |AB|=2, |C|=1, |D|=1, |CD|=|C|+|D|=2<br>
+              <span class="cs-math">d(AB,CD) = (|C|×d(AB,C) + |D|×d(AB,D)) / (|C|+|D|)</span>
+              <span class="cs-math">d(AB,CD) = (1×8 + 1×8) / (1+1) = 16/2 = <span class="cs-result">8.0</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Distance Matrix Setelah Iterasi 2</div>
+          <div style="overflow-x:auto">
+          <table class="matrix-table">
+            <tr><th></th><th>(AB)</th><th>(CD)</th></tr>
+            <tr><th>(AB)</th><td class="diag">0</td><td class="min-val">8</td></tr>
+            <tr><th>(CD)</th><td class="min-val">8</td><td class="diag">0</td></tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 ITERASI 3 — Gabungkan dua cluster terakhir</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              <b>Hanya satu jarak tersisa:</b> d(AB,CD) = 8 ← gabungkan!
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              <b>Tinggi root (ABCD):</b> d(AB,CD)/2 = 8/2 = <span class="cs-result">4.0</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              <b>Branch length (AB) dari root:</b> Tinggi root − Tinggi node (AB) = 4.0 − 2.0 = <span class="cs-result">2.0</span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">4</div>
+            <div class="cs-body">
+              <b>Branch length (CD) dari root:</b> Tinggi root − Tinggi node (CD) = 4.0 − 3.0 = <span class="cs-result">1.0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">✅ Phylogenetic Tree UPGMA — Newick Format & Interpretasi</div>
+          <div class="code" style="font-size:13px">Newick:  ((A:2,B:2):2,(C:3,D:3):1);
+
+Struktur pohon (dari bawah ke atas):
+             ┌──2.0──A     ← Branch length A
+    ──2.0──┤             (Node AB bergabung di tinggi 2.0)
+    |       └──2.0──B
+    |
+───(root=4.0)
+    |       ┌──3.0──C
+    ──1.0──┤             (Node CD bergabung di tinggi 3.0)
+            └──3.0──D
+
+Tinggi node (AB) = 2.0   → d(A,B)/2 = 4/2
+Tinggi node (CD) = 3.0   → d(C,D)/2 = 6/2
+Tinggi root     = 4.0   → d(AB,CD)/2 = 8/2</div>
+          <div class="note note-ok"><b>Interpretasi:</b> A dan B lebih dekat satu sama lain (divergensi lebih awal, waktu lebih dekat). C dan D juga berpasangan. Kedua pasang bergabung di root, menandakan keempat taksa memiliki nenek moyang bersama pada waktu 4.0 (unit waktu/jarak).</div>
+        </div>
+      </div>
+
+      <!-- WPGMA STEP BY STEP -->
+      <div id="wpgma-calc" class="panel">
+        <h3>⚙️ WPGMA — Perhitungan Lengkap Step-by-Step</h3>
+        <p>Menggunakan distance matrix yang SAMA untuk membandingkan perbedaan dengan UPGMA:</p>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 Distance Matrix Awal (sama seperti UPGMA)</div>
+          <div style="overflow-x:auto">
+          <table class="matrix-table">
+            <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+            <tr><th>A</th><td class="diag">0</td><td class="min-val">4</td><td>8</td><td>8</td></tr>
+            <tr><th>B</th><td class="min-val">4</td><td class="diag">0</td><td>8</td><td>8</td></tr>
+            <tr><th>C</th><td>8</td><td>8</td><td class="diag">0</td><td>6</td></tr>
+            <tr><th>D</th><td>8</td><td>8</td><td>6</td><td class="diag">0</td></tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 ITERASI 1 — WPGMA (TANPA bobot ukuran)</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              <b>Cari minimum:</b> d(A,B) = 4 ← MINIMUM (sama seperti UPGMA)
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              <b>Gabungkan A dan B → (AB), tinggi = 4/2 = 2.0</b>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">
+              <b>Hitung d(AB,C) menggunakan WPGMA:</b><br>
+              Formula WPGMA: d(AB,C) = (d(A,C) + d(B,C)) / 2 <span style="color:var(--warn)">← TIDAK ada |A|, |B|</span>
+              <span class="cs-math">d(AB,C) = (8 + 8) / 2 = 16/2 = <span class="cs-result">8.0</span></span>
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">4</div>
+            <div class="cs-body">
+              <b>Hitung d(AB,D) menggunakan WPGMA:</b><br>
+              <span class="cs-math">d(AB,D) = (d(A,D) + d(B,D)) / 2 = (8 + 8) / 2 = <span class="cs-result">8.0</span></span>
+            </div>
+          </div>
+          <div class="note note-info" style="font-size:12px; margin:8px 0">Pada contoh ini hasilnya SAMA dengan UPGMA karena |A|=|B|=1 dan d(A,C)=d(B,C). Perbedaan muncul ketika ukuran grup berbeda!</div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 ITERASI 2 — WPGMA</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">
+              <b>Cari minimum:</b> d(C,D)=6 ← MINIMUM. Gabungkan C dan D → (CD), tinggi = 3.0
+            </div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">
+              <b>Hitung d(AB,CD) menggunakan WPGMA:</b><br>
+              Formula: d(AB,CD) = (d(AB,C) + d(AB,D)) / 2 <span style="color:var(--warn)">← Hanya rata-rata biasa</span>
+              <span class="cs-math">d(AB,CD) = (8.0 + 8.0) / 2 = <span class="cs-result">8.0</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="cb-title">📐 ITERASI 3 — Gabungkan (AB) dan (CD)</div>
+          <div class="calc-step">
+            <div class="cs-num">1</div>
+            <div class="cs-body">Tinggi root = d(AB,CD)/2 = 8/2 = <span class="cs-result">4.0</span></div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">2</div>
+            <div class="cs-body">Branch length (AB) dari root = 4.0 − 2.0 = <span class="cs-result">2.0</span></div>
+          </div>
+          <div class="calc-step">
+            <div class="cs-num">3</div>
+            <div class="cs-body">Branch length (CD) dari root = 4.0 − 3.0 = <span class="cs-result">1.0</span></div>
+          </div>
+        </div>
+
+        <div class="note note-ok">
+          <b>Kapan UPGMA dan WPGMA memberikan hasil BERBEDA?</b><br>
+          Misalkan: d(A,C)=6, d(B,C)=10, d(A,D)=6, d(B,D)=10, |A|=1, |B|=3<br>
+          • <b>UPGMA:</b> d(AB,C) = (1×6 + 3×10)/(1+3) = (6+30)/4 = 9.0<br>
+          • <b>WPGMA:</b> d(AB,C) = (6 + 10)/2 = 8.0<br>
+          UPGMA memberi bobot lebih pada B karena grupnya lebih besar!
+        </div>
+
+        <div class="note note-purple">
+          <b>Ringkasan Perbedaan UPGMA vs WPGMA:</b><br>
+          | | UPGMA | WPGMA |<br>
+          |Bobot| Proporsional terhadap ukuran grup | Sama rata (1/2) |<br>
+          |Formula| (nA×dAC + nB×dBC)/(nA+nB) | (dAC + dBC)/2 |<br>
+          |Hasil sama jika| Semua grup ukurannya sama | Selalu berbeda jika ukuran berbeda |<br>
+          |Preferred| Ketika sample sizes berbeda | Saat ingin equal weighting per clade |
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Interpretasi Phylogenetic Tree</h3>
+        <div class="tablewrap"><table class="dt">
+          <tr><th>Elemen</th><th>Definisi</th><th>Makna Biologis</th></tr>
+          <tr><td><b>Leaf/Taxa</b></td><td>Ujung cabang (node terminal)</td><td>Spesies/sekuens yang dibandingkan</td></tr>
+          <tr><td><b>Internal Node</b></td><td>Titik percabangan</td><td>Nenek moyang bersama (common ancestor) hipotetis</td></tr>
+          <tr><td><b>Root</b></td><td>Node paling dalam/bawah</td><td>Nenek moyang bersama semua taksa</td></tr>
+          <tr><td><b>Branch Length</b></td><td>Panjang garis antar node</td><td>Jumlah perubahan evolusioner (atau waktu)</td></tr>
+          <tr><td><b>Clade</b></td><td>Grup + semua turunannya</td><td>Kelompok monofiletik (satu nenek moyang)</td></tr>
+          <tr><td><b>Outgroup</b></td><td>Taksa di luar kelompok utama</td><td>Digunakan untuk "me-root" pohon</td></tr>
+          <tr><td><b>Bootstrap</b></td><td>Nilai kepercayaan di node (%)</td><td>Seberapa kuat dukungan data untuk percabangan itu</td></tr>
+        </table></div>
+        <div class="note note-warn"><b>Bootstrap value ≥ 70%</b> umumnya dianggap dukungan yang kuat untuk suatu percabangan dalam phylogenetic tree.</div>
+      </div>
+    </section>
+
+    <footer>
+      <span>🧬 StudyHub · Computational Biology UAS · BINUS Cyber Security</span>
+      <span>Semester 4 — 2025/2026</span>
+      <span style="margin-left:auto; color:var(--accent)">Calc: UPGMA + WPGMA + NW + SW</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// Nav active highlight
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 60) cur = s.id; });
+  navLinks.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+  });
+});
+</script>
+</body>
+</html>

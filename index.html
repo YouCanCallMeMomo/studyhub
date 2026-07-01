@@ -811,7 +811,7 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-            <div class="stat-number orange">1</div>
+            <div class="stat-number orange">3</div>
             <div class="stat-label">UAS Siap</div>
         </div>
     </div>
@@ -830,7 +830,7 @@
                     <div class="card-icon">🧬</div>
                     <div class="card-title">Computational Biology</div>
                     <div class="card-subtitle">Dogma Sentral, Mutasi, Gene Structure, Evolusi Molekuler, UPGMA</div>
-                    <div class="card-badge">📝 UTS • 7 dokumen</div>
+                    <div class="card-badge">📝 UTS + UAS • 8 dokumen</div>
                 </div>
                 <div class="subject-card card-red" onclick="openSubject('sna')">
                     <div class="card-icon">🖧</div>
@@ -854,7 +854,7 @@
                     <div class="card-icon">⚖️</div>
                     <div class="card-title">Cyber Law</div>
                     <div class="card-subtitle">UU ITE, UU PDP, Kebebasan Ekspresi vs Privasi, Studi Kasus</div>
-                    <div class="card-badge">📝 UTS • 2 dokumen</div>
+                    <div class="card-badge">📝 UTS + UAS • 3 dokumen</div>
                 </div>
             </div>
         </div>
@@ -965,6 +965,7 @@ const subjects = {
             { name: 'MUGEN TSUKOYOMI(mUTASI GENETEIK).pdf', label: 'Session 11 — Mutasi Genetik (Mugen Tsukoyomi)', type: 'pdf', size: 'Slide', section: 'uts' },
             { name: 'MOLECULAR_EVOLUTION.md', label: 'Session 12 — Molecular Evolution (Ringkasan)', type: 'md', size: '18 KB', section: 'uts' },
             { name: 'MOLECULAR_EVOLUTION.pptx', label: 'Session 12 — Molecular Evolution (Slide PPT)', type: 'pptx', size: '3.1 MB', section: 'uts' },
+            { name: 'UAS_BIOLOGY.html', label: '🎯 Materi UAS — Bioinformatics DB, Pairwise Alignment, MSA, Evo.Bio, UPGMA & WPGMA (Step-by-Step)', type: 'html', size: '85 KB', section: 'uas' },
         ]
     },
     sna: {
@@ -1024,6 +1025,7 @@ const subjects = {
         files: [
             { name: 'UTS_CYBER_LAW_MATERI.md', label: 'Materi Utama Cyber Law (Kisi-kisi UTS)', type: 'md', size: '32 KB', section: 'uts' },
             { name: 'LATIHAN_SOAL_CYBER_LAW.md', label: 'Latihan Soal & Pembahasan (30 Soal)', type: 'md', size: '38 KB', section: 'uts' },
+            { name: 'UAS_CYBERLAW.html', label: '🎯 Materi UAS — Cyber Crime, Hukum Indo (UU ITE+PDP), Tren 2026–2036, Studi Kasus E-Commerce Breach + Forensik', type: 'html', size: '92 KB', section: 'uas' },
         ]
     },
     db_lab: {
@@ -1100,9 +1102,9 @@ function openSubject(key) {
     let lastSection = null;
 
     subj.files.forEach(file => {
-        const iconEmoji = file.type === 'md' ? '📄' : file.type === 'docx' ? '📘' : file.type === 'pdf' ? '📊' : file.type === 'pptx' ? '📑' : file.type === 'slide' ? '📊' : '🖼️';
+        const iconEmoji = file.type === 'md' ? '📄' : file.type === 'docx' ? '📘' : file.type === 'pdf' ? '📊' : file.type === 'pptx' ? '📑' : file.type === 'slide' ? '📊' : file.type === 'html' ? '🌐' : '🖼️';
         const iconClass = file.type;
-        const typeLabel = file.type === 'md' ? 'Markdown' : file.type === 'docx' ? 'Microsoft Word' : file.type === 'pdf' ? 'Slide Presentasi' : file.type === 'slide' ? 'Slide (Interactive PDF)' : file.type === 'pptx' ? 'PowerPoint Slide' : 'Gambar';
+        const typeLabel = file.type === 'md' ? 'Markdown' : file.type === 'docx' ? 'Microsoft Word' : file.type === 'pdf' ? 'Slide Presentasi' : file.type === 'slide' ? 'Slide (Interactive PDF)' : file.type === 'pptx' ? 'PowerPoint Slide' : file.type === 'html' ? 'Halaman Web Interaktif' : 'Gambar';
 
         // Render pemisah section jika berubah
         if (hasSections && file.section && file.section !== lastSection) {
@@ -1140,6 +1142,8 @@ function openSubject(key) {
             el.onclick = () => openWebSlide(subj.folder, file.name, file.label);
         } else if (file.type === 'pdf') {
             el.onclick = () => openPdf(subj.folder, file.name, file.label);
+        } else if (file.type === 'html') {
+            el.onclick = () => window.open(subj.folder + '/' + file.name, '_blank');
         } else if (file.type === 'docx' || file.type === 'pptx') {
             el.onclick = () => {
                 const link = document.createElement('a');
