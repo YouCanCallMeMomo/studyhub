@@ -38,7 +38,7 @@ function initTypingAnimation() {
   const el = document.getElementById('typing-target');
   if (!el) return;
   const texts = [
-    'Portal Materi UTS Semester 4',
+    'Portal Materi UTS Semester 5',
     'BINUS University — Cyber Security',
     'Reverse Engineering | Blockchain | Forensic | HCI | OS',
     'Belajar cerdas, lulus maksimal 🚀'

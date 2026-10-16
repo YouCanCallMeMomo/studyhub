@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows Log Analysis & Threat Hunting — StudyHub SOC Course</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--neon-cyan), var(--electric-blue));">🛡️</div>
+        <div>
+          <div class="logo-text">SOC<span style="color:var(--neon-green)">.Defense</span></div>
+          <span class="logo-sub">BLUE TEAM SPECIALIST</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation Hub</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard Utama</a>
+        <a href="index.html" class="nav-link active"><span class="nav-icon">🛡️</span> Windows Log Course</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Modul Silabus</div>
+        <a href="#foundations" class="nav-link"><span class="nav-icon">🧱</span> 1. Core Processes</a>
+        <a href="#event-ids" class="nav-link"><span class="nav-icon">📋</span> 2. Security Event IDs</a>
+        <a href="#sysmon" class="nav-link"><span class="nav-icon">👁️</span> 3. Sysmon Telemetry</a>
+        <a href="#mitre" class="nav-link"><span class="nav-icon">🎯</span> 4. MITRE ATT&CK Map</a>
+        <a href="#anatomy" class="nav-link"><span class="nav-icon">🔬</span> 5. Anatomy of 4624</a>
+        <a href="#xml-view" class="nav-link"><span class="nav-icon">📜</span> 6. Friendly vs XML</a>
+        <a href="#tools" class="nav-link"><span class="nav-icon">🛠️</span> 7. DFIR Tools Pipeline</a>
+        <a href="#quiz-sec" class="nav-link"><span class="nav-icon">⚡</span> 8. Interactive Quiz</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Mata Kuliah Lain</div>
+        <a href="../reverse-engineering/index.html" class="nav-link"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current">Windows Log Analysis (SOC Course)</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <!-- HERO HEADER -->
+        <header class="hero-header" style="text-align:left; padding: 20px 0;">
+          <div class="hero-tag" style="border-color:var(--neon-green); color:var(--neon-green);">
+            <span class="dot" style="background:var(--neon-green);"></span> FULL COURSE SOC SPECIALIST &bull; BLUE TEAM FUNDAMENTALS
+          </div>
+          <h1 class="glitch-text" data-text="Windows Log Analysis">Windows Log <span class="highlight" style="color:var(--neon-green);">Analysis</span></h1>
+          <p style="color:var(--text-secondary); margin-top:8px; max-width:800px; font-size:15px; line-height:1.7;">
+            <em>"Logs Tell Stories: What Happened, How It Happened, and Who Did It."</em><br>
+            Kurikulum intensif Security Operations Center (SOC) berbasis materi <strong>Josh Speshock</strong> (Healthcare SOC Analyst). Pelajari cara mendeteksi aktivitas mencurigakan, investigasi insiden, pelacakan proses normal Windows vs LOLBins, telemetri Sysmon, pemetaan MITRE ATT&CK, hingga otomasi investigasi dengan EvtxECmd, Hayabusa, Chainsaw, dan Timeline Explorer.
+          </p>
+          <div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
+            <a href="#foundations" class="btn btn-primary" style="background:linear-gradient(135deg, var(--neon-green), var(--neon-cyan)); color:#000;">🚀 Mulai Belajar Silabus</a>
+            <a href="#tools" class="btn btn-outline" style="border-color:var(--neon-green); color:var(--neon-green);">🛠️ 4 Open Source Tools</a>
+            <a href="#quiz-sec" class="btn btn-outline" style="border-color:var(--electric-blue); color:var(--electric-blue);">⚡ Kuis Pemahaman SOC</a>
+          </div>
+        </header>
+
+        <!-- PROGRESS TARGET CHECKLIST -->
+        <section class="card" style="margin-bottom:32px; border-left:4px solid var(--neon-green);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="font-size:16px; color:var(--neon-green);">🎯 Capaian Pembelajaran Windows Log Analysis</h3>
+            <span class="badge green">SOC TRAINING</span>
+          </div>
+          <div class="grid-2">
+            <label class="progress-check" data-key="soc_core_processes">
+              <input type="checkbox">
+              <span>Memahami 21 Windows Core Processes & Verifikasi Konteks (Parent, Path, User, CLI)</span>
+            </label>
+            <label class="progress-check" data-key="soc_security_event_ids">
+              <input type="checkbox">
+              <span>Menguasai 17 Windows Security Event IDs Kritis (4624, 4625, 4688, 4698, 4720, 1102, dll)</span>
+            </label>
+            <label class="progress-check" data-key="soc_sysmon_telemetry">
+              <input type="checkbox">
+              <span>Analisis Telemetri Sysmon (Event 1 Process, 3 Network, 7 DLL, 10 LSASS, 22 DNS, 25 Hollowing)</span>
+            </label>
+            <label class="progress-check" data-key="soc_mitre_mapping">
+              <input type="checkbox">
+              <span>Pemetaan Event ID ke Taktik MITRE ATT&CK (Initial Access, Execution, Persistence, Evasion)</span>
+            </label>
+            <label class="progress-check" data-key="soc_anatomy_4624">
+              <input type="checkbox">
+              <span>Anatomi Event 4624 & 7-Step Workflow Identifikasi Tipe Logon (Tipe 2, 3, 10 RDP)</span>
+            </label>
+            <label class="progress-check" data-key="soc_friendly_vs_xml">
+              <input type="checkbox">
+              <span>Perbedaan & Penggunaan Praktis Friendly View vs XML Schema View untuk SIEM Ingestion</span>
+            </label>
+            <label class="progress-check" data-key="soc_dfir_toolkits">
+              <input type="checkbox">
+              <span>Otomasi Investigasi EVTX: EvtxECmd, ULogViewer, Hayabusa, Chainsaw & Timeline Explorer</span>
+            </label>
+            <label class="progress-check" data-key="soc_public_datasets">
+              <input type="checkbox">
+              <span>Praktik Deteksi dengan Public Attack Datasets (EVTX-to-MITRE-Attack & EVTX-ATTACK-SAMPLES)</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- SECTION 1: FOUNDATION & CORE PROCESSES -->
+        <section class="materi-section" id="foundations">
+          <h2>1. Fondasi Windows Log Analysis & 21 Core Processes</h2>
+          <div class="highlight-box green" style="margin-bottom:20px; font-size:14px; font-weight:600;">
+            🔥 RUMUS DASAR SOC BLUE TEAM: <br>
+            <span style="color:var(--neon-cyan);">Windows Core Processes</span> + 
+            <span style="color:var(--neon-green);">Event Logs</span> + 
+            <span style="color:var(--purple);">Sysmon</span> = 
+            <span style="color:var(--orange);">Detect | Investigate | Stop Threats</span>
+          </div>
+
+          <p>
+            Analis SOC tidak dapat mengenali anomali jika tidak memahami apa yang normal. Banyak serangan modern mengeksploitasi <strong>Living-off-the-Land Binaries (LOLBins)</strong> atau menyamar menggunakan nama file sistem asli.
+          </p>
+
+          <div class="card" style="margin:20px 0; border:1px solid rgba(0, 255, 245, 0.2);">
+            <h4 style="color:var(--neon-cyan); margin-bottom:8px;">💡 Golden Rule: "Context is Everything"</h4>
+            <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+              Jangan hanya melihat nama proses! Selalu verifikasi 4 pilar konteks:
+            </p>
+            <div class="grid-2" style="margin-top:12px; gap:12px;">
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; font-size:12px;">
+                <strong style="color:var(--neon-green);">1. Parent Process:</strong> Siapa yang melahirkan proses ini? (Contoh: <code>services.exe</code> boleh menjalankan <code>svchost.exe</code>, tetapi <code>cmd.exe</code> atau <code>word.exe</code> TIDAK BOLEH).
+              </div>
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; font-size:12px;">
+                <strong style="color:var(--neon-green);">2. Image Path:</strong> Dari direktori mana biner dieksekusi? (Contoh: <code>svchost.exe</code> legal selalu dari <code>C:\Windows\System32\</code>, bukan <code>C:\Users\AppData\</code>).
+              </div>
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; font-size:12px;">
+                <strong style="color:var(--neon-green);">3. Command Line & Flags:</strong> Argumen apa yang diteruskan? Apakah ada string base64 terenkode atau flag unduh web?
+              </div>
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; font-size:12px;">
+                <strong style="color:var(--neon-green);">4. User Account:</strong> Siapa pemilik sesi eksekusi? (Akun SYSTEM, Local/Network Service, atau akun user biasa?).
+              </div>
+            </div>
+          </div>
+
+          <h3 style="color:var(--neon-cyan); margin:24px 0 12px;">21 Windows Core Processes Yang Wajib Diketahui</h3>
+          <div class="table-responsive" style="margin-bottom:24px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--neon-cyan);">
+                  <th style="padding:10px;">Process Name</th>
+                  <th style="padding:10px;">Peran Standar Sistem</th>
+                  <th style="padding:10px;">Expected Parent</th>
+                  <th style="padding:10px;">Expected Path</th>
+                  <th style="padding:10px;">Tanda Bahaya / Malicious Abuse</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">System (PID 4)</td>
+                  <td>Kernel mode system worker threads</td>
+                  <td>None (boot time)</td>
+                  <td>N/A (Kernel space)</td>
+                  <td>PID bukan 4, berada di folder selain kernel.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">smss.exe</td>
+                  <td>Session Manager Subsystem</td>
+                  <td>System (PID 4)</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Parent bukan System; ada lebih dari 1 instance berjalan terus.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">csrss.exe</td>
+                  <td>Client Server Runtime Subsystem</td>
+                  <td>smss.exe</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Parent bukan smss.exe; berjalan dari folder user.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">wininit.exe</td>
+                  <td>Windows Initialization Process</td>
+                  <td>smss.exe</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Hanya ada 1 instance resmi di Session 0.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">services.exe</td>
+                  <td>Service Control Manager (SCM)</td>
+                  <td>wininit.exe</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Parent bukan wininit.exe; memicu child process anomali.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-pink);">lsass.exe</td>
+                  <td>Local Security Authority Subsystem</td>
+                  <td>wininit.exe</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Target utama Mimikatz! Child process aneh atau handle read memory tinggi.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">svchost.exe</td>
+                  <td>Host Process for Windows Services</td>
+                  <td>services.exe</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Parent bukan services.exe (misal: cmd/powershell), tanpa flag -k.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">winlogon.exe</td>
+                  <td>User Logon Management</td>
+                  <td>smss.exe</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Parent aneh; menangani login visual Windows.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--neon-green);">explorer.exe</td>
+                  <td>Windows Shell, Desktop, File Manager</td>
+                  <td>Userinit -> None</td>
+                  <td><code>C:\Windows\</code></td>
+                  <td>Menjalankan koneksi jaringan luar mencurigakan ke IP asing.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--orange);">rundll32.exe</td>
+                  <td>Menjalankan fungsi DLL 32/64-bit</td>
+                  <td>Bervariasi</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Sering disalahgunakan untuk menjalankan payload malware berekstensi .dll.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--orange);">powershell.exe / pwsh.exe</td>
+                  <td>Command line scripting engine</td>
+                  <td>Bervariasi</td>
+                  <td><code>System32\WindowsPowerShell\</code></td>
+                  <td>Perintah obfuscation (-enc), executionpolicy bypass, download cradles.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:600; color:var(--orange);">mshta.exe / wscript.exe</td>
+                  <td>Scripting host (VBScript/JScript/HTA)</td>
+                  <td>Bervariasi</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Mengeksekusi kode script langsung dari URL web atau phishing attachment.</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px; font-weight:600; color:var(--orange);">schtasks.exe / sc.exe / reg.exe</td>
+                  <td>Task scheduler, service control, registry</td>
+                  <td>Bervariasi</td>
+                  <td><code>C:\Windows\System32\</code></td>
+                  <td>Digunakan malware untuk membuat mekanisme persistensi dan eskalasi privilese.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 2: SECURITY EVENT IDS -->
+        <section class="materi-section" id="event-ids">
+          <h2>2. Windows Event Log Channels & 17 Event IDs Kritis</h2>
+          <p>
+            Windows mencatat telemetri aktivitas ke berbagai saluran (Channels). Saluran utama meliputi:
+            <strong>Security</strong> (otentikasi, pembuatan proses), <strong>System</strong> (driver, perubahan layanan), <strong>Application</strong>, <strong>PowerShell Operational</strong> (Event 4103/4104), dan <strong>TaskScheduler Operational</strong> (Event 106/140).
+          </p>
+
+          <h3 style="color:var(--neon-green); margin:20px 0 12px;">17 Windows Security Event IDs Yang Wajib Dihafal Analis SOC</h3>
+          <div class="table-responsive" style="margin-bottom:24px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--neon-green);">
+                  <th style="padding:10px; width:12%;">Event ID</th>
+                  <th style="padding:10px; width:22%;">Nama Event</th>
+                  <th style="padding:10px; width:36%;">Mengapa Sangat Penting untuk Analis SOC?</th>
+                  <th style="padding:10px; width:30%;">Taktik MITRE ATT&CK Terkait</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--neon-cyan); font-weight:bold;">4624</td>
+                  <td>Successful Logon</td>
+                  <td>Baseline otentikasi normal; mendeteksi tipe login (Interactive, Network, RDP), user baru, dan lateral movement.</td>
+                  <td><span class="tag cyan">Initial Access / Lateral Movement</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--neon-pink); font-weight:bold;">4625</td>
+                  <td>Failed Logon</td>
+                  <td>Kunci mendeteksi serangan brute force, password spraying, kamus kata sandi, dan lockout.</td>
+                  <td><span class="tag" style="border-color:var(--neon-pink); color:var(--neon-pink);">Credential Access</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--neon-cyan); font-weight:bold;">4634 / 4647</td>
+                  <td>Logoff</td>
+                  <td>Menandai berakhirnya sesi logon; digunakan untuk menghitung durasi aktif sesi penyerang.</td>
+                  <td><span class="tag">Timeline Tracking</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--orange); font-weight:bold;">4648</td>
+                  <td>Logon with Explicit Credentials</td>
+                  <td>Mendeteksi penggunaan kredensial alternatif (seperti perintah <code>runas</code>) atau pergerakan lateral.</td>
+                  <td><span class="tag orange">Lateral Movement / Defense Evasion</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--purple); font-weight:bold;">4672</td>
+                  <td>Special Privileges Assigned</td>
+                  <td>Mencatat login dengan hak istimewa super-admin (SeDebugPrivilege, SeTakeOwnership, dll).</td>
+                  <td><span class="tag purple">Privilege Escalation</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--neon-green); font-weight:bold;">4688</td>
+                  <td>A New Process Has Been Created</td>
+                  <td>Merekam proses baru, Parent Process ID, dan Command Line lengkap (jika audit policy diaktifkan).</td>
+                  <td><span class="tag green">Execution</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--neon-green); font-weight:bold;">4689</td>
+                  <td>A Process Has Exited</td>
+                  <td>Mencatat proses yang berhenti; membantu merekonstruksi durasi hidup payload malware.</td>
+                  <td><span class="tag green">Execution Timeline</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--orange); font-weight:bold;">4698 / 4702</td>
+                  <td>Scheduled Task Created / Updated</td>
+                  <td>Metode persistensi paling umum! Penyerang menjadwalkan task berkala untuk mengeksekusi C2 beacon.</td>
+                  <td><span class="tag orange">Persistence / Privilege Escalation</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--purple); font-weight:bold;">4720</td>
+                  <td>User Account Created</td>
+                  <td>Mendeteksi pembuatan akun backdoor liar oleh penyerang setelah berhasil mengompromikan sistem.</td>
+                  <td><span class="tag purple">Persistence</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--purple); font-weight:bold;">4728 / 4732</td>
+                  <td>Member Added to Security Group</td>
+                  <td>Eskalasi privilese: akun biasa ditambahkan ke grup 'Domain Admins' atau 'Local Administrators'.</td>
+                  <td><span class="tag purple">Privilege Escalation</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--neon-pink); font-weight:bold;">1102</td>
+                  <td>The Audit Log Was Cleared</td>
+                  <td><strong>INDIKASI ANTI-FORENSIK KUAT!</strong> Penyerang menghapus Security log untuk menutupi jejak.</td>
+                  <td><span class="tag" style="border-color:var(--neon-pink); color:var(--neon-pink);">Defense Evasion</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--orange); font-weight:bold;">7045 (System)</td>
+                  <td>A New Service Was Installed</td>
+                  <td>Pemasangan service Windows baru (misal: PsExec service, backdoor persistent service).</td>
+                  <td><span class="tag orange">Persistence</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:8px; font-family:var(--font-code); color:var(--neon-cyan); font-weight:bold;">4104 (PWS)</td>
+                  <td>PowerShell Script Block Logging</td>
+                  <td>Merekam seluruh blok kode PowerShell yang dieksekusi, termasuk kode terenkode Base64 yang di-deobfuscate!</td>
+                  <td><span class="tag cyan">Execution / Defense Evasion</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 3: SYSMON TELEMETRY -->
+        <section class="materi-section" id="sysmon">
+          <h2>3. Sysmon (System Monitor): Telemetri Endpoint Mendalam</h2>
+          <p>
+            <strong>Sysmon</strong> adalah device driver dan service gratis dari Microsoft Sysinternals yang mencatat telemetri tingkat rendah ke Windows Event Log (<code>Microsoft-Windows-Sysmon/Operational</code>). Sysmon memberikan visibilitas yang jauh melampaui log bawaan Windows.
+          </p>
+
+          <h3 style="color:var(--purple); margin:20px 0 12px;">Daftar Sysmon Event IDs Paling Kritis</h3>
+          <div class="grid-2">
+            <div class="card" style="border-left:3px solid var(--neon-cyan);">
+              <h4 style="color:var(--neon-cyan); margin-bottom:6px;">Sysmon 1: Process Creation</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mencatat hash file (SHA-256, MD5), command line utuh, direktori kerja, user, dan proses induk. Sangat superior dibanding Event 4688 bawaan.
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--neon-green);">
+              <h4 style="color:var(--neon-green); margin-bottom:6px;">Sysmon 3: Network Connection</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Merekam koneksi outbound TCP/UDP: IP sumber, IP tujuan, port, dan proses spesifik yang membukanya. Kunci deteksi C2 beaconing.
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--orange);">
+              <h4 style="color:var(--orange); margin-bottom:6px;">Sysmon 7: Image / DLL Loaded</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mendeteksi injeksi DLL mencurigakan (DLL Sideloading, DLL Hijacking) yang dimuat ke dalam proses sah.
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--neon-pink);">
+              <h4 style="color:var(--neon-pink); margin-bottom:6px;">Sysmon 8: CreateRemoteThread</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mendeteksi injeksi kode antar-proses (Process Injection) di mana satu proses membuat thread di dalam address space proses lain.
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--neon-pink);">
+              <h4 style="color:var(--neon-pink); margin-bottom:6px;">Sysmon 10: ProcessAccess (LSASS Dumping)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mendeteksi saat suatu proses membuka handle ke proses lain (terutama <code>TargetImage: lsass.exe</code> dengan hak baca memori).
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--purple);">
+              <h4 style="color:var(--purple); margin-bottom:6px;">Sysmon 11: File Create</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mencatat file yang baru dibuat di direktori sensitif seperti <code>C:\Users\...\AppData\Local\Temp</code> atau folder Startup.
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--electric-blue);">
+              <h4 style="color:var(--electric-blue); margin-bottom:6px;">Sysmon 12, 13, 14: Registry Key / Value</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mendeteksi modifikasi Run keys (<code>HKCU\Software\Microsoft\Windows\CurrentVersion\Run</code>) untuk persistensi malware.
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--neon-cyan);">
+              <h4 style="color:var(--neon-cyan); margin-bottom:6px;">Sysmon 22: DNS Query</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mencatat setiap nama domain yang di-resolve oleh aplikasi, mendeteksi DGA (Domain Generation Algorithms) dan domain jahat.
+              </p>
+            </div>
+            <div class="card" style="border-left:3px solid var(--neon-pink);">
+              <h4 style="color:var(--neon-pink); margin-bottom:6px;">Sysmon 25: Process Tampering</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Mendeteksi teknik siluman tingkat tinggi seperti <strong>Process Hollowing</strong> dan <strong>Process Herpaderping</strong>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: ANATOMY OF 4624 & LOGON TYPES -->
+        <section class="materi-section" id="anatomy">
+          <h2>4. Anatomi Windows Event Log: Bedah Tuntas Event ID 4624</h2>
+          <p>
+            Event ID 4624 (Successful Logon) adalah salah satu event paling sering dianalisis di SOC. Memahami anatomi dan tipe logon adalah keterampilan wajib analis keamanan siber.
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--neon-cyan); margin-bottom:10px;">Komponen Utama Event 4624:</h4>
+              <ul style="font-size:12px; line-height:1.8; padding-left:16px;">
+                <li><strong>1. Event Message:</strong> Ringkasan umum ("An account was successfully logged on").</li>
+                <li><strong>2. Subject:</strong> Akun/proses yang meminta login (seringkali akun SYSTEM atau akun service).</li>
+                <li><strong>3. New Logon:</strong> Akun yang berhasil login (TargetUserName, Domain, Security ID, Logon ID unik, dan <strong>LogonType</strong>).</li>
+                <li><strong>4. Network Information:</strong> Workstation Name, Source Network Address (IP asal penyerang!), dan Source Port.</li>
+                <li><strong>5. Authentication Information:</strong> Paket otentikasi (Kerberos, NTLM, NegSsp).</li>
+                <li><strong>6. Key Metadata:</strong> Waktu TimeCreated, Komputer target, dan EventRecordID.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-green); margin-bottom:10px;">7 Langkah Praktis Menganalisis Event 4624:</h4>
+              <ol style="font-size:12px; line-height:1.8; padding-left:18px;">
+                <li>Mulai dari pesan umum untuk memastikan keberhasilan login.</li>
+                <li>Bandingkan <strong>Subject</strong> vs <strong>New Logon</strong> (siapa yang memicu dan siapa yang masuk).</li>
+                <li><strong>Periksa Logon Type!</strong> (Menentukan cara login dilakukan).</li>
+                <li>Evaluasi <strong>Source IP & Workstation</strong> (apakah IP internal sah atau IP luar asing?).</li>
+                <li>Cermati protokol otentikasi (NTLM vs Kerberos).</li>
+                <li>Gunakan <strong>Logon ID</strong> untuk melacak proses apa saja yang dijalankan oleh sesi login ini.</li>
+                <li>Korelasikan dengan event lain (misal: 4625 gagal berulang sebelum 4624 sukses = Brute Force tembus!).</li>
+              </ol>
+            </div>
+          </div>
+
+          <h3 style="color:var(--orange); margin:20px 0 12px;">Tabel Nilai 'LogonType' Windows</h3>
+          <div class="table-responsive" style="margin-bottom:24px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--orange);">
+                  <th style="padding:10px;">Logon Type</th>
+                  <th style="padding:10px;">Nama Tipe</th>
+                  <th style="padding:10px;">Arti & Konteks Penggunaan</th>
+                  <th style="padding:10px;">Analisis Investigasi SOC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:bold; color:var(--neon-cyan);">Type 2</td>
+                  <td>Interactive</td>
+                  <td>User login langsung secara fisik di keyboard & monitor lokal workstation.</td>
+                  <td>Aktivitas fisik pegawai di kantor atau konsol langsung.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:bold; color:var(--neon-green);">Type 3</td>
+                  <td>Network</td>
+                  <td>Login عبر jaringan (mengakses Shared Folder SMB, RPC, IIS Web).</td>
+                  <td>Sangat sering terjadi; waspadai akses share folder administratif (C$).</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:bold; color:var(--purple);">Type 4</td>
+                  <td>Batch</td>
+                  <td>Eksekusi otomatis oleh Scheduled Tasks atau batch job server.</td>
+                  <td>Verifikasi apakah task dijadwalkan oleh admin sah.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:bold; color:var(--neon-cyan);">Type 5</td>
+                  <td>Service</td>
+                  <td>Windows Service yang distart oleh Service Control Manager di background.</td>
+                  <td>Akun SYSTEM, LOCAL SERVICE, atau service account khusus.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:8px; font-weight:bold; color:var(--neon-pink);">Type 10</td>
+                  <td>RemoteInteractive</td>
+                  <td>User login jarak jauh menggunakan <strong>Remote Desktop Protocol (RDP)</strong>.</td>
+                  <td><strong>Prioritas tinggi!</strong> Sumber serangan ransomware & penyerang eksternal.</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px; font-weight:bold; color:var(--orange);">Type 9</td>
+                  <td>NewCredentials</td>
+                  <td>Penggunaan <code>runas /netonly</code> untuk mengakses resource remote dengan kredensial berbeda.</td>
+                  <td>Sering digunakan malware pergerakan lateral untuk menghindari deteksi lokal.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 5: FRIENDLY VS XML VIEW -->
+        <section class="materi-section" id="xml-view">
+          <h2>5. Details Tab: Friendly View vs XML Schema View</h2>
+          <p>
+            Di Windows Event Viewer, tab <em>Details</em> menyediakan dua mode representasi data. Keduanya menyajikan data yang sama, namun untuk kebutuhan analisis yang berbeda.
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--neon-cyan); margin-bottom:8px;">Friendly View (Tampilan Bersahabat)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Menyajikan data dalam pohon hierarki yang dapat dilipat (*collapsible tree*) dengan label deskriptif yang mudah dibaca analis manusia saat triage cepat manual.
+              </p>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--purple); margin-bottom:8px;">XML View (Raw Schema Payload)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Format data asli mentah terstruktur berbasis skema XML. Sangat krusial untuk:
+              </p>
+              <ul style="font-size:12px; line-height:1.7; padding-left:16px;">
+                <li>Otomasi parsing script (Python, PowerShell).</li>
+                <li>Ingestion ke SIEM (Splunk, Elastic ELK, Microsoft Sentinel).</li>
+                <li>Penulisan aturan deteksi Sigma dan XPath Filter Query.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-block" style="margin-top:16px;">
+            <div class="code-header">
+              <span>Event 4624 - Cuplikan XML Schema Nyata</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-xml">&lt;Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event"&gt;
+  &lt;System&gt;
+    &lt;Provider Name="Microsoft-Windows-Security-Auditing" Guid="{54849625-5478-4994-A5BA-3E3B0328C30D}" /&gt;
+    &lt;EventID&gt;4624&lt;/EventID&gt;
+    &lt;Version&gt;2&lt;/Version&gt;
+    &lt;Level&gt;0&lt;/Level&gt;
+    &lt;Task&gt;12544&lt;/Task&gt;
+    &lt;TimeCreated SystemTime="2026-09-04T10:14:32.456789Z" /&gt;
+    &lt;EventRecordID&gt;1234567&lt;/EventRecordID&gt;
+    &lt;Channel&gt;Security&lt;/Channel&gt;
+    &lt;Computer&gt;WS01.contoso.local&lt;/Computer&gt;
+  &lt;/System&gt;
+  &lt;EventData&gt;
+    &lt;Data Name="SubjectUserName"&gt;SYSTEM&lt;/Data&gt;
+    &lt;Data Name="TargetUserName"&gt;jdoe&lt;/Data&gt;
+    &lt;Data Name="TargetDomainName"&gt;CONTOSO&lt;/Data&gt;
+    &lt;Data Name="LogonType"&gt;10&lt;/Data&gt; &lt;!-- RDP REMOTE LOGON --&gt;
+    &lt;Data Name="LogonProcessName"&gt;User32&lt;/Data&gt;
+    &lt;Data Name="AuthenticationPackageName"&gt;Negotiate&lt;/Data&gt;
+    &lt;Data Name="WorkstationName"&gt;ATTACKER-PC&lt;/Data&gt;
+    &lt;Data Name="IpAddress"&gt;192.168.1.55&lt;/Data&gt;
+    &lt;Data Name="IpPort"&gt;52144&lt;/Data&gt;
+  &lt;/EventData&gt;
+&lt;/Event&gt;</code></pre>
+          </div>
+        </section>
+
+        <!-- SECTION 6: OPEN SOURCE ANALYSIS TOOLS & WORKFLOW -->
+        <section class="materi-section" id="tools">
+          <h2>6. Open Source Windows Log Analysis Tools & Pipeline</h2>
+          <p>
+            Membuka log EVTX berukuran puluhan gigabyte menggunakan Event Viewer bawaan Windows sangat lambat dan kerap membekukan sistem (*freezing*). Komunitas Blue Team menggunakan alat analisis open-source berkinerja tinggi.
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card" style="border-top:3px solid var(--neon-cyan);">
+              <h4 style="color:var(--neon-cyan);">1. EvtxECmd (Eric Zimmerman)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7; margin-bottom:8px;">
+                Parser EVTX berkecepatan ultra tinggi yang mengekstrak ribuan log biner menjadi format CSV, JSON, atau XML. Memiliki built-in mapping untuk ratusan Event ID.
+              </p>
+              <div class="code-block">
+                <pre><code># Parse 1 berkas Security.evtx ke CSV:
+EvtxECmd.exe -f Security.evtx --csv "C:\Output" --csvf Security.csv
+
+# Parse seluruh folder log dan filter event penting:
+EvtxECmd.exe -d "C:\Logs" --csv "C:\Output" --inc 4624,4625,4688</code></pre>
+              </div>
+            </div>
+
+            <div class="card" style="border-top:3px solid var(--orange);">
+              <h4 style="color:var(--orange);">2. Hayabusa (Yamato Security)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7; margin-bottom:8px;">
+                Tool threat-hunting dan timeline generator berbasis bahasa Rust yang mengevaluasi rules Sigma terhadap berkas EVTX dan mengkategorikan temuan berdasarkan tingkat keparahan (High, Medium, Low).
+              </p>
+              <div class="code-block">
+                <pre><code># Jalankan scan threat-hunting menyeluruh:
+hayabusa.exe csv-timeline -d "C:\EVTX" -o timeline.csv</code></pre>
+              </div>
+            </div>
+
+            <div class="card" style="border-top:3px solid var(--purple);">
+              <h4 style="color:var(--purple);">3. Chainsaw (WithSecure Labs)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7; margin-bottom:8px;">
+                Tool pencari ancaman cepat yang memanfaatkan detection logic Sigma untuk mendeteksi tanda kompromi (IoC) di log Windows secara instan.
+              </p>
+              <div class="code-block">
+                <pre><code># Hunting dengan rules Sigma:
+chainsaw.exe hunt "C:\EVTX" --sigma "sigma\rules" --csv -o Results</code></pre>
+              </div>
+            </div>
+
+            <div class="card" style="border-top:3px solid var(--neon-green);">
+              <h4 style="color:var(--neon-green);">4. ULogViewer & Timeline Explorer</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7; margin-bottom:8px;">
+                Aplikasi GUI visualizer untuk memuat file CSV keluaran parser log. Memungkinkan filter kolom instan, pengelompokan tanggal, dan pencarian regex super cepat.
+              </p>
+              <div class="code-block">
+                <pre><code># Buka CSV di Timeline Explorer:
+TimelineExplorer.exe "C:\Output\Security.csv"</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="highlight-box green" style="margin-top:16px;">
+            <h4 style="color:var(--neon-green);">Suggested SOC Investigation Workflow:</h4>
+            <div style="font-family:var(--font-code); font-size:13px; line-height:1.8;">
+              [ 1. EvtxECmd ] ---> Ekstraksi EVTX ke CSV terstruktur<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+              [ 2. Chainsaw & Hayabusa ] ---> Pemindaian otomatis rules Sigma untuk mendeteksi anomali & timeline<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+              [ 3. Timeline Explorer / ULogViewer ] ---> Triage visual, filter IP asing, dan rekonstruksi narasi insiden
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 7: INTERACTIVE QUIZ -->
+        <section id="quiz-sec" style="margin-top:40px;">
+          <div class="section-heading">
+            <h2 style="color:var(--neon-green);">⚡ Kuis Evaluasi Windows Log Analysis</h2>
+            <div class="line"></div>
+            <span class="badge green">5 SOAL SOC EVALUATION</span>
+          </div>
+          <div id="quiz-winlog-root"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll ke atas">↑</button>
+  <footer class="site-footer">
+    <div><span class="footer-brand">StudyHub SOC v2.0</span> — Windows Log Analysis Specialist Course</div>
+    <div>BINUS Cyber Security &bull; All Rights Reserved</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="js/quiz-windows-logs.js"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+</html>

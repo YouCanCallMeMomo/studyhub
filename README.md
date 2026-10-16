@@ -1,19 +1,27 @@
-# 🛡️ StudyHub SOC v2.0 — Portal Materi UTS Semester 4
+# 🛡️ StudyHub SOC v2.0 — Portal Materi UTS Semester 5
 > **BINUS University — Cyber Security Academic Defense Portal**
 
-StudyHub SOC v2.0 adalah portal pembelajaran web interaktif bertema Security Operations Center (SOC) dan Cyberpunk aesthetic, dirancang khusus untuk mahasiswa Cyber Security dalam menghadapi Ujian Tengah Semester (UTS) Semester 4.
+StudyHub SOC v2.0 adalah portal pembelajaran web interaktif bertema Security Operations Center (SOC) dan Cyberpunk aesthetic, dirancang khusus untuk mahasiswa Cyber Security dalam menghadapi Ujian Tengah Semester (UTS) Semester 5 dan pelatihan spesialisasi SOC.
 
 ---
 
 ## ⚡ Fitur Utama
 
 - **Cyberpunk / SOC Terminal Aesthetic:** Palet warna gelap (`#0a0e17`), aksen neon cyan (`#00fff5`), neon green (`#39ff14`), electric blue (`#3b82f6`), purple (`#a855f7`), efek matrix rain canvas, scanlines, dan glitch header.
-- **5 Mata Kuliah Inti Semester 4:**
+- **5 Mata Kuliah Inti Semester 5:**
   1. 🔓 **Reverse Engineering:** Arsitektur x86 vs x64, dekompilasi ASM ke C, tabel register, calling convention, dan 10 latihan dekompilasi dengan visualisasi diagram stack memory bergaris.
   2. ⛓️ **Blockchain Technology:** Hashing SHA-256, Merkle Tree, Konsensus (PoW, PoS, PBFT), EVM, dan Cheatsheet Solidity v0.8+ lengkap dengan 10 smart contract compilable.
   3. 🔍 **Computer Forensic & DFIR:** Kerangka kerja investigasi NIST SP 800-86, integritas Chain of Custody ISO/IEC 27037, analisis Volatility 3, dan 10 studi kasus investigasi insiden nyata.
   4. 🧠 **Human-Computer Interaction (HCI):** Prinsip Donald Norman, model konseptual, aspek kognitif (Fitts' Law & Hick's Law), CSCW kolaborasi sosial, 3 level emosional, dan evolusi antarmuka dari CLI ke BCI.
   5. 🖥️ **Operating Systems:** Arsitektur kernel, siklus hidup proses & PCB, multithreading Pthreads, algoritma penjadwalan CPU (Gantt Chart), sinkronisasi IPC, analisis Deadlock Banker's Algorithm, dan 10 program C berstandar POSIX.
+- **🛡️ Full Course SOC Only: Windows Log Analysis & Threat Hunting:**
+  - Panduan mendalam *Blue Team Fundamentals* berbasis kurikulum Josh Speshock:
+  - 21 Windows Core Processes & pemahaman konteks (Parent process, command line, path, user)
+  - Windows Event Log Key Channels (Security, System, Application, PowerShell 4104, TaskScheduler)
+  - 17 Windows Security Event IDs penting & 15 Sysmon Event IDs (1 hingga 26)
+  - Pemetaan Taktik MITRE ATT&CK (Authentication, Execution, Persistence, Evasion, C2)
+  - Anatomi Event 4624 (General tab vs Friendly/XML view) & 7-step analysis workflow
+  - Open Source Analysis Tools (EvtxECmd, ULogViewer, Hayabusa, Chainsaw, Timeline Explorer)
 - **Kuis Interaktif per-Modul:** Uji pemahaman langsung di browser dengan umpan balik benar/salah instan dan penjelasan pembahasan.
 - **Progress Tracker (LocalStorage):** Penanda progres target capaian belajar tersimpan otomatis di browser tanpa database.
 - **Code Copy Tool:** Salin kode assembly, Solidity, dan C dalam satu klik tombol.
@@ -55,12 +63,16 @@ studyhub-main/
 │   ├── materi.html              # Diktat 6 topik HCI komprehensif
 │   └── js/
 │       └── quiz-hci.js          # Kuis interaktif HCI
-└── operating-system/
-    ├── index.html               # Overview modul Operating Systems
-    ├── materi.html              # 7 Topik teori OS & analisis Gantt chart
-    ├── code-examples.html       # 10 Program C compilable berstandar POSIX
+├── operating-system/
+│   ├── index.html               # Overview modul Operating Systems
+│   ├── materi.html              # 7 Topik teori OS & analisis Gantt chart
+│   ├── code-examples.html       # 10 Program C compilable berstandar POSIX
+│   └── js/
+│       └── quiz-os.js           # Kuis interaktif Operating Systems
+└── windows-log-analysis/
+    ├── index.html               # SOC Course: Full Windows Log Analysis & Hunting
     └── js/
-        └── quiz-os.js           # Kuis interaktif Operating Systems
+        └── quiz-windows-logs.js # Kuis interaktif Analisis Log & Sysmon
 ```
 
 ---
