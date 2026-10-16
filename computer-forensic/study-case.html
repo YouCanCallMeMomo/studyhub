@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10 Studi Kasus Computer Forensic — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--orange), var(--neon-pink));">💼</div>
+        <div>
+          <div class="logo-text">DFIR<span style="color:var(--orange)">.Cases</span></div>
+          <span class="logo-sub">10 INCIDENT INVESTIGATIONS</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link"><span class="nav-icon">📚</span> Materi DFIR & CoC</a>
+        <a href="study-case.html" class="nav-link active"><span class="nav-icon">💼</span> 10 Forensic Cases</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Daftar Skenario Kasus</div>
+        <a href="#case1" class="nav-link"><span class="nav-icon">1️⃣</span> 1. Serangan Ransomware</a>
+        <a href="#case2" class="nav-link"><span class="nav-icon">2️⃣</span> 2. Data Exfiltration</a>
+        <a href="#case3" class="nav-link"><span class="nav-icon">3️⃣</span> 3. Insider Threat</a>
+        <a href="#case4" class="nav-link"><span class="nav-icon">4️⃣</span> 4. Spear Phishing</a>
+        <a href="#case5" class="nav-link"><span class="nav-icon">5️⃣</span> 5. Web Server Deface</a>
+        <a href="#case6" class="nav-link"><span class="nav-icon">6️⃣</span> 6. Database SQLi Breach</a>
+        <a href="#case7" class="nav-link"><span class="nav-icon">7️⃣</span> 7. Crypto Wallet Theft</a>
+        <a href="#case8" class="nav-link"><span class="nav-icon">8️⃣</span> 8. Malicious USB Stager</a>
+        <a href="#case9" class="nav-link"><span class="nav-icon">9️⃣</span> 9. BEC Email Spoofing</a>
+        <a href="#case10" class="nav-link"><span class="nav-icon">🔟</span> 10. Android Mobile Spyware</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Computer Forensic</a>
+          <span class="sep">/</span>
+          <span class="current">10 Studi Kasus DFIR Nyata</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> CIRT OPERATIONAL CASEBOOK</div>
+          <h1 class="glitch-text" data-text="10 Forensic Cases">10 Forensic <span class="highlight" style="color:var(--orange)">Cases</span></h1>
+          <p style="color:var(--text-secondary); max-width:750px;">
+            10 Skenario insiden keamanan digital berbasis situasi dunia nyata: alur investigasi berstandar ISO/IEC 27037 (Initial Response → Evidence ID → Collection → CoC → Analysis → Timeline → Reporting) disertai penggunaan tools dan artefak forensik presisi.
+          </p>
+        </header>
+
+        <!-- ==================== CASE 1 ==================== -->
+        <article class="case-card" id="case1">
+          <div class="case-header">
+            <div class="case-number">01</div>
+            <div>
+              <div class="case-title">Kasus 1: Serangan LockBit Ransomware pada File Server Rumah Sakit</div>
+              <div class="case-type">Kategori: Malware & Cryptovirology • Target: Windows Server 2022</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Pukul 03:15 WIB, sistem rekam medis RS Medica terhenti. Seluruh file dokumen database berekstensi <code>.lockbit</code> disertai file tebusan <code>Restore-My-Files.txt</code>. Server masih menyala dan beberapa layanan aktif.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Bagaimana awal mula ransomware masuk (vektor infeksi), proses apa yang melakukan enkripsi, apakah ada kunci enkripsi yang tersisa di RAM, dan langkah mitigasi forensik apa yang wajib diambil?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li>
+                <span class="step-num">1</span>
+                <div>
+                  <strong>Initial Response (Triage):</strong> JANGAN matikan server! Segera putuskan kabel LAN fisik (Network Isolation) atau terapkan port shutdown pada switch manageable untuk memutus komunikasi Command & Control (C2) tanpa menghilangkan volatile data RAM.
+                </div>
+              </li>
+              <li>
+                <span class="step-num">2</span>
+                <div>
+                  <strong>Evidence Identification:</strong> RAM aktif server (64GB), disk NVMe system drive (C:), dan disk storage data pasien (D: & E:).
+                </div>
+              </li>
+              <li>
+                <span class="step-num">3</span>
+                <div>
+                  <strong>Collection (Imaging & Hashing):</strong>
+                  <ul>
+                    <li>Live RAM dump menggunakan tool <code>DumpIt.exe</code> ke external drive terisolasi. Hash SHA-256 dicatat seketika.</li>
+                    <li>Sistem dimatikan (graceful/clean pull plug jika ada disk encryption) lalu disk di-imaging sektor-demi-sektor menjadi file format <code>E01</code> menggunakan Hardware Write Blocker Tableau T8u dan FTK Imager.</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <span class="step-num">4</span>
+                <div>
+                  <strong>Chain of Custody:</strong> Mengisi formulir CoC (bukti ID: <code>EVID-HOSP-RAM01</code> dan <code>EVID-HOSP-SSD01</code>), mencatat nomor seri NVMe, waktu serah terima dari Tim IT RS ke Tim DFIR, serta pencocokan hash SHA-256 pre & post imaging.
+                </div>
+              </li>
+              <li>
+                <span class="step-num">5</span>
+                <div>
+                  <strong>Forensic Analysis & Tools:</strong>
+                  <ul>
+                    <li><code>Volatility 3</code>: Menjalankan plugin <code>windows.malfind</code> untuk mendeteksi memory injection, dan <code>windows.psscan</code> menemukan proses <code>svchost_update.exe</code> dengan PID 4820 menyuntikkan payload LockBit.</li>
+                    <li><code>Autopsy & KAPE</code>: Menganalisa Windows Event Log <code>Security.evtx</code> (Event ID 4624 Type 10) mengungkap login RDP ilegal dari IP luar <code>194.26.29.x</code> melalui credential Administrator yang lemah.</li>
+                    <li>Ekstraksi artefak <code>$MFT</code> dan <code>$LogFile</code> untuk mengetahui timestamp file pertama yang terenkripsi (02:47:12 WIB).</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <span class="step-num">6</span>
+                <div>
+                  <strong>Findings & Timeline:</strong> Penyerang membobol port RDP 3389 pukul 01:10 WIB (Brute force), menonaktifkan Windows Defender via registry command pada 01:45 WIB, mengeksekusi LockBit loader pada 02:40 WIB, dan mengenkripsi 45.000 file pasien.
+                </div>
+              </li>
+              <li>
+                <span class="step-num">7</span>
+                <div>
+                  <strong>Reporting:</strong> Rekomendasi penutupan port RDP dari internet publik, penerapan MFA (Multi-Factor Authentication), implementasi offline immutable backup, dan pelaporan bukti ke BSSN/Kepolisian.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 2 ==================== -->
+        <article class="case-card" id="case2">
+          <div class="case-header">
+            <div class="case-number">02</div>
+            <div>
+              <div class="case-title">Kasus 2: Data Exfiltration Rahasia Dagang via DNS Tunneling</div>
+              <div class="case-type">Kategori: Network & Data Theft • Target: Workstation R&D FinTech</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Sensor EDR mendeteksi lonjakan volume kueri DNS aneh (subdomain panjang berformat Base64/Hex) dari komputer insinyur senior ke domain <code>ns1.data-sync-cloud.xyz</code> di tengah malam.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Apakah terjadi kebocoran data (exfiltration), data apa yang berhasil dicuri, dan bagaimana cara penyerang mem-bypass firewall?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Karantina host melalui kebijakan EDR isolation, mirror traffic network tap, dan kumpulkan firewall pcap logs.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> PCAP paket jaringan dari core switch, disk workstation, dan Sysmon log host.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Akuisisi PCAP file dan full physical image SSD workstation menggunakan FTK Imager. Verifikasi hash SHA-256.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Pencatatan item <code>EVID-PCAP-01</code> dan <code>EVID-PC-WS09</code> dengan tanda tangan saksi lead security.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> Menggunakan <code>Wireshark</code> dan script Python untuk merekonstruksi kueri DNS TXT/A query. Mengumpulkan chunk string base64 dari subdomain (misal: <code>a8f1b2c4.ns1.data-sync-cloud.xyz</code>) lalu men-decode-nya kembali menjadi file <code>secret_algorithm_v2.pdf</code>.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Total 8.400 kueri DNS mengeksfiltrasi 14 MB blueprint proprietary selama 45 menit.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Terapkan DNS Inspection, batasi outbound DNS hanya ke internal resolver perusahaan (block external port 53 UDP).</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 3 ==================== -->
+        <article class="case-card" id="case3">
+          <div class="case-header">
+            <div class="case-number">03</div>
+            <div>
+              <div class="case-title">Kasus 3: Insider Threat — Karyawan Mengundurkan Diri Menyalin Database</div>
+              <div class="case-type">Kategori: Internal Threat • Target: Laptop Windows 11 Enterprise</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Seorang sales VP mengajukan resign mendadak untuk pindah ke perusahaan kompetitor. HRD mencurigai adanya pencurian daftar klien sebelum laptop inventaris diserahkan kembali.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Apakah ada USB drive yang dicolokkan ke laptop pada minggu terakhir masa kerja? File apa saja yang diakses dan disalin?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Amankan laptop dari tangan HRD, simpan dalam Faraday Bag berlabel bukti, cabut baterai bila memungkinkan.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> Laptop Dell Latitude 7420 (S/N: DL7420-X891) beserta internal SSD M.2 NVMe.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Buat E01 Image menggunakan Write Blocker Tableau. Hitung MD5 dan SHA-256.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Dokumentasikan serah terima laptop dari bagian HRD ke laboratorium forensik internal.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis & Tools:</strong> Menggunakan <code>Registry Explorer (Eric Zimmerman)</code> membaca hive <code>SYSTEM\CurrentControlSet\Enum\USBSTOR</code>: ditemukan Flashdisk SanDisk Ultra 64GB (S/N: 4C53000129080511) dicolokkan tanggal 14 Oktober 2026 pukul 17:15 WIB. Memeriksa artefak <code>Shellbags</code> dan <code>LNK Files</code> di <code>C:\Users\username\AppData\Roaming\Microsoft\Windows\Recent</code> mengungkap pembukaan file <code>Client_Portfolio_2026.xlsx</code> ke drive letter E: (flashdisk).</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Terbukti terjadi penyalinan data portofolio klien berukuran 240 MB ke media eksternal 2 jam sebelum email resign dikirimkan.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Laporan diserahkan ke bagian Legal untuk tindakan hukum pelanggaran NDA dan UU ITE Pasal 30 & 32.</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 4 ==================== -->
+        <article class="case-card" id="case4">
+          <div class="case-header">
+            <div class="case-number">04</div>
+            <div>
+              <div class="case-title">Kasus 4: Spear Phishing dengan Lampiran Dokumen Macro Malicious</div>
+              <div class="case-type">Kategori: Social Engineering & Initial Access • Target: Komputer Bagian Finance</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Staf akuntan menerima email bertajuk "Surat Tagihan Pajak DJP Mendesak.xlsm". Setelah membuka dan mengklik "Enable Content", komputer mengalami kelambatan dan koneksi tak wajar.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Apa payload yang dieksekusi oleh macro VBA, ke IP C2 mana malware terhubung, dan akun apa yang dicuri?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Putuskan koneksi internet workstation, ambil memory image sebelum mematikan mesin.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> File email <code>.eml</code> dari mail server, memory RAM workstation, dan disk image C:.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Ekspor file <code>.xlsm</code> lampiran ke isolated sandbox environment, lakukan memory capture dengan FTK Imager CLI.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Verifikasi integritas hash file bukti <code>Tax_Invoice.xlsm</code> SHA-256.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> Menggunakan tool <code>olevba</code> dari suite <code>oletools</code> mengekstrak script VBA terobfusikasi: macro mengeksekusi <code>powershell.exe -enc ...</code> mendownload loader RedLine Stealer dari <code>http://185.190.x.x/update.bin</code>. Volatility <code>windows.netscan</code> menunjukkan koneksi TCP ESTABLISHED ke port 4444.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Kredensial browser Chrome (termasuk internet banking) berhasil diambil dan dikirimkan ke C2 penyerang sebelum workstation diisolasi.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Reset darurat seluruh kredensial perbankan perusahaan, aktifkan pemblokiran file berekstensi macro di email gateway.</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 5 ==================== -->
+        <article class="case-card" id="case5">
+          <div class="case-header">
+            <div class="case-number">05</div>
+            <div>
+              <div class="case-title">Kasus 5: Web Server Hacked & Web Shell Deployment</div>
+              <div class="case-type">Kategori: Web Application Attack • Target: Linux Nginx / PHP-FPM Server</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Halaman muka portal mahasiswa menampilkan gambar tengkorak (deface). Seluruh halaman indeks diubah menjadi pesan ejekan kelompok hacker.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Celah apa yang dimanfaatkan penyerang, di mana letak file web shell, dan bagaimana privilege escalation dilakukan?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Pasang halaman maintenance statis, backup live memory Linux dengan kernel module <code>LiME</code>.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> Nginx access/error logs di <code>/var/log/nginx/</code>, root filesystem <code>/</code>, dan bash history.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Buat raw disk image disk VPS menggunakan perintah <code>dd if=/dev/sda of=/mnt/external/sda.raw bs=64K status=progress</code>, hitung SHA-256.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Catat metadata image server dengan timestamp UTC presisi.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> Analisa log web Nginx menemukan request POST berulang ke endpoint <code>/upload_avatar.php</code> dengan status HTTP 200. Ditemukan file web shell bernama <code>bypass.php.png</code> yang dieksekusi via Apache/Nginx MIME-type misconfiguration. Web shell mengeksekusi reverse shell ke port 1337. Melalui cron job dengan izin root misconfigured (<code>/etc/crontab</code>), penyerang menimpa <code>/var/www/html/index.php</code>.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Kerentanan Unrestricted File Upload dimanfaatkan penyerang untuk menanam b374k web shell dan mengubah tampilan web.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Hardening server, pasang Web Application Firewall (WAF), simpan file upload di S3 bucket non-executable.</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 6 ==================== -->
+        <article class="case-card" id="case6">
+          <div class="case-header">
+            <div class="case-number">06</div>
+            <div>
+              <div class="case-title">Kasus 6: Database SQL Injection & Data Dump Breach</div>
+              <div class="case-type">Kategori: Database & Application Forensics • Target: MySQL Server</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Data 100.000 pengguna toko online dijual di forum breached. Tim pengembang mengklaim tidak ada akses SSH server yang bocor.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Parameter URL apa yang rentan SQLi, tools otomatis apa yang digunakan pelaku, dan kapan dumping terjadi?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Amankan MySQL binary logs (<code>binlog</code>) dan Web Server HTTP access logs.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> <code>access.log</code>, <code>mysql-bin.000*</code>, dan database table metadata.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Kumpulkan log secara terotentikasi dan hitung hash SHA-256.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Buat catatan pemindahan log forensik ke server analisa terpisah.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> Grep access log menemukan ribuan request dalam hitungan detik dengan pola <code>UNION SELECT</code> dan <code>information_schema.tables</code> pada parameter <code>/product.php?id=1' UNION SELECT ...</code>. User-agent string teridentifikasi: <code>sqlmap/1.6.4#stable</code>. MySQL general query log mengonfirmasi pembacaan tabel <code>tbl_users</code> berisi hash password dan nomor KTP.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Pelaku menggunakan SQLMap untuk membobol database via Boolean-based blind & Union-based SQLi pada tanggal 10 Oktober 2026 pukul 21:00-22:15 WIB.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Migrasi seluruh kueri ke PDO / Prepared Statements dengan parameter binding, implementasi input sanitization.</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 7 ==================== -->
+        <article class="case-card" id="case7">
+          <div class="case-header">
+            <div class="case-number">07</div>
+            <div>
+              <div class="case-title">Kasus 7: Pencurian Saldo Kripto via Clipboard Hijacker Malware</div>
+              <div class="case-type">Kategori: Cryptocurrency Forensics • Target: Desktop Windows 10</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Korban menyalin alamat dompet Ethereum temannya, namun setelah menekan "Send" di dompet MetaMask, dana sebesar 10 ETH terkirim ke dompet asing milik attacker.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Bagaimana alamat dompet bisa berubah di clipboard, proses apa yang memonitor Windows Clipboard, dan bagaimana alur dana on-chain?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Tangkap memori volatile (RAM) saat sistem berjalan untuk melacak proses clipboard monitor.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> RAM capture (16GB) dan disk image host.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Menggunakan FTK Imager membuat dump RAM dan physical drive image.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Verifikasi identitas hardware laptop dan sertifikat hash.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> Volatility memeriksa <code>windows.handles</code> pada proses <code>audio_driver.exe</code> yang mencurigakan di folder <code>C:\Users\User\AppData\Roaming\</code>. Ditemukan hooks ke Win32 API <code>SetClipboardViewer</code> dan regex pencocokan alamat ETH (<code>^0x[a-fA-F0-9]{40}$</code>). Begitu string dompet disalin, malware menggantinya dengan dompet attacker yang memiliki 4 karakter awal/akhir mirip. On-chain analysis via Etherscan menemukan dana langsung dialirkan ke Tornado Cash mixer.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Korban mengunduh software crack game 3 hari sebelumnya yang menginstal Trojan Clipboard Hijacker berkedok driver audio.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Tandai (blacklist) dompet penyerang di platform intelijen blockchain (Chainalysis/Elliptic) dan edukasi verifikasi hardware wallet.</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 8 ==================== -->
+        <article class="case-card" id="case8">
+          <div class="case-header">
+            <div class="case-number">08</div>
+            <div>
+              <div class="case-title">Kasus 8: Serangan BadUSB / Rubber Ducky di Ruang Kontrol SCADA</div>
+              <div class="case-type">Kategori: Physical / Hardware Attack • Target: Workstation HMI Air Gap</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Workstation terisolasi (Air-gapped) di gardu listrik tiba-tiba membuka terminal Command Prompt secara kilat dan mengeksekusi script pengubah konfigurasi PLC.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Media fisik apa yang digunakan, mengapa sistem tidak meminta otorisasi driver flashdisk, dan payload apa yang diketik?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Lepaskan perangkat mencurigakan berbentuk USB yang terpasang di port belakang komputer SCADA.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> Fisik USB dongle (kemasan plastik hitam tanpa stiker), system disk workstation.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Amankan USB dongle dalam anti-static bag. Imaging SSD workstation secara forensik.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Foto fisik barang bukti USB dari 4 sudut beserta nomor seri port motherboard.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> Memeriksa Windows Registry <code>SYSTEM\CurrentControlSet\Enum\HID</code> (Human Interface Device): perangkat mengenalkan diri bukan sebagai Flashdisk/Storage (Mass Storage Class), melainkan sebagai <strong>Keyboard Fisik USB (HID)</strong> dengan VID <code>0x03EB</code> dan PID <code>0x2042</code> (chipset ATmega32U4 / Rubber Ducky). Script DuckyScript mengetikkan keystroke 1000 karakter per detik: <code>GUI r -> cmd.exe -> echo malicious_script -> powershell ...</code>.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Teknisi vendor meninggalkan flashdisk palsu (Rubber Ducky) yang disamarkan, mengeksploitasi kepercayaan OS terhadap input keyboard fisik.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Pasang Endpoint USB Device Control, batasi VID/PID keyboard resmi, dan kunci fisik port USB di area SCADA kritikal.</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 9 ==================== -->
+        <article class="case-card" id="case9">
+          <div class="case-header">
+            <div class="case-number">09</div>
+            <div>
+              <div class="case-title">Kasus 9: Business Email Compromise (BEC) & Wire Fraud</div>
+              <div class="case-type">Kategori: Email Forensics • Target: Microsoft 365 Exchange Online</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Bagian keuangan mentransfer Rp 2,5 Milyar ke rekening baru atas perintah email dari "CEO". Setelah dikonfirmasi via telepon, CEO tidak pernah mengirim email instruksi tersebut.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Apakah email dipalsukan (spoofing) atau akun CEO dibobol sungguhan (account takeover)? Periksa header SPF, DKIM, DMARC!</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Bekukan akun email CEO di Azure AD / Entra ID, cabut semua active session token.</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> Header raw email (<code>.eml</code>) dari inbox finance, Unified Audit Log (UAL) Microsoft 365.</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Ekspor audit log M365 menggunakan PowerShell commandlet <code>Search-UnifiedAuditLog</code>.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Verifikasi hash file ekspor audit log.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> Analisa header RFC 822: <code>SPF=pass</code>, <code>DKIM=pass</code>, <code>DMARC=pass</code>. Ini membuktikan email dikirimkan LANGSUNG dari infrastruktur resmi Microsoft 365 perusahaan, BUKAN spoofing luar! Audit log mengungkap aktivitas login dari Nigeria (IP <code>102.164.x.x</code>) menggunakan Session Hijacking via AitM Phishing. Pelaku membuat <strong>Inbox Rule tersembunyi</strong>: memindahkan semua email dari finance ke folder "RSS Feeds" dan menghapusnya agar CEO asli tidak curiga.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Account Takeover akibat pencurian cookie sesi OAuth MFA token via Evilginx phishing proxy.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Terapkan FIDO2 Hardware Security Keys (YubiKey) yang kebal phishing AitM, dan hapus seluruh inbox forwarding rules ilegal.</div></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- ==================== CASE 10 ==================== -->
+        <article class="case-card" id="case10">
+          <div class="case-header">
+            <div class="case-number">10</div>
+            <div>
+              <div class="case-title">Kasus 10: Mobile Forensics — Penyadapan Android Pegasus Spyware</div>
+              <div class="case-type">Kategori: Mobile Device Forensics • Target: Smartphone Android 14 Samsung</div>
+            </div>
+          </div>
+          <p style="font-size:14px; margin-bottom:12px;"><strong>Skenario Insiden:</strong> Ponsel milik seorang jurnalis investigasi mengalami baterai cepat habis, suhu tinggi, dan indikator mikrofon kamera sering menyala sendiri di latar belakang.</p>
+          <p style="font-size:13px; color:var(--neon-cyan); margin-bottom:16px;"><strong>Pertanyaan Investigator:</strong> Bagaimana prosedur ekstraksi fisik bukti smartphone tanpa merusak data internal? Artefak apa yang membuktikan infeksi spyware?</p>
+          
+          <button class="toggle-answer">🔽 Buka Laporan Investigasi Lengkap</button>
+          <div class="answer-section">
+            <ul class="step-list">
+              <li><span class="step-num">1</span><div><strong>Initial Response:</strong> Masukkan smartphone ke dalam <strong>Faraday Bag</strong> bersertifikasi militer (memblokir sinyal seluler GSM, WiFi, Bluetooth, GPS) untuk mencegah perintah remote wipe dari penyerang. Jangan matikan ponsel jika PIN/Passcode tidak diketahui (agar tetap di mode After First Unlock / AFU).</div></li>
+              <li><span class="step-num">2</span><div><strong>Evidence ID:</strong> Samsung Galaxy S23 (IMEI 1 & 2 tercatat di label bodi).</div></li>
+              <li><span class="step-num">3</span><div><strong>Collection:</strong> Menggunakan Cellebrite UFED / Magnet AXIOM atau open-source <code>Mobile Verification Toolkit (MVT)</code> melakukan ekstraksi Full File System (FFS) via ADB developer bridge.</div></li>
+              <li><span class="step-num">4</span><div><strong>Chain of Custody:</strong> Foto kondisi fisik retak/goresan ponsel, catat IMEI dan nomor kartu SIM.</div></li>
+              <li><span class="step-num">5</span><div><strong>Analysis:</strong> MVT memeriksa database <code>telephony.db</code> dan log sistem Android <code>logcat</code>: ditemukan rekaman zero-click exploit via file animasi WebP di pesan WhatsApp. Ekstraksi binary payload di direktori tersembunyi <code>/data/local/tmp/</code> menunjukkan proses daemon mengunggah audio rekaman dan file pesan Signal secara terenkripsi ke IP C2.</div></li>
+              <li><span class="step-num">6</span><div><strong>Findings:</strong> Ditemukan indikator kompromi (IoC) spyware komersial canggih yang mengeksploitasi zero-day vulnerability pada parser media image.</div></li>
+              <li><span class="step-num">7</span><div><strong>Reporting:</strong> Penggantian perangkat keras secara total, pembaruan ke patch keamanan OS terbaru, pelaporan ke Citizen Lab.</div></li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — 10 Digital Forensic Case Studies</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

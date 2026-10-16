@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reverse Engineering — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">🔓</div>
+        <div>
+          <div class="logo-text">Reverse<span style="color:var(--neon-cyan)">.Eng</span></div>
+          <span class="logo-sub">COMP6836001</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link active"><span class="nav-icon">📖</span> Ringkasan Materi</a>
+        <a href="cheatsheet.html" class="nav-link"><span class="nav-icon">📜</span> Assembly Cheatsheet</a>
+        <a href="soal-latihan.html" class="nav-link"><span class="nav-icon">📝</span> 10 Soal ASM→C</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Semua Matkul</div>
+        <a href="../reverse-engineering/index.html" class="nav-link active"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current">Reverse Engineering</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 20px 0;">
+          <div class="hero-tag"><span class="dot"></span> COMP6836001 • RE-CORE</div>
+          <h1 class="glitch-text" data-text="Reverse Engineering">Reverse <span class="highlight">Engineering</span></h1>
+          <p style="color:var(--text-secondary); margin-top:8px; max-width:750px;">
+            Panduan komprehensif analisis biner x86 dan x64 untuk UTS: arsitektur CPU, register, stack frame, calling convention, hingga rekonstruksi algoritma assembly ke source code bahasa C tingkat tinggi.
+          </p>
+          <div style="display:flex; gap:12px; margin-top:20px;">
+            <a href="cheatsheet.html" class="btn btn-primary">📜 Assembly Cheatsheet</a>
+            <a href="soal-latihan.html" class="btn btn-outline">📝 10 Soal Latihan ASM→C</a>
+          </div>
+        </header>
+
+        <!-- PROGRESS CHECKLIST -->
+        <section class="card" style="margin-bottom:32px;">
+          <h3 style="font-size:16px; margin-bottom:12px; color:var(--neon-cyan);">🎯 Target Capaian UTS Reverse Engineering</h3>
+          <div class="grid-2">
+            <label class="progress-check" data-key="re_registers">
+              <input type="checkbox">
+              <span>Memahami register x86 vs x64 (RAX, RBX, RCX, RDX, RSI, RDI, RSP, RBP)</span>
+            </label>
+            <label class="progress-check" data-key="re_calling">
+              <input type="checkbox">
+              <span>Calling conventions: cdecl (32-bit stack) vs System V AMD64 (RDI, RSI, RDX...)</span>
+            </label>
+            <label class="progress-check" data-key="re_stack_frame">
+              <input type="checkbox">
+              <span>Prolog fungsi (`push rbp; mov rbp, rsp; sub rsp, N`) & Epilog (`leave; ret`)</span>
+            </label>
+            <label class="progress-check" data-key="re_branches">
+              <input type="checkbox">
+              <span>Pola perulangan & percabangan (CMP, JMP, JE, JNE, JLE, JGE, JL, JG)</span>
+            </label>
+            <label class="progress-check" data-key="re_stack_trace">
+              <input type="checkbox">
+              <span>Melakukan visualisasi stack memory offset (rbp-0x4, rbp-0x8) secara presisi</span>
+            </label>
+            <label class="progress-check" data-key="re_decompilation">
+              <input type="checkbox">
+              <span>Mampu mentranslasikan 100% instruksi assembly kembali ke kode C yang valid</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- MATERI KUNCI -->
+        <section class="materi-section">
+          <h2>1. Fundamental Arsitektur x86 vs x64</h2>
+          <p>
+            Dalam binary analysis, pemahaman mendalam tentang perbedaan mode 32-bit (IA-32 / x86) dan 64-bit (x86_64 / AMD64) adalah fondasi mutlak. Setiap register pada x64 berukuran 64-bit (8 bytes), sedangkan pada x86 berukuran 32-bit (4 bytes).
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <h3 style="color:var(--neon-cyan);">Arsitektur x86 (32-bit)</h3>
+              <ul style="font-size:13px; line-height:1.8;">
+                <li>Pointer berukuran 4 byte (32-bit addresses).</li>
+                <li>Register utama: <code>EAX</code>, <code>EBX</code>, <code>ECX</code>, <code>EDX</code>, <code>ESI</code>, <code>EDI</code>, <code>ESP</code>, <code>EBP</code>, <code>EIP</code>.</li>
+                <li>Passing argumen fungsi mayoritas dilakukan via <strong>Stack</strong> (kanan ke kiri pada <code>cdecl</code>).</li>
+                <li>Return value integer diletakkan pada register <code>EAX</code>.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 style="color:var(--neon-green);">Arsitektur x64 (64-bit)</h3>
+              <ul style="font-size:13px; line-height:1.8;">
+                <li>Pointer berukuran 8 byte (64-bit addresses).</li>
+                <li>Register diperluas: <code>RAX</code> - <code>R15</code> (16 general purpose registers).</li>
+                <li>Passing argumen via <strong>Register</strong> (System V: <code>RDI</code>, <code>RSI</code>, <code>RDX</code>, <code>RCX</code>, <code>R8</code>, <code>R9</code>).</li>
+                <li>Return value diletakkan pada register <code>RAX</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="materi-section">
+          <h2>2. Anatomi Stack Frame (Prolog, Body, Epilog)</h2>
+          <p>
+            Stack tumbuh ke bawah (dari alamat memori tinggi ke alamat memori rendah). Ketika suatu fungsi dieksekusi, CPU membentuk sebuah stack frame terlokalisasi:
+          </p>
+          <div class="highlight-box">
+            <h4>Struktur Standar Fungsi Assembly x64</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">x86_64 Assembly</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-x86asm">push    rbp              ; Simpan base pointer lama dari pemanggil (caller)
+mov     rbp, rsp         ; Tetapkan base pointer baru untuk frame fungsi ini
+sub     rsp, 16          ; Alokasikan ruang 16-byte di stack untuk local variables
+
+; --- BODY FUNGSI (Operasi logika, perhitungan lokal) ---
+mov     DWORD PTR [rbp-4], 10    ; int x = 10;
+mov     DWORD PTR [rbp-8], 20    ; int y = 20;
+mov     eax, DWORD PTR [rbp-4]   ; temp = x;
+add     eax, DWORD PTR [rbp-8]   ; temp += y;
+
+; --- EPILOG FUNGSI (Restorasi frame & Return) ---
+leave                    ; Ekuivalen dengan: mov rsp, rbp; pop rbp;
+ret                      ; Pop RIP / return address dan lompat kembali ke pemanggil</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- INTERACTIVE MINI QUIZ -->
+        <section class="card" style="margin-top:40px;">
+          <h2 style="font-size:18px; margin-bottom:16px; color:var(--neon-cyan);">⚡ Cek Pemahaman Kilat: Reverse Engineering</h2>
+          <div id="quiz-container">
+            <div class="quiz-card" style="border:none; padding:0; background:transparent;">
+              <div class="quiz-number">Pertanyaan 1 dari 3</div>
+              <div class="quiz-question">Pada arsitektur System V AMD64 (Linux x64), register manakah yang digunakan untuk menampung argumen fungsi pertama dan kedua?</div>
+              <div class="quiz-options">
+                <div class="quiz-option" onclick="checkQuickQuiz(this, true)"><span class="option-label">A</span> RDI untuk argumen ke-1, RSI untuk argumen ke-2</div>
+                <div class="quiz-option" onclick="checkQuickQuiz(this, false)"><span class="option-label">B</span> RCX untuk argumen ke-1, RDX untuk argumen ke-2</div>
+                <div class="quiz-option" onclick="checkQuickQuiz(this, false)"><span class="option-label">C</span> RAX untuk argumen ke-1, RBX untuk argumen ke-2</div>
+                <div class="quiz-option" onclick="checkQuickQuiz(this, false)"><span class="option-label">D</span> Stack [ESP+4] dan [ESP+8]</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — Reverse Engineering Module</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script src="../js/main.js"></script>
+  <script>
+    function checkQuickQuiz(el, isCorrect) {
+      const parent = el.closest('.quiz-options');
+      parent.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected', 'correct', 'wrong'));
+      el.classList.add(isCorrect ? 'correct' : 'wrong');
+    }
+  </script>
+</body>
+</html>

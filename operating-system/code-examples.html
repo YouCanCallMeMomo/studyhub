@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10 Contoh Kode C Operating Systems — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--electric-blue), var(--neon-cyan));">💻</div>
+        <div>
+          <div class="logo-text">OS<span style="color:var(--electric-blue)">.CodeLab</span></div>
+          <span class="logo-sub">10 POSIX C PROGRAMS</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link"><span class="nav-icon">📚</span> 7 Topik Teori OS</a>
+        <a href="code-examples.html" class="nav-link active"><span class="nav-icon">💻</span> 10 Kode C Compilable</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Daftar Program C</div>
+        <a href="#code1" class="nav-link"><span class="nav-icon">1️⃣</span> 1. Fork Process</a>
+        <a href="#code2" class="nav-link"><span class="nav-icon">2️⃣</span> 2. Wait Sync</a>
+        <a href="#code3" class="nav-link"><span class="nav-icon">3️⃣</span> 3. UNIX Pipe</a>
+        <a href="#code4" class="nav-link"><span class="nav-icon">4️⃣</span> 4. Shared Memory</a>
+        <a href="#code5" class="nav-link"><span class="nav-icon">5️⃣</span> 5. Pthread Creation</a>
+        <a href="#code6" class="nav-link"><span class="nav-icon">6️⃣</span> 6. Mutex Lock</a>
+        <a href="#code7" class="nav-link"><span class="nav-icon">7️⃣</span> 7. Semaphore Sync</a>
+        <a href="#code8" class="nav-link"><span class="nav-icon">8️⃣</span> 8. Producer-Consumer</a>
+        <a href="#code9" class="nav-link"><span class="nav-icon">9️⃣</span> 9. Reader-Writer</a>
+        <a href="#code10" class="nav-link"><span class="nav-icon">🔟</span> 10. Dining Philosophers</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Operating System</a>
+          <span class="sep">/</span>
+          <span class="current">10 Kode C OS Compilable</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> POSIX SYSTEM CALLS & MULTITHREADING LAB</div>
+          <h1 class="glitch-text" data-text="10 C Code Examples">10 C Code <span class="highlight" style="color:var(--electric-blue)">Examples</span></h1>
+          <p style="color:var(--text-secondary); max-width:780px;">
+            Kompilasi 10 program C murni berstandar POSIX (Linux/UNIX/GCC) untuk ujian praktik dan teori OS: System calls manajemen proses, Inter-Process Communication (IPC), Multithreading Pthread, serta penanganan konkurensi (Mutex, Semaphore, dan Algoritma Klasik Sinkronisasi). Seluruh kode valid, compilable, dilengkapi penjelasan per-baris dan expected output.
+          </p>
+        </header>
+
+        <!-- CODE 1 -->
+        <article class="card" id="code1" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--electric-blue);">1. Fork & Process Creation (`fork.c`)</h3>
+            <span class="badge blue">PROCESS MANAGEMENT</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Mendemonstrasikan pembuatan proses anak (child process) menggunakan system call <code>fork()</code>. Menunjukkan perbedaan nilai kembalian <code>pid</code> di proses induk (parent) dan anak.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>fork_example.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+int main() {
+    pid_t pid;
+    printf("[PARENT] PID utama: %d, bersiap memanggil fork()...\n", getpid());
+
+    pid = fork();
+
+    if (pid &lt; 0) {
+        // Fork gagal dialokasikan oleh kernel
+        perror("Fork gagal dieksekusi");
+        exit(EXIT_FAILURE);
+    } 
+    else if (pid == 0) {
+        // Blok eksekusi proses anak (Child Process)
+        printf("[CHILD] Halo dari Proses Anak!\n");
+        printf("[CHILD] PID Anak: %d, Parent PID (PPID): %d\n", getpid(), getppid());
+    } 
+    else {
+        // Blok eksekusi proses induk (Parent Process)
+        printf("[PARENT] Halo dari Proses Induk!\n");
+        printf("[PARENT] PID Induk: %d, Baru saja melahirkan anak dengan PID: %d\n", getpid(), pid);
+    }
+
+    printf("[ALL] Baris ini dieksekusi oleh kedua proses (PID: %d)\n", getpid());
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>pid = fork();</code>: Kernel menduplikasi PCB, stack, heap, dan deskriptor proses. Setelah baris ini, ada 2 proses konkuren.</li>
+                <li><code>if (pid == 0)</code>: Di proses anak, kernel menyuplai nilai 0 untuk membedakan perannya.</li>
+                <li><code>else (pid > 0)</code>: Di proses parent, kernel menyuplai PID dari anak yang baru dibuat.</li>
+                <li><code>getpid() & getppid()</code>: Mendapatkan PID diri sendiri dan PID induk.</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o fork fork_example.c && ./fork
+[PARENT] PID utama: 4520, bersiap memanggil fork()...
+[PARENT] Halo dari Proses Induk!
+[PARENT] PID Induk: 4520, Baru saja melahirkan anak dengan PID: 4521
+[ALL] Baris ini dieksekusi oleh kedua proses (PID: 4520)
+[CHILD] Halo dari Proses Anak!
+[CHILD] PID Anak: 4521, Parent PID (PPID): 4520
+[ALL] Baris ini dieksekusi oleh kedua proses (PID: 4521)</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 2 -->
+        <article class="card" id="code2" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--electric-blue);">2. Wait & Process Synchronization (`wait.c`)</h3>
+            <span class="badge blue">SYNC & STATUS</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Mencegah Zombie Process dengan memanggil <code>wait()</code> di proses orang tua, menahan eksekusi hingga anak tuntas dan mengevaluasi status exit code.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>wait_example.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/wait.h&gt;
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid &lt; 0) {
+        perror("Fork error");
+        exit(1);
+    } 
+    else if (pid == 0) {
+        printf("[CHILD PID %d] Mulai komputasi berat selama 2 detik...\n", getpid());
+        sleep(2);
+        printf("[CHILD] Selesai. Keluar dengan status exit code 42.\n");
+        exit(42); // Nilai status exit khusus
+    } 
+    else {
+        int status;
+        printf("[PARENT] Menunggu anak (PID %d) selesai dengan wait()...\n", pid);
+        pid_t child_pid = wait(&status);
+
+        printf("[PARENT] Anak (PID %d) telah selesai dieksekusi!\n", child_pid);
+        if (WIFEXITED(status)) {
+            printf("[PARENT] Status Exit Code Anak: %d\n", WEXITSTATUS(status));
+        } else if (WIFSIGNALED(status)) {
+            printf("[PARENT] Anak terhenti secara paksa oleh sinyal: %d\n", WTERMSIG(status));
+        }
+    }
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>wait(&status)</code>: Memblokir pemanggil hingga state proses anak berubah. Mengembalikan PID anak yang terminate.</li>
+                <li><code>WIFEXITED(status)</code>: Bernilai true jika proses anak keluar secara normal (misal lewat <code>exit()</code>).</li>
+                <li><code>WEXITSTATUS(status)</code>: Mengekstrak 8-bit terendah dari nilai exit code anak (dalam contoh: 42).</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o wait wait_example.c && ./wait
+[PARENT] Menunggu anak (PID 4832) selesai dengan wait()...
+[CHILD PID 4832] Mulai komputasi berat selama 2 detik...
+[CHILD] Selesai. Keluar dengan status exit code 42.
+[PARENT] Anak (PID 4832) telah selesai dieksekusi!
+[PARENT] Status Exit Code Anak: 42</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 3 -->
+        <article class="card" id="code3" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--neon-cyan);">3. UNIX Anonymous Pipe (IPC) (`pipe.c`)</h3>
+            <span class="badge cyan">HALFDUPLEX IPC</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Saluran komunikasi satu arah (unidirectional) di dalam memori kernel antar-proses berkerabat (Parent-Child) menggunakan 2 file descriptor: read end (fd[0]) dan write end (fd[1]).
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>pipe_ipc.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/wait.h&gt;
+
+#define BUFFER_SIZE 64
+
+int main() {
+    int fd[2]; // fd[0] = Read end, fd[1] = Write end
+    char write_msg[] = "SECRET_PAYLOAD_IPC_0x89A";
+    char read_msg[BUFFER_SIZE];
+
+    // 1. Buat pipa saluran kernel sebelum fork
+    if (pipe(fd) == -1) {
+        perror("Pembuatan pipe gagal");
+        return 1;
+    }
+
+    pid_t pid = fork();
+
+    if (pid &lt; 0) {
+        perror("Fork error");
+        return 1;
+    } 
+    else if (pid == 0) {
+        // CHILD: Bertindak sebagai Writer
+        close(fd[0]); // Tutup ujung baca yang tidak digunakan
+        printf("[CHILD] Mengirim data ke pipe: '%s'\n", write_msg);
+        write(fd[1], write_msg, strlen(write_msg) + 1);
+        close(fd[1]); // Tutup setelah selesai menulis (kirim EOF)
+        exit(0);
+    } 
+    else {
+        // PARENT: Bertindak sebagai Reader
+        close(fd[1]); // Tutup ujung tulis yang tidak digunakan
+        wait(NULL);   // Tunggu anak selesai menulis
+        read(fd[0], read_msg, BUFFER_SIZE);
+        printf("[PARENT] Menerima data dari pipe: '%s'\n", read_msg);
+        close(fd[0]); // Tutup ujung baca
+    }
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>pipe(fd)</code>: Mengalokasikan buffer melingkar (circular buffer) di kernel dan mengisi array <code>fd[0]</code> (read) dan <code>fd[1]</code> (write).</li>
+                <li><code>close(fd[0]) / close(fd[1])</code>: Menutup channel yang tidak terpakai sangat penting agar pembaca menerima indikator EOF (End-Of-File) saat writer menutup ujung tulis.</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o pipe pipe_ipc.c && ./pipe
+[CHILD] Mengirim data ke pipe: 'SECRET_PAYLOAD_IPC_0x89A'
+[PARENT] Menerima data dari pipe: 'SECRET_PAYLOAD_IPC_0x89A'</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 4 -->
+        <article class="card" id="code4" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--neon-cyan);">4. POSIX / System V Shared Memory (`shm.c`)</h3>
+            <span class="badge cyan">FASTEST IPC</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Metode IPC tercepat karena dua proses memetakan segmen halaman memori fisik RAM yang sama ke dalam address space virtual mereka, menghindari overhead context switch kernel.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>shared_memory.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/ipc.h&gt;
+#include &lt;sys/shm.h&gt;
+#include &lt;sys/wait.h&gt;
+
+#define SHM_SIZE 1024
+
+int main() {
+    // 1. Dapatkan identifier unik untuk shared memory segment
+    key_t key = ftok("/tmp", 65);
+    int shmid = shmget(key, SHM_SIZE, 0666 | IPC_CREAT);
+
+    if (shmid &lt; 0) {
+        perror("shmget gagal");
+        exit(1);
+    }
+
+    pid_t pid = fork();
+
+    if (pid == 0) {
+        // CHILD: Attach ke shared memory dan menulis pesan
+        char *str = (char*) shmat(shmid, (void*)0, 0);
+        printf("[CHILD] Menulis ke Shared Memory...\n");
+        strncpy(str, "StudyHub SOC Kernel Shared Memory Buffer v2.0", SHM_SIZE);
+        shmdt(str); // Detach memori
+        exit(0);
+    } 
+    else {
+        // PARENT: Tunggu anak selesai lalu membaca isi memori
+        wait(NULL);
+        char *str = (char*) shmat(shmid, (void*)0, 0);
+        printf("[PARENT] Membaca dari Shared Memory: '%s'\n", str);
+        shmdt(str); // Detach memori
+
+        // Hancurkan segmen shared memory dari sistem
+        shmctl(shmid, IPC_RMID, NULL);
+    }
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>shmget()</code>: Mengalokasikan segmen memori bersama di kernel.</li>
+                <li><code>shmat()</code>: Memetakan (attach) alamat memori kernel ke virtual pointer di user space.</li>
+                <li><code>shmdt()</code>: Melepaskan kaitan (detach) segmen dari proses.</li>
+                <li><code>shmctl(shmid, IPC_RMID, NULL)</code>: Menghapus segmen secara permanen agar tidak terjadi memory leak di RAM.</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o shm shared_memory.c && ./shm
+[CHILD] Menulis ke Shared Memory...
+[PARENT] Membaca dari Shared Memory: 'StudyHub SOC Kernel Shared Memory Buffer v2.0'</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 5 -->
+        <article class="card" id="code5" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--purple);">5. POSIX Thread Creation & Join (`pthread.c`)</h3>
+            <span class="badge purple">MULTITHREADING</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Membuat beberapa thread pekerja konkuren menggunakan pustaka standar <code>pthread</code>, melewatkan argumen ID thread, dan menunggu penyelesaiannya lewat <code>pthread_join()</code>.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>pthread_example.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;unistd.h&gt;
+
+#define NUM_THREADS 3
+
+void* thread_worker(void* arg) {
+    long tid = (long)arg;
+    printf("[THREAD %ld] Berjalan aktif di core CPU...\n", tid);
+    sleep(1);
+    printf("[THREAD %ld] Tugas komputasi selesai.\n", tid);
+    pthread_exit((void*)(tid * 100)); // Mengembalikan exit status
+}
+
+int main() {
+    pthread_t threads[NUM_THREADS];
+    void* status;
+
+    printf("[MAIN] Membuat %d worker thread...\n", NUM_THREADS);
+
+    for (long i = 0; i &lt; NUM_THREADS; i++) {
+        int rc = pthread_create(&threads[i], NULL, thread_worker, (void*)i);
+        if (rc) {
+            printf("Error pembuatan thread: %d\n", rc);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    // Menunggu setiap thread tuntas (Join)
+    for (int i = 0; i &lt; NUM_THREADS; i++) {
+        pthread_join(threads[i], &status);
+        printf("[MAIN] Thread %d telah bergabung kembali dengan return value: %ld\n", i, (long)status);
+    }
+
+    printf("[MAIN] Seluruh thread sukses dieksekusi!\n");
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>pthread_create(&tid, attr, start_routine, arg)</code>: Membuka thread eksekusi baru. Butuh link compiler <code>-lpthread</code>.</li>
+                <li><code>pthread_join(tid, &retval)</code>: Memblokir thread utama sampai thread target selesai, sekaligus mengambil return value-nya.</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o pthread pthread_example.c -lpthread && ./pthread
+[MAIN] Membuat 3 worker thread...
+[THREAD 0] Berjalan aktif di core CPU...
+[THREAD 1] Berjalan aktif di core CPU...
+[THREAD 2] Berjalan aktif di core CPU...
+[THREAD 0] Tugas komputasi selesai.
+[THREAD 1] Tugas komputasi selesai.
+[THREAD 2] Tugas komputasi selesai.
+[MAIN] Thread 0 telah bergabung kembali dengan return value: 0
+[MAIN] Thread 1 telah bergabung kembali dengan return value: 100
+[MAIN] Thread 2 telah bergabung kembali dengan return value: 200
+[MAIN] Seluruh thread sukses dieksekusi!</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 6 -->
+        <article class="card" id="code6" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--neon-pink);">6. Mutex Lock (Mencegah Race Condition) (`mutex.c`)</h3>
+            <span class="badge" style="border-color:var(--neon-pink); color:var(--neon-pink);">MUTUAL EXCLUSION</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Mencegah race condition ketika 2 thread serentak memodifikasi variabel penghitung global bersama (shared counter) dengan mengunci critical section menggunakan <code>pthread_mutex_lock</code>.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>mutex_counter.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;pthread.h&gt;
+
+#define ITERATIONS 1000000
+
+long shared_counter = 0;
+pthread_mutex_t lock; // Kunci Mutex
+
+void* increment_task(void* arg) {
+    for (int i = 0; i &lt; ITERATIONS; i++) {
+        // --- AWAL CRITICAL SECTION ---
+        pthread_mutex_lock(&lock);
+        shared_counter++; // Modifikasi aman, eksklusif 1 thread
+        pthread_mutex_unlock(&lock);
+        // --- AKHIR CRITICAL SECTION ---
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+
+    // Inisialisasi Mutex
+    if (pthread_mutex_init(&lock, NULL) != 0) {
+        printf("Inisialisasi mutex gagal\n");
+        return 1;
+    }
+
+    pthread_create(&t1, NULL, increment_task, NULL);
+    pthread_create(&t2, NULL, increment_task, NULL);
+
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    pthread_mutex_destroy(&lock);
+
+    printf("Ekspektasi Counter : %d\n", ITERATIONS * 2);
+    printf("Hasil Riil Counter : %ld\n", shared_counter);
+
+    if (shared_counter == ITERATIONS * 2) {
+        printf("✅ SUKSES: Tidak terjadi Race Condition berkat Mutex!\n");
+    } else {
+        printf("❌ GAGAL: Terjadi Data Corruption Race Condition!\n");
+    }
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>pthread_mutex_lock(&lock)</code>: Thread meminta kunci. Jika kunci sedang dipegang thread lain, thread pemanggil diblokir tidur (sleep).</li>
+                <li><code>pthread_mutex_unlock(&lock)</code>: Melepas kunci dan membangunkan thread lain di antrean.</li>
+                <li>Tanpa mutex, operasi <code>shared_counter++</code> yang terdiri dari 3 instruksi assembly (MOV, ADD, MOV) akan saling menimpa secara acak (data corruption).</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o mutex mutex_counter.c -lpthread && ./mutex
+Ekspektasi Counter : 2000000
+Hasil Riil Counter : 2000000
+✅ SUKSES: Tidak terjadi Race Condition berkat Mutex!</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 7 -->
+        <article class="card" id="code7" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--neon-green);">7. POSIX Counting Semaphore (`semaphore.c`)</h3>
+            <span class="badge green">RESOURCE COUNTING</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Mengontrol akses terbatas terhadap kolam sumber daya (Resource Pool) yang hanya berkapasitas 2 slot serentak menggunakan <code>sem_init</code>, <code>sem_wait</code>, dan <code>sem_post</code>.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>semaphore_pool.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;semaphore.h&gt;
+#include &lt;unistd.h&gt;
+
+#define TOTAL_CLIENTS 5
+#define MAX_CONCURRENT_SLOTS 2 // Hanya 2 thread boleh masuk bersamaan
+
+sem_t slot_semaphore;
+
+void* client_access(void* arg) {
+    long id = (long)arg;
+    printf("[CLIENT %ld] Mengantre menunggu izin slot...\n", id);
+
+    // Operasi wait(S) / P(S): Mengurangi counter semaphore
+    sem_wait(&slot_semaphore);
+
+    printf("--> [CLIENT %ld] MENDAPATKAN SLOT! Sedang memakai layanan...\n", id);
+    sleep(2); // Simulasi pemrosesan
+    printf("<-- [CLIENT %ld] Selesai memakai. Melepaskan slot.\n", id);
+
+    // Operasi signal(S) / V(S): Menaikkan counter semaphore
+    sem_post(&slot_semaphore);
+
+    return NULL;
+}
+
+int main() {
+    pthread_t clients[TOTAL_CLIENTS];
+
+    // Inisialisasi semaphore dengan nilai awal 2
+    sem_init(&slot_semaphore, 0, MAX_CONCURRENT_SLOTS);
+
+    for (long i = 0; i &lt; TOTAL_CLIENTS; i++) {
+        pthread_create(&clients[i], NULL, client_access, (void*)i);
+    }
+
+    for (int i = 0; i &lt; TOTAL_CLIENTS; i++) {
+        pthread_join(clients[i], NULL);
+    }
+
+    sem_destroy(&slot_semaphore);
+    printf("[MAIN] Seluruh client selesai dilayani dengan tertib.\n");
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>sem_init(&sem, 0, 2)</code>: Argumen kedua bernilai 0 berarti semaphore dibagi antar-thread dalam satu proses (bukan antar-proses). Argumen ketiga adalah kapasitas awal (2).</li>
+                <li><code>sem_wait()</code>: Mengurangi slot. Jika slot bernilai 0, thread tertahan tidur.</li>
+                <li><code>sem_post()</code>: Menambah slot dan membangunkan salah satu thread yang tertidur.</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o sem semaphore_pool.c -lpthread && ./sem
+[CLIENT 0] Mengantre menunggu izin slot...
+--> [CLIENT 0] MENDAPATKAN SLOT! Sedang memakai layanan...
+[CLIENT 1] Mengantre menunggu izin slot...
+--> [CLIENT 1] MENDAPATKAN SLOT! Sedang memakai layanan...
+[CLIENT 2] Mengantre menunggu izin slot...
+<-- [CLIENT 0] Selesai memakai. Melepaskan slot.
+--> [CLIENT 2] MENDAPATKAN SLOT! Sedang memakai layanan...</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 8 -->
+        <article class="card" id="code8" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--orange);">8. Producer-Consumer (Bounded Buffer) (`prod_cons.c`)</h3>
+            <span class="badge orange">CLASSIC IPC CONCURRENCY</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Solusi masalah klasik Bounded Buffer dengan 2 Semaphore (<code>empty</code> dan <code>full</code>) serta 1 Mutex untuk mencegah overflow dan underflow pada buffer berukuran tetap.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>producer_consumer.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;semaphore.h&gt;
+#include &lt;unistd.h&gt;
+
+#define BUFFER_SIZE 4
+#define TOTAL_ITEMS 8
+
+int buffer[BUFFER_SIZE];
+int in = 0, out = 0;
+
+sem_t sem_empty; // Menghitung ruang buffer kosong
+sem_t sem_full;  // Menghitung jumlah item yang siap dibaca
+pthread_mutex_t buffer_mutex;
+
+void* producer(void* arg) {
+    for (int i = 1; i &lt;= TOTAL_ITEMS; i++) {
+        sem_wait(&sem_empty); // Tunggu sampai ada ruang kosong
+        pthread_mutex_lock(&buffer_mutex);
+
+        buffer[in] = i * 10;
+        printf("[PRODUCER] Menaruh item %d di slot buffer [%d]\n", buffer[in], in);
+        in = (in + 1) % BUFFER_SIZE;
+
+        pthread_mutex_unlock(&buffer_mutex);
+        sem_post(&sem_full); // Kabarkan ada item baru
+
+        usleep(100000); // Istirahat 100ms
+    }
+    return NULL;
+}
+
+void* consumer(void* arg) {
+    for (int i = 1; i &lt;= TOTAL_ITEMS; i++) {
+        sem_wait(&sem_full); // Tunggu sampai ada item
+        pthread_mutex_lock(&buffer_mutex);
+
+        int item = buffer[out];
+        printf("    [CONSUMER] Mengambil item %d dari slot [%d]\n", item, out);
+        out = (out + 1) % BUFFER_SIZE;
+
+        pthread_mutex_unlock(&buffer_mutex);
+        sem_post(&sem_empty); // Kabarkan ada ruang kosong
+
+        usleep(250000); // Consumer sedikit lebih lambat
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t prod_thread, cons_thread;
+
+    sem_init(&sem_empty, 0, BUFFER_SIZE); // Awal: semua 4 slot kosong
+    sem_init(&sem_full, 0, 0);            // Awal: 0 item
+    pthread_mutex_init(&buffer_mutex, NULL);
+
+    pthread_create(&prod_thread, NULL, producer, NULL);
+    pthread_create(&cons_thread, NULL, consumer, NULL);
+
+    pthread_join(prod_thread, NULL);
+    pthread_join(cons_thread, NULL);
+
+    sem_destroy(&sem_empty);
+    sem_destroy(&sem_full);
+    pthread_mutex_destroy(&buffer_mutex);
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>sem_empty</code>: Bernilai 4 saat awal. Jika buffer penuh (0 slot kosong), producer terblokir.</li>
+                <li><code>sem_full</code>: Bernilai 0 saat awal. Jika buffer kosong, consumer tertidur menunggu producer.</li>
+                <li><code>in = (in + 1) % BUFFER_SIZE</code>: Pointer circular buffer untuk operasi efisien antrean FIFO.</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o prod_cons producer_consumer.c -lpthread && ./prod_cons
+[PRODUCER] Menaruh item 10 di slot buffer [0]
+    [CONSUMER] Mengambil item 10 dari slot [0]
+[PRODUCER] Menaruh item 20 di slot buffer [1]
+[PRODUCER] Menaruh item 30 di slot buffer [2]
+    [CONSUMER] Mengambil item 20 dari slot [1]</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 9 -->
+        <article class="card" id="code9" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--orange);">9. Readers-Writers Problem (`readers_writers.c`)</h3>
+            <span class="badge orange">DATABASE ACCESS SYNC</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Sinkronisasi akses dataset: Multiple Readers diizinkan membaca serentak, namun saat Writer masuk, seluruh proses lain dicegah masuk (eksklusif murni).
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>readers_writers.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;unistd.h&gt;
+
+pthread_mutex_t rw_mutex; // Kunci eksklusif untuk Penulis / Writer
+pthread_mutex_t count_mutex; // Kunci untuk memproteksi variabel reader_count
+int reader_count = 0;
+int database_data = 100;
+
+void* reader(void* arg) {
+    long id = (long)arg;
+
+    // Masuk reader
+    pthread_mutex_lock(&count_mutex);
+    reader_count++;
+    if (reader_count == 1) {
+        // Reader pertama mengunci penulis agar tidak bisa menulis saat membaca
+        pthread_mutex_lock(&rw_mutex);
+    }
+    pthread_mutex_unlock(&count_mutex);
+
+    // --- MEMBACA DATABASE BERSAMA ---
+    printf("  [READER %ld] Membaca data bernilai: %d (Total Reader Aktif: %d)\n", id, database_data, reader_count);
+    usleep(150000);
+
+    // Keluar reader
+    pthread_mutex_lock(&count_mutex);
+    reader_count--;
+    if (reader_count == 0) {
+        // Reader terakhir melepaskan kunci penulis
+        pthread_mutex_unlock(&rw_mutex);
+    }
+    pthread_mutex_unlock(&count_mutex);
+    return NULL;
+}
+
+void* writer(void* arg) {
+    long id = (long)arg;
+
+    pthread_mutex_lock(&rw_mutex); // Kunci seluruh akses!
+    database_data += 50;
+    printf("--> [WRITER %ld] Mengubah nilai data menjadi: %d (EKSKLUSIF)\n", id, database_data);
+    usleep(200000);
+    pthread_mutex_unlock(&rw_mutex);
+
+    return NULL;
+}
+
+int main() {
+    pthread_t r[4], w[2];
+    pthread_mutex_init(&rw_mutex, NULL);
+    pthread_mutex_init(&count_mutex, NULL);
+
+    pthread_create(&r[0], NULL, reader, (void*)1);
+    pthread_create(&w[0], NULL, writer, (void*)1);
+    pthread_create(&r[1], NULL, reader, (void*)2);
+    pthread_create(&r[2], NULL, reader, (void*)3);
+    pthread_create(&w[1], NULL, writer, (void*)2);
+    pthread_create(&r[3], NULL, reader, (void*)4);
+
+    for (int i = 0; i &lt; 4; i++) pthread_join(r[i], NULL);
+    for (int i = 0; i &lt; 2; i++) pthread_join(w[i], NULL);
+
+    pthread_mutex_destroy(&rw_mutex);
+    pthread_mutex_destroy(&count_mutex);
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li><code>if (reader_count == 1) pthread_mutex_lock(&rw_mutex)</code>: Reader pertama menyalakan gembok untuk seluruh kawanan pembaca berikutnya.</li>
+                <li><code>if (reader_count == 0) pthread_mutex_unlock(&rw_mutex)</code>: Hanya saat pembaca terakhir keluar, pintu dibuka kembali untuk Penulis (Writer).</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o rw readers_writers.c -lpthread && ./rw
+  [READER 1] Membaca data bernilai: 100 (Total Reader Aktif: 1)
+--> [WRITER 1] Mengubah nilai data menjadi: 150 (EKSKLUSIF)
+  [READER 2] Membaca data bernilai: 150 (Total Reader Aktif: 2)
+  [READER 3] Membaca data bernilai: 150 (Total Reader Aktif: 2)
+--> [WRITER 2] Mengubah nilai data menjadi: 200 (EKSKLUSIF)</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- CODE 10 -->
+        <article class="card" id="code10" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="color:var(--neon-pink);">10. Dining Philosophers (Pencegahan Deadlock) (`philosophers.c`)</h3>
+            <span class="badge" style="border-color:var(--neon-pink); color:var(--neon-pink);">DEADLOCK PREVENTION</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+            Implementasi masalah 5 Filsuf makan menggunakan strategi <em>Resource Ordering</em> (filsuf bernomor ganjil mengambil sumpit kanan terlebih dahulu) guna mematahkan kondisi Circular Wait secara matematis.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span>dining_philosophers.c</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;unistd.h&gt;
+
+#define NUM_PHILOSOPHERS 5
+
+pthread_mutex_t chopsticks[NUM_PHILOSOPHERS];
+
+void* philosopher(void* arg) {
+    long id = (long)arg;
+    int left_fork = id;
+    int right_fork = (id + 1) % NUM_PHILOSOPHERS;
+
+    // Berpikir sejenak
+    printf("[FILSUF %ld] Sedang merenung dan berpikir...\n", id);
+    usleep(100000);
+
+    // STRATEGI PENCEGAHAN DEADLOCK:
+    // Filsuf bernomor ganjil mengambil kanan dulu; genap mengambil kiri dulu
+    if (id % 2 == 0) {
+        pthread_mutex_lock(&chopsticks[left_fork]);
+        pthread_mutex_lock(&chopsticks[right_fork]);
+    } else {
+        pthread_mutex_lock(&chopsticks[right_fork]);
+        pthread_mutex_lock(&chopsticks[left_fork]);
+    }
+
+    // --- SESI MAKAN ---
+    printf("🍝 [FILSUF %ld] Sedang makan lezat dengan sumpit (%d & %d)!\n", id, left_fork, right_fork);
+    usleep(200000);
+
+    // Melepaskan sumpit
+    pthread_mutex_unlock(&chopsticks[left_fork]);
+    pthread_mutex_unlock(&chopsticks[right_fork]);
+
+    printf("[FILSUF %ld] Selesai makan, meletakkan kedua sumpit.\n", id);
+    return NULL;
+}
+
+int main() {
+    pthread_t phils[NUM_PHILOSOPHERS];
+
+    for (int i = 0; i &lt; NUM_PHILOSOPHERS; i++) {
+        pthread_mutex_init(&chopsticks[i], NULL);
+    }
+
+    for (long i = 0; i &lt; NUM_PHILOSOPHERS; i++) {
+        pthread_create(&phils[i], NULL, philosopher, (void*)i);
+    }
+
+    for (int i = 0; i &lt; NUM_PHILOSOPHERS; i++) {
+        pthread_join(phils[i], NULL);
+    }
+
+    for (int i = 0; i &lt; NUM_PHILOSOPHERS; i++) {
+        pthread_mutex_destroy(&chopsticks[i]);
+    }
+
+    printf("✅ SUKSES: Seluruh 5 filsuf selesai makan tanpa terjebak Deadlock!\n");
+    return 0;
+}</code></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-green); margin-bottom:6px;">🔍 Penjelasan Baris Kunci:</h5>
+              <ul style="font-size:12px; line-height:1.7; padding-left:14px;">
+                <li>Jika semua filsuf mengambil sumpit kiri secara serempak, timbul <strong>Circular Wait</strong> di mana masing-masing menahan 1 sumpit dan menunggu sumpit kanan tetangga (Deadlock total).</li>
+                <li>Dengan membuat filsuf ganjil mengambil sumpit berurutan sebaliknya (kanan dulu baru kiri), rantai sirkular terputus dan minimal satu filsuf dipastikan berhasil meraih 2 sumpit sekaligus untuk makan.</li>
+              </ul>
+            </div>
+            <div class="card" style="background:rgba(0,0,0,0.2);">
+              <h5 style="color:var(--neon-cyan); margin-bottom:6px;">📟 Expected Terminal Output:</h5>
+              <pre style="font-family:var(--font-code); font-size:11px; color:var(--neon-green); line-height:1.6;">$ gcc -o phils dining_philosophers.c -lpthread && ./phils
+[FILSUF 0] Sedang merenung dan berpikir...
+[FILSUF 1] Sedang merenung dan berpikir...
+🍝 [FILSUF 0] Sedang makan lezat dengan sumpit (0 & 1)!
+🍝 [FILSUF 2] Sedang makan lezat dengan sumpit (2 & 3)!
+[FILSUF 0] Selesai makan, meletakkan kedua sumpit.
+🍝 [FILSUF 1] Sedang makan lezat dengan sumpit (1 & 2)!
+✅ SUKSES: Seluruh 5 filsuf selesai makan tanpa terjebak Deadlock!</pre>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll ke atas">↑</button>
+  <footer class="site-footer">
+    <div><span class="footer-brand">StudyHub SOC v2.0</span> — Operating Systems POSIX Code Lab</div>
+    <div>BINUS Cyber Security UTS Prep &bull; All Rights Reserved</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+</html>

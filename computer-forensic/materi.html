@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Computer Forensic & DFIR — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--orange), var(--neon-pink));">🔍</div>
+        <div>
+          <div class="logo-text">DFIR<span style="color:var(--orange)">.Theory</span></div>
+          <span class="logo-sub">PROCEDURES & LEGAL</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link active"><span class="nav-icon">📚</span> Materi DFIR & CoC</a>
+        <a href="study-case.html" class="nav-link"><span class="nav-icon">💼</span> 10 Forensic Cases</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Daftar Bab</div>
+        <a href="#bab1" class="nav-link"><span class="nav-icon">⚖️</span> 1. DFIR & ISO/IEC 27037</a>
+        <a href="#bab2" class="nav-link"><span class="nav-icon">📋</span> 2. Chain of Custody Form</a>
+        <a href="#bab3" class="nav-link"><span class="nav-icon">⏱️</span> 3. Order of Volatility</a>
+        <a href="#bab4" class="nav-link"><span class="nav-icon">💾</span> 4. Imaging & Preservation</a>
+        <a href="#bab5" class="nav-link"><span class="nav-icon">🛠️</span> 5. Forensic Toolkits</a>
+        <a href="#bab6" class="nav-link"><span class="nav-icon">🕵️</span> 6. Anti-Forensics & Hukum</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Computer Forensic</a>
+          <span class="sep">/</span>
+          <span class="current">Materi DFIR & Chain of Custody</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> STANDAR INTERNASIONAL FORENSIK DIGITAL</div>
+          <h1 class="glitch-text" data-text="Digital Forensics & IR">Digital Forensics <span class="highlight" style="color:var(--orange)">& IR</span></h1>
+          <p style="color:var(--text-secondary); max-width:750px;">
+            Panduan komprehensif forensik digital: kerangka kerja investigasi (NIST SP 800-86), formulir & integritas Chain of Custody (CoC), urutan volatilitas data, analisis memori & disk, teknik anti-forensik, serta aspek legal di mata hukum.
+          </p>
+        </header>
+
+        <!-- BAB 1 -->
+        <section class="materi-section" id="bab1">
+          <h2>1. Definisi & Kerangka Kerja DFIR (NIST SP 800-86)</h2>
+          <p>
+            <strong>Digital Forensics</strong> adalah penerapan prinsip-prinsip sains dan hukum untuk menemukan, mengekstraksi, mendokumentasikan, dan menganalisis bukti digital dari sistem komputer sedemikian rupa sehingga valid dan dapat diterima sebagai alat bukti sah di pengadilan (<em>admissible in court</em>).
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <h4 style="color:var(--orange);">4 Fase Metodologi NIST SP 800-86:</h4>
+              <ol style="font-size:13px; line-height:1.8;">
+                <li><strong>Collection (Pengumpulan):</strong> Mengidentifikasi, mengamankan, dan mengakuisisi data dari berbagai sumber bukti potensial sesuai urutan volatilitas.</li>
+                <li><strong>Examination (Pemeriksaan):</strong> Memproses data biner dalam jumlah masif menggunakan tool forensik otomatis guna mengekstraksi artefak penting.</li>
+                <li><strong>Analysis (Analisa):</strong> Mengkorelasikan artefak yang ditemukan untuk menjawab pertanyaan 5W1H (Who, What, When, Where, Why, How).</li>
+                <li><strong>Reporting (Pelaporan):</strong> Menyusun laporan forensik tertulis yang objektif, jelas, dan dapat dipahami oleh jaksa, hakim, atau manajemen eksekutif.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--neon-green);">Prinsip ISO/IEC 27037:</h4>
+              <ul style="font-size:13px; line-height:1.8;">
+                <li><strong>Auditability:</strong> Seluruh tahapan investigasi wajib dicatat rinci sehingga pihak independen dapat mereproduksi hasil yang sama persis (reproducibility).</li>
+                <li><strong>Repeatability:</strong> Alat dan metode yang digunakan harus menghasilkan output identik jika diulang pada bukti yang sama.</li>
+                <li><strong>Justifiability:</strong> Setiap tindakan yang diambil investigator (misal mematikan server atau melakukan live memory capture) harus memiliki landasan teknis yang dapat dipertanggungjawabkan.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- BAB 2 -->
+        <section class="materi-section" id="bab2">
+          <h2>2. Chain of Custody (Rantai Bukti Digital)</h2>
+          <div class="highlight-box orange">
+            <h4>Definisi Chain of Custody (CoC):</h4>
+            <p>
+              Dokumen kronologis resmi yang mencatat secara tanpa celah alur pemindahan kepemilikan, lokasi penyimpanan, tanggal/waktu, alasan pengambilan, dan pihak yang menangani barang bukti digital sejak pertama kali disita di TKP hingga dihadirkan di persidangan. Cacat pada formulir CoC dapat menyebabkan bukti digital <strong>dinyatakan gugur / tidak sah</strong> di pengadilan.
+            </p>
+          </div>
+
+          <h3>Format Baku Formulir Chain of Custody</h3>
+          <table class="cyber-table">
+            <thead>
+              <tr><th>Field Dokumen</th><th>Data yang Wajib Diisi</th><th>Contoh Isian Forensik</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Case Number</td><td>Nomor register kasus resmi kepolisian / SOC incident</td><td><code>CIRT-2026-OCT-0941</code></td></tr>
+              <tr><td>Evidence ID / Barcode</td><td>Kode unik penomoran barang bukti fisik</td><td><code>ITEM-SSD-01</code></td></tr>
+              <tr><td>Item Description</td><td>Merek, model, nomor seri (Serial Number), kapasitas penyimpanan</td><td>Samsung 980 PRO NVMe SSD 1TB (S/N: S5GXNX0T123456)</td></tr>
+              <tr><td>Acquisition Source</td><td>Lokasi fisik tepat bukti disita & nama pemilik laptop</td><td>Laptop Lenovo ThinkPad X1 Ruang Direksi Lantai 3</td></tr>
+              <tr><td>Cryptographic Hash Initial</td><td>Nilai hash MD5 dan SHA-256 yang dihitung saat akuisisi</td><td>SHA256: <code>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</code></td></tr>
+              <tr><td>Acquired By</td><td>Nama lengkap, NIP/ID, dan jabatan investigator</td><td>Bripka Momo Chan, S.Kom, CHFI (Forensic Lead)</td></tr>
+              <tr><td>Transfer Log</td><td>Tanggal/Jam, Dilepas oleh, Diterima oleh, Alasan perpindahan bukti</td><td>16-Okt-2026 14:30 WIB | Dari: Investigator | Ke: Ruang Bukti Kering Bersuhu Khusus | Alasan: Penyimpanan Aman</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- BAB 3 -->
+        <section class="materi-section" id="bab3">
+          <h2>3. Order of Volatility (RFC 3227)</h2>
+          <p>
+            Bukti digital memiliki umur simpan yang berbeda-beda sebelum hilang akibat reboot, shutdown, atau tertimpa data baru. RFC 3227 menginstruksikan investigator untuk mengakuisisi bukti dari yang paling mudah menguap (volatile) ke yang paling persisten:
+          </p>
+          <table class="stack-table">
+            <thead>
+              <tr><th>Prioritas</th><th>Jenis Data / Lokasi</th><th>Tingkat Volatilitas</th><th>Alat Akuisisi Standar</th></tr>
+            </thead>
+            <tbody>
+              <tr style="color:var(--neon-pink); font-weight:bold;">
+                <td>1 (Tertinggi)</td>
+                <td>CPU Registers, CPU Cache memory</td>
+                <td>Pecahan mikrodetik (hilang instan)</td>
+                <td>Hardware JTAG / In-circuit debugger</td>
+              </tr>
+              <tr style="color:var(--orange);">
+                <td>2</td>
+                <td>RAM (Random Access Memory), Routing tables, ARP Cache, Proses berjalan, Koneksi jaringan aktif</td>
+                <td>Detik hingga menit (hilang saat power off)</td>
+                <td>DumpIt, LiME (Linux), FTK Imager CLI, WinPmem</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Data Temp / Swap File, Virtual Memory file (pagefile.sys, hiberfil.sys)</td>
+                <td>Dapat tertimpa saat reboot</td>
+                <td>Live forensics parser</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Hard Disk Drive (HDD), Solid State Drive (SSD), Flash memory</td>
+                <td>Persisten (berbulan-bulan)</td>
+                <td>Hardware Write Blocker + Guymager / Tableau / FTK</td>
+              </tr>
+              <tr>
+                <td>5 (Terendah)</td>
+                <td>Log jarak jauh (Remote SIEM, Splunk), Media tape backup kaset, Printout fisik</td>
+                <td>Sangat persisten</td>
+                <td>API Log collector, WORM Storage (Write Once Read Many)</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- BAB 4 -->
+        <section class="materi-section" id="bab4">
+          <h2>4. Evidence Preservation & Forensic Imaging</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3 style="color:var(--neon-green);">Hardware Write Blocker (Wajib!)</h3>
+              <p style="font-size:13px; line-height:1.7;">
+                Ketika menghubungkan disk tersangka ke workstation forensik, <strong>Hardware Write Blocker</strong> wajib disisipkan di antara disk tersangka dan komputer analisis. Write Blocker meneruskan sinyal baca (Read commands) namun mencegat dan membuang semua sinyal tulis (Write commands) agar sistem operasi analis tidak mengubah satu bit pun timestamp file (MACB timestamps).
+              </p>
+            </div>
+            <div class="card">
+              <h3 style="color:var(--neon-cyan);">Format Image: RAW DD vs E01 (Expert Witness)</h3>
+              <ul style="font-size:13px; line-height:1.7;">
+                <li><strong>RAW / DD (Bit-stream):</strong> Salinan sektor demi sektor tanpa kompresi dan tanpa metadata header. Universal, dapat dibuka oleh tool apapun.</li>
+                <li><strong>E01 (EnCase Image File Format):</strong> Standar de-facto industri forensik. Menyimpan data disk dengan kompresi, mencatat metadata kasus (investigator, case name, serial number), dan menyertakan checksum CRC per 64 sektor serta hash SHA-1/MD5 internal otomatis.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- BAB 5 -->
+        <section class="materi-section" id="bab5">
+          <h2>5. Forensic Toolkits & Analisis Artefak Sistem</h2>
+          <table class="cyber-table">
+            <thead>
+              <tr><th>Software Tool</th><th>Kategori Forensik</th><th>Peran & Artefak Utama yang Ditelusuri</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Volatility 3</code></td>
+                <td>Memory (RAM) Forensics</td>
+                <td>Menemukan proses tersembunyi (<code>windows.pslist</code> vs <code>windows.psscan</code>), inject DLL malware (<code>windows.malfind</code>), koneksi C2 server (<code>windows.netscan</code>).</td>
+              </tr>
+              <tr>
+                <td><code>Autopsy / SleuthKit</code></td>
+                <td>Disk File System Forensics</td>
+                <td>Mengurai NTFS Master File Table (<code>$MFT</code>), memulihkan file terhapus (carving), memeriksa UserAssist, Prefetch (<code>.pf</code>), dan Web Browsing History.</td>
+              </tr>
+              <tr>
+                <td><code>Wireshark / TShark</code></td>
+                <td>Network Forensics</td>
+                <td>Analisa packet capture (PCAP): mendeteksi DNS tunneling, beaconing HTTP, ekstraksi credential plaintext (FTP/Telnet), dan ekstraksi file executable dari aliran TCP.</td>
+              </tr>
+              <tr>
+                <td><code>FTK Imager</code></td>
+                <td>Evidence Acquisition</td>
+                <td>Membuat bit-stream image (E01/DD) fisik dan logikal, verifikasi integritas hash MD5 & SHA-1, pratinjau struktur direktori tanpa merusak media.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- BAB 6 -->
+        <section class="materi-section" id="bab6">
+          <h2>6. Teknik Anti-Forensics & Aspek Hukum Digital Evidence</h2>
+          <div class="highlight-box purple">
+            <h4>Metode Anti-Forensik yang Kerap Dihadapi:</h4>
+            <ul>
+              <li><strong>Timestomping:</strong> Memodifikasi atribut waktu MACB (Modified, Accessed, Created, Born) di <code>$STANDARD_INFORMATION</code> NTFS untuk mengelabui garis waktu (timeline). Dideteksi dengan membandingkannya terhadap atribut waktu di <code>$FILE_NAME</code> attribute yang tidak terpengaruh API biasa.</li>
+              <li><strong>Slack Space & Unallocated Space Hiding:</strong> Menyembunyikan payload rahasia di sisa ruang cluster yang tidak terpakai oleh file kecil.</li>
+              <li><strong>Secure Wiping:</strong> Menimpa sektor disk dengan pola acak (DoD 5220.22-M 7-pass wiping) yang membuat data tidak dapat dipulihkan bahkan dengan mikroskop magnetik.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — Digital Forensics & IR Compendium</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

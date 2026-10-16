@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer Forensic & DFIR — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--orange), var(--neon-pink));">🔍</div>
+        <div>
+          <div class="logo-text">DFIR<span style="color:var(--orange)">.Ops</span></div>
+          <span class="logo-sub">COMP6838001</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link active"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link"><span class="nav-icon">📚</span> Materi DFIR & CoC</a>
+        <a href="study-case.html" class="nav-link"><span class="nav-icon">💼</span> 10 Forensic Cases</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Semua Matkul</div>
+        <a href="../reverse-engineering/index.html" class="nav-link"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link active"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current">Computer Forensic & DFIR</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 20px 0;">
+          <div class="hero-tag"><span class="dot"></span> COMP6838001 • CIRT DIGITAL INVESTIGATION</div>
+          <h1 class="glitch-text" data-text="Computer Forensic">Computer <span class="highlight" style="color:var(--orange)">Forensic</span></h1>
+          <p style="color:var(--text-secondary); margin-top:8px; max-width:750px;">
+            Digital Forensics & Incident Response (DFIR): Metodologi pengumpulan bukti digital berstandar ISO/IEC 27037, integritas rantai bukti (Chain of Custody), analisa artefak disk & RAM (Volatility), dan 10 investigasi studi kasus insiden siber.
+          </p>
+          <div style="display:flex; gap:12px; margin-top:20px;">
+            <a href="materi.html" class="btn btn-primary" style="background:linear-gradient(135deg, var(--orange), var(--neon-pink)); color:#fff;">📚 Pelajari Teori & Prosedur CoC</a>
+            <a href="study-case.html" class="btn btn-outline" style="border-color:var(--orange); color:var(--orange);">💼 10 Investigasi Kasus Nyata</a>
+          </div>
+        </header>
+
+        <!-- CHECKLIST PROGRESS -->
+        <section class="card" style="margin-bottom:32px;">
+          <h3 style="font-size:16px; margin-bottom:12px; color:var(--orange);">🎯 Target Capaian UTS Computer Forensic</h3>
+          <div class="grid-2">
+            <label class="progress-check" data-key="cf_dfir_phases">
+              <input type="checkbox">
+              <span>Fase DFIR NIST SP 800-86: Collection, Examination, Analysis, Reporting</span>
+            </label>
+            <label class="progress-check" data-key="cf_coc">
+              <input type="checkbox">
+              <span>Prosedur Chain of Custody & Standar ISO/IEC 27037 (Evidence Integrity)</span>
+            </label>
+            <label class="progress-check" data-key="cf_order_volatility">
+              <input type="checkbox">
+              <span>Order of Volatility: CPU registers/cache → RAM → Disk → Removable media</span>
+            </label>
+            <label class="progress-check" data-key="cf_imaging_hashing">
+              <input type="checkbox">
+              <span>Teknik Bit-Stream Imaging (E01, RAW DD) & Verifikasi Hash (MD5, SHA-256)</span>
+            </label>
+            <label class="progress-check" data-key="cf_memory_volatility">
+              <input type="checkbox">
+              <span>Analisis Memori RAM dengan Volatility 3 (pslist, malfind, netscan)</span>
+            </label>
+            <label class="progress-check" data-key="cf_anti_forensics">
+              <input type="checkbox">
+              <span>Teknik Anti-Forensics: Timestomping, Data Hiding, Slack Space, Obfuscation</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- MODUL CARDS -->
+        <div class="grid-2">
+          <div class="card">
+            <h3 style="color:var(--orange); margin-bottom:8px;">📚 Diktat Teori & Metodologi DFIR</h3>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+              Memahami kerangka kerja digital forensik, formulir Chain of Custody resmi, prinsip penanganan barang bukti (Write Blocker), analisis NTFS (MFT, $LogFile), dan aspek legal peradilan.
+            </p>
+            <a href="materi.html" class="btn btn-sm btn-outline">Buka Materi DFIR →</a>
+          </div>
+
+          <div class="card">
+            <h3 style="color:var(--neon-pink); margin-bottom:8px;">💼 10 Investigasi Studi Kasus Skenario UTS</h3>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+              10 skenario lengkap (Ransomware, Data Exfiltration, Insider Threat, Phishing, Web Hacking, SQLi, Crypto Theft, USB Stager, Email Forensics, Mobile Extraction) dengan metodologi response bertahap.
+            </p>
+            <a href="study-case.html" class="btn btn-sm btn-outline">Buka 10 Studi Kasus →</a>
+          </div>
+        </div>
+
+        <!-- QUIZ CONTAINER -->
+        <section style="margin-top:40px;">
+          <h2 style="font-size:18px; margin-bottom:16px; color:var(--orange);">⚡ Kuis Interaktif Computer Forensic</h2>
+          <div id="quiz-forensic-root"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — Computer Forensic Module</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="js/quiz-forensic.js"></script>
+</body>
+</html>

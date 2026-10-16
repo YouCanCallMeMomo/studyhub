@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10 Soal Assembly ke C + Stack Memory Visual — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">📝</div>
+        <div>
+          <div class="logo-text">ASM<span style="color:var(--neon-green)">→C</span></div>
+          <span class="logo-sub">10 DRILL PROBLEMS</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Ringkasan Materi</a>
+        <a href="cheatsheet.html" class="nav-link"><span class="nav-icon">📜</span> Assembly Cheatsheet</a>
+        <a href="soal-latihan.html" class="nav-link active"><span class="nav-icon">📝</span> 10 Soal ASM→C</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Daftar Soal</div>
+        <a href="#soal1" class="nav-link"><span class="nav-icon">1️⃣</span> Soal 1: x86 Simple Math</a>
+        <a href="#soal2" class="nav-link"><span class="nav-icon">2️⃣</span> Soal 2: x86 If-Else Logic</a>
+        <a href="#soal3" class="nav-link"><span class="nav-icon">3️⃣</span> Soal 3: x86 While Loop</a>
+        <a href="#soal4" class="nav-link"><span class="nav-icon">4️⃣</span> Soal 4: x86 For Loop Sum</a>
+        <a href="#soal5" class="nav-link"><span class="nav-icon">5️⃣</span> Soal 5: x86 Function Call</a>
+        <a href="#soal6" class="nav-link"><span class="nav-icon">6️⃣</span> Soal 6: x64 Pointer / Swap</a>
+        <a href="#soal7" class="nav-link"><span class="nav-icon">7️⃣</span> Soal 7: x64 Array Indexing</a>
+        <a href="#soal8" class="nav-link"><span class="nav-icon">8️⃣</span> Soal 8: x64 Struct Access</a>
+        <a href="#soal9" class="nav-link"><span class="nav-icon">9️⃣</span> Soal 9: x64 Recursive Fib</a>
+        <a href="#soal10" class="nav-link"><span class="nav-icon">🔟</span> Soal 10: x64 Bitwise Ops</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Reverse Engineering</a>
+          <span class="sep">/</span>
+          <span class="current">10 Soal ASM→C + Stack Visual</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> DECOMPILATION LABORATORY</div>
+          <h1 class="glitch-text" data-text="10 Soal ASM ke C">10 Soal <span class="highlight">ASM ke C</span></h1>
+          <p style="color:var(--text-secondary); max-width:750px;">
+            5 Soal 32-bit (x86) dan 5 Soal 64-bit (x64) standar ujian UTS. Setiap soal dilengkapi analisis langkah demi langkah dari nol (identifikasi offset lokal, bukan menebak nama), visualisasi tabel stack memory, dan rekonstruksi kode bahasa C final.
+          </p>
+        </header>
+
+        <!-- ==================== SOAL 1 ==================== -->
+        <article class="soal-card" id="soal1">
+          <div class="soal-header">
+            <div class="soal-number">01</div>
+            <div>
+              <div class="soal-title">Soal 1: Aritmetika Sederhana & Deklarasi Variabel (x86 32-bit)</div>
+              <div class="soal-sub">Tipe: Aritmetika Dasar • Arsitektur: IA-32 Intel Syntax</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86 Assembly (32-bit)</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">push    ebp
+mov     ebp, esp
+sub     esp, 16
+mov     DWORD PTR [ebp-4], 15
+mov     DWORD PTR [ebp-8], 25
+mov     edx, DWORD PTR [ebp-4]
+mov     eax, DWORD PTR [ebp-8]
+add     eax, edx
+mov     DWORD PTR [ebp-12], eax
+mov     eax, DWORD PTR [ebp-12]
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Langkah 1: Identifikasi Prolog & Alokasi Memori Stack</h4>
+            <p>
+              Instruksi <code>push ebp; mov ebp, esp</code> membentuk basis stack frame baru. Instruksi <code>sub esp, 16</code> memesan memori 16 byte pada stack untuk variabel lokal.
+            </p>
+            <h4>Langkah 2: Tracking Offset Stack & Nilai</h4>
+            <table class="stack-table">
+              <thead><tr><th>Offset Relatif (Address)</th><th>Ukuran</th><th>Nilai Saat Ini</th><th>Inferensi Variabel C</th></tr></thead>
+              <tbody>
+                <tr><td><code>[ebp - 4]</code></td><td>4 Byte (DWORD)</td><td><code>15 (0x0000000F)</code></td><td><code>int a = 15;</code></td></tr>
+                <tr><td><code>[ebp - 8]</code></td><td>4 Byte (DWORD)</td><td><code>25 (0x00000019)</code></td><td><code>int b = 25;</code></td></tr>
+                <tr><td><code>[ebp - 12]</code></td><td>4 Byte (DWORD)</td><td><code>a + b = 40 (0x00000028)</code></td><td><code>int c = a + b;</code></td></tr>
+                <tr><td><code>[ebp]</code></td><td>4 Byte</td><td>Saved EBP</td><td>Frame Pointer Caller</td></tr>
+              </tbody>
+            </table>
+            <h4>Langkah 3: Analisis Instruksi Body & Epilog</h4>
+            <ul>
+              <li><code>mov edx, [ebp-4]</code> menyalin nilai 15 ke EDX.</li>
+              <li><code>mov eax, [ebp-8]</code> menyalin nilai 25 ke EAX.</li>
+              <li><code>add eax, edx</code> menghitung <code>25 + 15 = 40</code>, disimpan di EAX.</li>
+              <li><code>mov [ebp-12], eax</code> menyimpan hasil penjumlahan ke <code>[ebp-12]</code>.</li>
+              <li><code>mov eax, [ebp-12]</code> memuat hasil ke EAX sebagai return value sebelum <code>leave; ret</code>.</li>
+            </ul>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int soal1() {
+    int a = 15;
+    int b = 25;
+    int c = a + b;
+    return c;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 2 ==================== -->
+        <article class="soal-card" id="soal2">
+          <div class="soal-header">
+            <div class="soal-number">02</div>
+            <div>
+              <div class="soal-title">Soal 2: Percabangan Kondisional If-Else (x86 32-bit)</div>
+              <div class="soal-sub">Tipe: Control Flow (CMP & JLE) • Arsitektur: IA-32</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86 Assembly (32-bit)</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">push    ebp
+mov     ebp, esp
+sub     esp, 16
+mov     DWORD PTR [ebp-4], 10
+mov     DWORD PTR [ebp-8], 20
+mov     eax, DWORD PTR [ebp-4]
+cmp     eax, DWORD PTR [ebp-8]
+jle     .L2
+mov     DWORD PTR [ebp-12], 100
+jmp     .L3
+.L2:
+mov     DWORD PTR [ebp-12], 200
+.L3:
+mov     eax, DWORD PTR [ebp-12]
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Langkah 1: Analisis Offset Variabel</h4>
+            <table class="stack-table">
+              <thead><tr><th>Offset Relatif</th><th>Nilai Awal</th><th>Inferensi Variabel C</th></tr></thead>
+              <tbody>
+                <tr><td><code>[ebp - 4]</code></td><td>10</td><td><code>int x = 10;</code></td></tr>
+                <tr><td><code>[ebp - 8]</code></td><td>20</td><td><code>int y = 20;</code></td></tr>
+                <tr><td><code>[ebp - 12]</code></td><td>Uninitialized (Nantinya 100 atau 200)</td><td><code>int result;</code></td></tr>
+              </tbody>
+            </table>
+            <h4>Langkah 2: Evaluasi Alur Kontrol Percabangan</h4>
+            <ul>
+              <li><code>mov eax, [ebp-4]</code> : memuat <code>x</code> ke EAX.</li>
+              <li><code>cmp eax, [ebp-8]</code> : membandingkan <code>x</code> dengan <code>y</code> (operasi <code>x - y</code>).</li>
+              <li><code>jle .L2</code> : Jump if Less or Equal (jika <code>x <= y</code>, lompat ke label <code>.L2</code>).</li>
+              <li>Jika kondisi <code>x <= y</code> SALAH (artinya <code>x > y</code>), alur berlanjut: <code>result = 100;</code> lalu <code>jmp .L3</code> (melewati blok else).</li>
+              <li>Di label <code>.L2</code>: <code>result = 200;</code>.</li>
+              <li>Di label <code>.L3</code>: Mengembalikan <code>result</code> melalui EAX.</li>
+            </ul>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int soal2() {
+    int x = 10;
+    int y = 20;
+    int result;
+    if (x > y) {
+        result = 100;
+    } else {
+        result = 200;
+    }
+    return result;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 3 ==================== -->
+        <article class="soal-card" id="soal3">
+          <div class="soal-header">
+            <div class="soal-number">03</div>
+            <div>
+              <div class="soal-title">Soal 3: Perulangan While Loop (x86 32-bit)</div>
+              <div class="soal-sub">Tipe: Looping • Arsitektur: IA-32</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86 Assembly (32-bit)</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">push    ebp
+mov     ebp, esp
+sub     esp, 16
+mov     DWORD PTR [ebp-4], 1
+mov     DWORD PTR [ebp-8], 10
+jmp     .L_COND
+.L_BODY:
+mov     eax, DWORD PTR [ebp-4]
+add     eax, eax
+mov     DWORD PTR [ebp-4], eax
+.L_COND:
+cmp     DWORD PTR [ebp-4], 100
+jle     .L_BODY
+mov     eax, DWORD PTR [ebp-4]
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Langkah 1: Identifikasi Pola Perulangan (Jump to Condition)</h4>
+            <p>Pola compiler GCC standar saat mengoptimasi perulangan: inisialisasi variabel, lompat langsung ke pengecekan kondisi (<code>jmp .L_COND</code>). Jika kondisi terpenuhi (<code>jle .L_BODY</code>), ulangi tubuh loop.</p>
+            <table class="stack-table">
+              <thead><tr><th>Offset Relatif</th><th>Nilai Awal</th><th>Inferensi Variabel C</th></tr></thead>
+              <tbody>
+                <tr><td><code>[ebp - 4]</code></td><td>1</td><td><code>int n = 1;</code></td></tr>
+                <tr><td><code>[ebp - 8]</code></td><td>10</td><td>Variabel tidak digunakan (dead code/unused <code>int dummy = 10;</code>)</td></tr>
+              </tbody>
+            </table>
+            <h4>Langkah 2: Operasi di dalam Body Loop</h4>
+            <p><code>add eax, eax</code> : menggandakan nilai EAX (ekuivalen <code>n = n * 2</code> atau <code>n += n</code>).</p>
+            <p>Kondisi keluar: loop berjalan selama <code>n <= 100</code>.</p>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int soal3() {
+    int n = 1;
+    while (n <= 100) {
+        n = n * 2; // atau n += n;
+    }
+    return n;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 4 ==================== -->
+        <article class="soal-card" id="soal4">
+          <div class="soal-header">
+            <div class="soal-number">04</div>
+            <div>
+              <div class="soal-title">Soal 4: Perulangan For Loop Akumulasi Total (x86 32-bit)</div>
+              <div class="soal-sub">Tipe: For Loop & Accumulator • Arsitektur: IA-32</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86 Assembly (32-bit)</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">push    ebp
+mov     ebp, esp
+sub     esp, 16
+mov     DWORD PTR [ebp-4], 0        ; total = 0
+mov     DWORD PTR [ebp-8], 1        ; i = 1
+jmp     .L_FOR_TEST
+.L_FOR_BODY:
+mov     eax, DWORD PTR [ebp-8]
+add     DWORD PTR [ebp-4], eax      ; total += i
+add     DWORD PTR [ebp-8], 1        ; i++
+.L_FOR_TEST:
+cmp     DWORD PTR [ebp-8], 10       ; compare i with 10
+jle     .L_FOR_BODY
+mov     eax, DWORD PTR [ebp-4]
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Tabel Stack Memory:</h4>
+            <table class="stack-table">
+              <thead><tr><th>Offset Stack</th><th>Nilai Inisial</th><th>Peran Variabel C</th></tr></thead>
+              <tbody>
+                <tr><td><code>[ebp - 4]</code></td><td>0</td><td><code>int total = 0;</code></td></tr>
+                <tr><td><code>[ebp - 8]</code></td><td>1</td><td><code>int i = 1;</code></td></tr>
+              </tbody>
+            </table>
+            <h4>Penjelasan Langkah Perulangan:</h4>
+            <ul>
+              <li>Inisialisasi <code>total = 0</code> dan counter <code>i = 1</code>.</li>
+              <li>Lompat ke <code>.L_FOR_TEST</code>: membandingkan <code>i</code> dengan <code>10</code>.</li>
+              <li>Jika <code>i <= 10</code>, eksekusi body: <code>total += i</code>, kemudian increment <code>i++</code>.</li>
+              <li>Ketika <code>i = 11</code>, kondisi <code>jle</code> gagal, keluar loop dan return <code>total</code>.</li>
+            </ul>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int soal4() {
+    int total = 0;
+    for (int i = 1; i <= 10; i++) {
+        total += i;
+    }
+    return total;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 5 ==================== -->
+        <article class="soal-card" id="soal5">
+          <div class="soal-header">
+            <div class="soal-number">05</div>
+            <div>
+              <div class="soal-title">Soal 5: Pemanggilan Fungsi Berargumen (x86 cdecl)</div>
+              <div class="soal-sub">Tipe: Function Call & Stack Parameter Passing • Arsitektur: IA-32</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86 Assembly (32-bit)</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">; --- Fungsi Pembantu: hitung(a, b) ---
+hitung:
+push    ebp
+mov     ebp, esp
+mov     edx, DWORD PTR [ebp+8]      ; argumen 1
+mov     eax, DWORD PTR [ebp+12]     ; argumen 2
+imul    eax, edx
+pop     ebp
+ret
+
+; --- Fungsi Utama: caller() ---
+caller:
+push    ebp
+mov     ebp, esp
+sub     esp, 16
+mov     DWORD PTR [ebp-4], 7
+mov     DWORD PTR [ebp-8], 6
+push    DWORD PTR [ebp-8]           ; push arg2 (6)
+push    DWORD PTR [ebp-4]           ; push arg1 (7)
+call    hitung
+add     esp, 8                      ; caller cleans up stack
+mov     DWORD PTR [ebp-12], eax
+mov     eax, DWORD PTR [ebp-12]
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Analisis Konvensi cdecl:</h4>
+            <p>Parameter didorong ke stack dari kanan ke kiri (<code>push [ebp-8]</code> lalu <code>push [ebp-4]</code>). Di dalam fungsi <code>hitung</code>:</p>
+            <ul>
+              <li><code>[ebp + 8]</code> merujuk pada argumen pertama (nilai 7).</li>
+              <li><code>[ebp + 12]</code> merujuk pada argumen kedua (nilai 6).</li>
+              <li><code>imul eax, edx</code> melakukan perkalian: <code>7 * 6 = 42</code>.</li>
+              <li>Setelah <code>call hitung</code>, perintah <code>add esp, 8</code> membersihkan 2 argumen (2 * 4 bytes) dari stack.</li>
+            </ul>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int hitung(int a, int b) {
+    return a * b;
+}
+
+int caller() {
+    int x = 7;
+    int y = 6;
+    int res = hitung(x, y);
+    return res;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 6 ==================== -->
+        <article class="soal-card" id="soal6">
+          <div class="soal-header">
+            <div class="soal-number">06</div>
+            <div>
+              <div class="soal-title">Soal 6: Pointer & Passing by Reference (x64 64-bit)</div>
+              <div class="soal-sub">Tipe: Memory Pointers (LEA & Registers) • Arsitektur: x86_64</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86_64 Assembly (Linux ABI)</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">; --- swap(int *p1, int *p2) ---
+swap:
+push    rbp
+mov     rbp, rsp
+mov     QWORD PTR [rbp-8], rdi      ; p1 (pointer 8-byte)
+mov     QWORD PTR [rbp-16], rsi     ; p2 (pointer 8-byte)
+mov     rax, QWORD PTR [rbp-8]
+mov     eax, DWORD PTR [rax]        ; temp = *p1
+mov     DWORD PTR [rbp-20], eax     ; simpan temp di stack
+mov     rax, QWORD PTR [rbp-16]
+mov     edx, DWORD PTR [rax]        ; edx = *p2
+mov     rax, QWORD PTR [rbp-8]
+mov     DWORD PTR [rax], edx        ; *p1 = *p2
+mov     rax, QWORD PTR [rbp-16]
+mov     edx, DWORD PTR [rbp-20]     ; edx = temp
+mov     DWORD PTR [rax], edx        ; *p2 = temp
+nop
+pop     rbp
+ret
+
+; --- main_test() ---
+main_test:
+push    rbp
+mov     rbp, rsp
+sub     rsp, 16
+mov     DWORD PTR [rbp-4], 100      ; a = 100
+mov     DWORD PTR [rbp-8], 200      ; b = 200
+lea     rdx, [rbp-8]
+lea     rax, [rbp-4]
+mov     rsi, rdx                    ; arg 2 = &b
+mov     rdi, rax                    ; arg 1 = &a
+call    swap
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Langkah 1: Identifikasi Passing Parameter via Register RDI & RSI</h4>
+            <p>Pada System V AMD64, <code>rdi</code> menampung alamat <code>&a</code> dan <code>rsi</code> menampung alamat <code>&b</code> yang dihasilkan oleh instruksi <code>lea</code>.</p>
+            <h4>Langkah 2: Tracking Pointer Dereferencing</h4>
+            <ul>
+              <li><code>mov rax, [rbp-8]</code> diikuti <code>mov eax, [rax]</code> : membaca nilai integer yang ditunjuk oleh pointer <code>p1</code> (dereference <code>*p1</code>).</li>
+              <li><code>DWORD PTR [rbp-20]</code> menyimpan nilai sementara (<code>int temp = *p1</code>).</li>
+              <li><code>*p1 = *p2;</code> dan <code>*p2 = temp;</code>. Ini adalah algoritma penukaran nilai (swap) menggunakan pointer.</li>
+            </ul>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">void swap(int *p1, int *p2) {
+    int temp = *p1;
+    *p1 = *p2;
+    *p2 = temp;
+}
+
+void main_test() {
+    int a = 100;
+    int b = 200;
+    swap(&a, &b);
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 7 ==================== -->
+        <article class="soal-card" id="soal7">
+          <div class="soal-header">
+            <div class="soal-number">07</div>
+            <div>
+              <div class="soal-title">Soal 7: Array Indexing & Akumulasi Elemen (x64 64-bit)</div>
+              <div class="soal-sub">Tipe: Array 1D & Scale Index Addressing • Arsitektur: x86_64</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86_64 Assembly</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">sum_array:
+push    rbp
+mov     rbp, rsp
+sub     rsp, 32
+; Inisialisasi array 4 elemen int arr[4] = {10, 20, 30, 40};
+mov     DWORD PTR [rbp-24], 10      ; arr[0]
+mov     DWORD PTR [rbp-20], 20      ; arr[1]
+mov     DWORD PTR [rbp-16], 30      ; arr[2]
+mov     DWORD PTR [rbp-12], 40      ; arr[3]
+mov     DWORD PTR [rbp-4], 0        ; sum = 0
+mov     DWORD PTR [rbp-8], 0        ; i = 0
+jmp     .L_ARR_COND
+.L_ARR_BODY:
+mov     eax, DWORD PTR [rbp-8]      ; eax = i
+cdqe                                ; convert dword to qword (rax = (long)i)
+mov     edx, DWORD PTR [rbp-24+rax*4] ; edx = arr[i] (scale 4 bytes)
+add     DWORD PTR [rbp-4], edx      ; sum += arr[i]
+add     DWORD PTR [rbp-8], 1        ; i++
+.L_ARR_COND:
+cmp     DWORD PTR [rbp-8], 3        ; i <= 3
+jle     .L_ARR_BODY
+mov     eax, DWORD PTR [rbp-4]      ; return sum
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Visualisasi Stack Array Memory:</h4>
+            <table class="stack-table">
+              <thead><tr><th>Address Offset</th><th>Nilai</th><th>Indeks Array</th></tr></thead>
+              <tbody>
+                <tr><td><code>[rbp - 24]</code></td><td>10 (0x0A)</td><td><code>arr[0]</code></td></tr>
+                <tr><td><code>[rbp - 20]</code></td><td>20 (0x14)</td><td><code>arr[1]</code></td></tr>
+                <tr><td><code>[rbp - 16]</code></td><td>30 (0x1E)</td><td><code>arr[2]</code></td></tr>
+                <tr><td><code>[rbp - 12]</code></td><td>40 (0x28)</td><td><code>arr[3]</code></td></tr>
+                <tr><td><code>[rbp - 8]</code></td><td>Counter i (0..4)</td><td><code>int i</code></td></tr>
+                <tr><td><code>[rbp - 4]</code></td><td>Total Sum</td><td><code>int sum</code></td></tr>
+              </tbody>
+            </table>
+            <h4>Analisis Formula SIB (Scale-Index-Base):</h4>
+            <p><code>[rbp-24 + rax*4]</code> : Base alamat array berada di <code>rbp-24</code>. Karena elemennya bertipe <code>int</code> (4 bytes), indeks <code>rax</code> dikalikan 4 untuk melompat antar elemen memori.</p>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int sum_array() {
+    int arr[4] = {10, 20, 30, 40};
+    int sum = 0;
+    for (int i = 0; i <= 3; i++) { // atau i < 4
+        sum += arr[i];
+    }
+    return sum;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 8 ==================== -->
+        <article class="soal-card" id="soal8">
+          <div class="soal-header">
+            <div class="soal-number">08</div>
+            <div>
+              <div class="soal-title">Soal 8: Akses Struct Data Members (x64 64-bit)</div>
+              <div class="soal-sub">Tipe: Struct Offset & Alignment • Arsitektur: x86_64</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86_64 Assembly</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">; Struct Student { int id; int score; char grade; }
+get_total:
+push    rbp
+mov     rbp, rsp
+sub     rsp, 16
+; inisialisasi struct di stack [rbp-16]
+mov     DWORD PTR [rbp-16], 101     ; s.id = 101 (offset 0)
+mov     DWORD PTR [rbp-12], 95      ; s.score = 95 (offset 4)
+mov     BYTE PTR [rbp-8], 65        ; s.grade = 'A' (ASCII 65, offset 8)
+mov     eax, DWORD PTR [rbp-12]     ; ambil score
+add     eax, 5                      ; score + 5 bonus
+leave
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Analisis Layout Memori Struct:</h4>
+            <table class="stack-table">
+              <thead><tr><th>Offset dari [rbp-16]</th><th>Ukuran</th><th>Nilai</th><th>Field Struct C</th></tr></thead>
+              <tbody>
+                <tr><td><code>+0 byte ([rbp-16])</code></td><td>4 byte int</td><td>101</td><td><code>int id;</code></td></tr>
+                <tr><td><code>+4 byte ([rbp-12])</code></td><td>4 byte int</td><td>95</td><td><code>int score;</code></td></tr>
+                <tr><td><code>+8 byte ([rbp-8])</code></td><td>1 byte char</td><td>'A' (65)</td><td><code>char grade;</code></td></tr>
+              </tbody>
+            </table>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">struct Student {
+    int id;
+    int score;
+    char grade;
+};
+
+int get_total() {
+    struct Student s;
+    s.id = 101;
+    s.score = 95;
+    s.grade = 'A';
+    return s.score + 5;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 9 ==================== -->
+        <article class="soal-card" id="soal9">
+          <div class="soal-header">
+            <div class="soal-number">09</div>
+            <div>
+              <div class="soal-title">Soal 9: Rekursi Fungsi Fibonacci (x64 64-bit)</div>
+              <div class="soal-sub">Tipe: Recursive Function • Arsitektur: x86_64</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86_64 Assembly</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">fib:
+push    rbp
+mov     rbp, rsp
+push    rbx                         ; callee-saved register
+sub     rsp, 24
+mov     DWORD PTR [rbp-20], edi     ; n (parameter pertama)
+cmp     DWORD PTR [rbp-20], 1
+jg      .L_RECURSE
+mov     eax, DWORD PTR [rbp-20]     ; return n jika n <= 1
+jmp     .L_END
+.L_RECURSE:
+mov     eax, DWORD PTR [rbp-20]
+sub     eax, 1
+mov     edi, eax                    ; arg1 = n - 1
+call    fib
+mov     ebx, eax                    ; simpan hasil fib(n-1) di ebx
+mov     eax, DWORD PTR [rbp-20]
+sub     eax, 2
+mov     edi, eax                    ; arg1 = n - 2
+call    fib
+add     eax, ebx                    ; hasil = fib(n-2) + fib(n-1)
+.L_END:
+add     rsp, 24
+pop     rbx
+pop     rbp
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Langkah Analisis Rekursi:</h4>
+            <ul>
+              <li><strong>Base Case:</strong> <code>cmp [rbp-20], 1; jg .L_RECURSE</code>. Jika <code>n <= 1</code>, langsung lompat ke akhir dan me-return <code>n</code>.</li>
+              <li><strong>Recursive Call 1:</strong> Memanggil <code>fib(n - 1)</code>, return value disimpan sementara di register <code>ebx</code>.</li>
+              <li><strong>Recursive Call 2:</strong> Memanggil <code>fib(n - 2)</code>, lalu menjumlahkan <code>eax = fib(n-2) + ebx</code>.</li>
+            </ul>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int fib(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fib(n - 1) + fib(n - 2);
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- ==================== SOAL 10 ==================== -->
+        <article class="soal-card" id="soal10">
+          <div class="soal-header">
+            <div class="soal-number">10</div>
+            <div>
+              <div class="soal-title">Soal 10: Operasi Bitwise & Masking Enkripsi (x64 64-bit)</div>
+              <div class="soal-sub">Tipe: Bit Manipulation (XOR, SHL, AND) • Arsitektur: x86_64</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">x86_64 Assembly</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-x86asm">crypto_func:
+push    rbp
+mov     rbp, rsp
+mov     DWORD PTR [rbp-4], edi      ; val
+mov     DWORD PTR [rbp-8], esi      ; key
+mov     eax, DWORD PTR [rbp-4]
+xor     eax, DWORD PTR [rbp-8]      ; eax = val ^ key
+shl     eax, 2                      ; eax = eax << 2
+and     eax, 0x000000FF             ; eax = eax & 0xFF
+pop     rbp
+ret</code></pre>
+          </div>
+          <button class="toggle-answer">🔽 Lihat Analisis Step-by-Step & Jawaban C</button>
+          <div class="answer-section">
+            <h4>Analisis Operasi Bitwise:</h4>
+            <ul>
+              <li><code>rdi</code> menampung argumen 1 (<code>val</code>), disimpan di <code>[rbp-4]</code>.</li>
+              <li><code>rsi</code> menampung argumen 2 (<code>key</code>), disimpan di <code>[rbp-8]</code>.</li>
+              <li><code>xor eax, [rbp-8]</code> : Bitwise XOR <code>val ^ key</code>.</li>
+              <li><code>shl eax, 2</code> : Bitwise Shift Left sebanyak 2 bit <code>(val ^ key) << 2</code>.</li>
+              <li><code>and eax, 0xFF</code> : Bitwise AND dengan masker 8-bit (0xFF) <code>((val ^ key) << 2) & 0xFF</code>.</li>
+            </ul>
+            <h4>Kode C Final:</h4>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">C Code</span><button class="copy-btn">Copy</button></div>
+              <pre><code class="language-c">int crypto_func(int val, int key) {
+    int res = (val ^ key) << 2;
+    return res & 0xFF;
+    // atau ringkas: return ((val ^ key) << 2) & 0xFF;
+}</code></pre>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — 10 Soal Assembly ke C</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

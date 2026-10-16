@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Fundamental Blockchain — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--neon-green), var(--neon-cyan));">⛓️</div>
+        <div>
+          <div class="logo-text">Block<span style="color:var(--neon-green)">.Theory</span></div>
+          <span class="logo-sub">FUNDAMENTAL & SECURITY</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link active"><span class="nav-icon">📚</span> Teori Fundamental</a>
+        <a href="solidity-cheatsheet.html" class="nav-link"><span class="nav-icon">📜</span> Solidity Cheatsheet</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Daftar Topik</div>
+        <a href="#topik1" class="nav-link"><span class="nav-icon">🔐</span> 1. SHA-256 & Merkle Tree</a>
+        <a href="#topik2" class="nav-link"><span class="nav-icon">🤝</span> 2. Mekanisme Konsensus</a>
+        <a href="#topik3" class="nav-link"><span class="nav-icon">⛏️</span> 3. Mining & Halving</a>
+        <a href="#topik4" class="nav-link"><span class="nav-icon">⚙️</span> 4. Arsitektur EVM</a>
+        <a href="#topik5" class="nav-link"><span class="nav-icon">💸</span> 5. DeFi Fundamental</a>
+        <a href="#topik6" class="nav-link"><span class="nav-icon">🛡️</span> 6. Web3 Security Holes</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Blockchain</a>
+          <span class="sep">/</span>
+          <span class="current">Materi Fundamental</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> UTS THEORY COMPENDIUM</div>
+          <h1 class="glitch-text" data-text="Materi Teori Blockchain">Materi Teori <span class="highlight" style="color:var(--neon-green)">Blockchain</span></h1>
+          <p style="color:var(--text-secondary); max-width:750px;">
+            Diktat komprehensif teori UTS: prinsip kriptografi desentralisasi, hashing SHA-256, struktur blok, pohon Merkle, perbandingan konsensus, ekosistem Ethereum EVM, dan analisis kerentanan smart contract.
+          </p>
+        </header>
+
+        <!-- TOPIK 1 -->
+        <section class="materi-section" id="topik1">
+          <h2>1. Kriptografi Hashing SHA-256 & Merkle Tree</h2>
+          <p>
+            Blockchain adalah buku besar terdistribusi (Distributed Ledger Technology / DLT) yang tersusun atas rantai blok data yang dihubungkan secara kriptografis melalui nilai hash blok sebelumnya (<code>PrevHash</code>).
+          </p>
+          <div class="highlight-box green">
+            <h4>Karakteristik SHA-256 (Secure Hash Algorithm 256-bit):</h4>
+            <ul>
+              <li><strong>Deterministic:</strong> Input yang sama pasti menghasilkan digest 256-bit (64 karakter heksadesimal) yang identik.</li>
+              <li><strong>Pre-image Resistance (One-Way):</strong> Sangat mustahil secara komputasi mencari input <code>M</code> jika hanya diketahui nilai hash <code>H(M)</code>.</li>
+              <li><strong>Second Pre-image Resistance:</strong> Diberikan <code>M1</code>, mustahil mencari <code>M2</code> sedemikian rupa sehingga <code>H(M1) == H(M2)</code>.</li>
+              <li><strong>Collision Resistance:</strong> Mustahil mencari dua input acak yang menghasilkan output hash yang sama persis.</li>
+              <li><strong>Avalanche Effect:</strong> Perubahan 1 bit saja pada input akan mengubah lebih dari 50% bit output hash secara dramatis.</li>
+            </ul>
+          </div>
+
+          <h3>Struktur Merkle Tree (Pohon Hash Biner)</h3>
+          <p>
+            Merkle Tree merangkum seluruh transaksi dalam sebuah blok menjadi satu string tunggal berukuran 32-byte yang disebut <strong>Merkle Root</strong>.
+          </p>
+          <table class="cyber-table">
+            <thead>
+              <tr><th>Tingkatan Node</th><th>Proses Perhitungan Hash</th><th>Kegunaan Utama</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Leaf Node (Daun)</td>
+                <td><code>H(Tx1), H(Tx2), H(Tx3), H(Tx4)</code></td>
+                <td>Hash dari data transaksi mentah masing-masing.</td>
+              </tr>
+              <tr>
+                <td>Intermediate Node</td>
+                <td><code>H(1-2) = SHA256(H(Tx1) + H(Tx2))</code></td>
+                <td>Penggabungan dua hash anak (concatenation) lalu di-hash ulang.</td>
+              </tr>
+              <tr>
+                <td>Merkle Root (Akar)</td>
+                <td><code>Root = SHA256(H(1-2) + H(3-4))</code></td>
+                <td>Disimpan di Header Blok. Memungkinkan verifikasi <strong>SPV (Simplified Payment Verification)</strong> dengan kompleksitas <code>O(log N)</code> tanpa perlu mengunduh seluruh transaksi.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- TOPIK 2 -->
+        <section class="materi-section" id="topik2">
+          <h2>2. Mekanisme Konsensus Terdistribusi</h2>
+          <p>
+            Konsensus menjamin seluruh node dalam jaringan peer-to-peer (P2P) mencapai kesepakatan mutlak mengenai satu-satunya versi sejarah buku besar yang sah tanpa otoritas sentral.
+          </p>
+          <table class="cyber-table">
+            <thead>
+              <tr><th>Mekanisme Konsensus</th><th>Prinsip Penentuan Pembuat Blok</th><th>Kelebihan</th><th>Kelemahan & Keamanan</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Proof of Work (PoW)</strong><br>(Bitcoin, Dogecoin)</td>
+                <td>Miner berlomba memecahkan teka-teki kriptografis: mencari <code>Nonce</code> sedemikian hingga <code>SHA256(SHA256(BlockHeader)) < Target</code>.</td>
+                <td>Sangat aman, teruji waktu, true decentralization.</td>
+                <td>Boros energi listrik (high energy consumption), TPS rendah (Bitcoin ~7 TPS), rentan terhadap 51% Hashrate Attack.</td>
+              </tr>
+              <tr>
+                <td><strong>Proof of Stake (PoS)</strong><br>(Ethereum 2.0 / The Merge)</td>
+                <td>Validator dipilih secara pseudo-acak berbobot berdasarkan jumlah koin yang dijaminkan (staked) dalam kontrak deposit.</td>
+                <td>Hemat energi (>99.9% reduction), throughput lebih tinggi, mekanisme slashing bagi validator curang.</td>
+                <td>Rentan masalah "Nothing at Stake" (diatasi dengan slashing protocol), konsentrasi kekayaan pada pemilik modal besar.</td>
+              </tr>
+              <tr>
+                <td><strong>Delegated Proof of Stake (DPoS)</strong><br>(EOS, TRON)</td>
+                <td>Pemilik token memilih sejumlah kecil delegasi (misal 21 Block Producers) untuk memvalidasi transaksi secara bergantian.</td>
+                <td>Kecepatan transaksi sangat tinggi (ribuan TPS), konfirmasi sub-detik.</td>
+                <td>Cenderung tersentralisasi (oligarki delegasi), rentan kolusi validator.</td>
+              </tr>
+              <tr>
+                <td><strong>PBFT (Practical Byzantine Fault Tolerance)</strong><br>(Hyperledger Fabric)</td>
+                <td>Voting multi-ronde (Pre-prepare, Prepare, Commit) antar node yang telah teridentifikasi (Permissioned).</td>
+                <td>Finalitas mutlak instan, toleran hingga <code>f = (N - 1) / 3</code> node jahat/rusak.</td>
+                <td>Tidak scalable ke ribuan node publik karena overhead komunikasi jaringan kuadratik <code>O(N²)</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- TOPIK 3 -->
+        <section class="materi-section" id="topik3">
+          <h2>3. Mining, Halving, & Difficulty Adjustment</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3 style="color:var(--neon-green);">Mining & Difficulty Target</h3>
+              <p style="font-size:13px; line-height:1.7;">
+                Pada jaringan Bitcoin, tingkat kesulitan (difficulty) disesuaikan secara otomatis setiap <strong>2016 blok</strong> (~2 minggu). Jika blok ditemukan lebih cepat dari rata-rata 10 menit akibat pertambahan miner, target diturunkan (membuat hash puzzle lebih sulit), dan sebaliknya.
+              </p>
+            </div>
+            <div class="card">
+              <h3 style="color:var(--neon-cyan);">Bitcoin Halving Cycle</h3>
+              <p style="font-size:13px; line-height:1.7;">
+                Reward blok Bitcoin dipotong 50% setiap <strong>210.000 blok</strong> (~4 tahun). Dimulai dari 50 BTC (2009), 25 BTC (2012), 12.5 BTC (2016), 6.25 BTC (2020), dan 3.125 BTC (2024). Menjamin pasokan maksimum Bitcoin tidak akan pernah melebihi <strong>21.000.000 BTC</strong> (kebijakan deflasi).
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOPIK 4 -->
+        <section class="materi-section" id="topik4">
+          <h2>4. Arsitektur Ethereum & Ethereum Virtual Machine (EVM)</h2>
+          <p>
+            Berbeda dari model UTXO (Unspent Transaction Output) pada Bitcoin, Ethereum menggunakan <strong>Account-Based Model</strong> dan merupakan komputer terdistribusi Turing-Complete.
+          </p>
+          <div class="grid-2">
+            <div class="card">
+              <h3 style="color:var(--neon-cyan);">Tipe Akun Ethereum</h3>
+              <ul style="font-size:13px; line-height:1.8;">
+                <li><strong>EOA (Externally Owned Account):</strong> Dikendalikan oleh private key manusia. Memiliki saldo ETH dan Nonce transaksi. Bebas biaya pembuatan akun.</li>
+                <li><strong>Contract Account:</strong> Dikendalikan oleh kode bytecode EVM. Memiliki saldo ETH, Nonce, kode smart contract, dan penyimpanan persisten (Storage root).</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 style="color:var(--neon-green);">Mekanisme Gas (Anti Halting-Problem)</h3>
+              <ul style="font-size:13px; line-height:1.8;">
+                <li>Setiap opcode EVM (ADD, SLOAD, SSTORE) memiliki tarif Gas tetap.</li>
+                <li><strong>Gas Limit:</strong> Batas maksimum komputasi yang rela dibayar pengirim transaksi.</li>
+                <li><strong>EIP-1559:</strong> Total Fee = <code>Units of Gas * (Base Fee + Priority Tip)</code>. Base Fee di-burn secara otomatis, mengurangi suplai sirkulasi ETH.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOPIK 5 -->
+        <section class="materi-section" id="topik5">
+          <h2>5. Ekosistem Decentralized Finance (DeFi)</h2>
+          <p>Aplikasi finansial tanpa perantara bank yang berjalan di atas protokol blockchain:</p>
+          <ul>
+            <li><strong>AMM (Automated Market Maker):</strong> Bursa terdesentralisasi (DEX seperti Uniswap) yang menggunakan formula produk konstan <code>x * y = k</code> alih-alih order book terpusat.</li>
+            <li><strong>Lending Protocols:</strong> Pinjam-meminjam terdesentralisasi (Aave, Compound) menggunakan over-collateralization (rasio jaminan lebih besar dari pinjaman) dan liquidator bot.</li>
+            <li><strong>Stablecoins:</strong> Aset kripto terpatok mata uang fiat (Fiat-backed seperti USDT/USDC, Crypto-collateralized seperti DAI, dan Algorithmic).</li>
+          </ul>
+        </section>
+
+        <!-- TOPIK 6 -->
+        <section class="materi-section" id="topik6">
+          <h2>6. Kerentanan Keamanan Smart Contract (Vulnerabilities)</h2>
+          <div class="highlight-box orange">
+            <h4>1. Reentrancy Attack (Kasus The DAO Hack 2016)</h4>
+            <p>
+              Terjadi ketika kontrak eksternal yang dipanggil melakukan pemanggilan balik (fallback/receive) ke fungsi penarikan dana kontrak pemanggil SEBELUM status saldo pengirim diperbarui.
+            </p>
+            <p><strong>Solusi:</strong> Menerapkan pola <em>Checks-Effects-Interactions</em> atau menggunakan <code>ReentrancyGuard</code> (OpenZeppelin nonReentrant modifier).</p>
+          </div>
+          <div class="highlight-box purple">
+            <h4>2. Integer Overflow / Underflow</h4>
+            <p>
+              Pada Solidity versi sebelum v0.8.0, variabel <code>uint8</code> dengan nilai 255 yang ditambah 1 akan memutar kembali menjadi 0 tanpa error. Sejak Solidity v0.8+, compiler menyertakan built-in arithmetic overflow check otomatis (revert bila overflow).
+            </p>
+          </div>
+          <div class="highlight-box">
+            <h4>3. Front-Running & MEV (Maximal Extractable Value)</h4>
+            <p>
+              Transaksi di Ethereum berada di public mempool sebelum dimasukkan ke dalam blok. Miner/bot dapat melihat transaksi pengguna dan menyelipkan transaksi mereka sendiri dengan Gas Fee yang lebih tinggi untuk mengeksploitasi selisih harga (sandwich attack).
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — Blockchain Fundamental Theory</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

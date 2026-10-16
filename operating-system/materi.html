@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Teori Operating Systems — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--electric-blue), var(--neon-cyan));">🖥️</div>
+        <div>
+          <div class="logo-text">OS<span style="color:var(--electric-blue)">.Theory</span></div>
+          <span class="logo-sub">COMP6840001</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link active"><span class="nav-icon">📚</span> 7 Topik Teori OS</a>
+        <a href="code-examples.html" class="nav-link"><span class="nav-icon">💻</span> 10 Kode C Compilable</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Daftar Bab Teori</div>
+        <a href="#bab1" class="nav-link"><span class="nav-icon">⚙️</span> 1. Introduction to OS</a>
+        <a href="#bab2" class="nav-link"><span class="nav-icon">🔄</span> 2. Processes & Lifecycle</a>
+        <a href="#bab3" class="nav-link"><span class="nav-icon">🧵</span> 3. Threads & Pthreads</a>
+        <a href="#bab4" class="nav-link"><span class="nav-icon">⏱️</span> 4. CPU Scheduling</a>
+        <a href="#bab5" class="nav-link"><span class="nav-icon">⚡</span> 5. Multiprocessor & NUMA</a>
+        <a href="#bab6" class="nav-link"><span class="nav-icon">🔒</span> 6. Synchronization & IPC</a>
+        <a href="#bab7" class="nav-link"><span class="nav-icon">🛑</span> 7. Deadlock & Banker's</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Semua Matkul</div>
+        <a href="../reverse-engineering/index.html" class="nav-link"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link active"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Operating System</a>
+          <span class="sep">/</span>
+          <span class="current">7 Topik Teori Lengkap UTS</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> DIKTAT KOMPREHENSIF UTS SEMESTER 4</div>
+          <h1 class="glitch-text" data-text="Operating Systems Theory">Operating Systems <span class="highlight" style="color:var(--electric-blue)">Theory</span></h1>
+          <p style="color:var(--text-secondary); max-width:780px;">
+            Diktat teori mendalam 7 topik utama Operating Systems (COMP6840001): Arsitektur Kernel & System Calls, Model State & PCB, POSIX Multithreading, Algoritma Penjadwalan CPU & Kalkulasi Gantt Chart, Komputasi SMP/NUMA, Sinkronisasi Concurrency, serta Analisis Deadlock & Algoritma Banker.
+          </p>
+        </header>
+
+        <!-- BAB 1 -->
+        <section class="materi-section" id="bab1">
+          <h2>1. Introduction to Operating Systems: Definisi, Struktur & System Calls</h2>
+          <p>
+            <strong>Operating System (OS)</strong> adalah perangkat lunak sistem tingkat rendah yang bertindak sebagai perantara (intermediary) antara pengguna komputer/program aplikasi dengan perangkat keras komputer (hardware).
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--neon-cyan);">Dua Peran Utama OS:</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Resource Allocator:</strong> Mengelola dan mengalokasikan CPU time, ruang memori RAM, ruang disk penyimpanan file, serta perangkat I/O secara adil dan efisien di antara program-program yang bersaing.</li>
+                <li><strong>Control Program:</strong> Mengontrol eksekusi program pengguna untuk mencegah terjadinya kesalahan (errors) dan penggunaan komputer yang tidak sah (security violation).</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--electric-blue);">Dual-Mode Operation (Proteksi Hardware):</h4>
+              <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+                CPU modern mendukung minimal dua mode operasi yang dibedakan oleh bit status (Mode Bit):
+              </p>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>User Mode (Mode Bit = 1):</strong> Tempat eksekusi aplikasi pengguna biasa. Instruksi sensitif (privileged instructions seperti akses I/O langsung atau memori fisik kernel) dilarang.</li>
+                <li><strong>Kernel / Supervisor Mode (Mode Bit = 0):</strong> Tempat eksekusi kernel OS dengan akses tanpa batas ke seluruh instruksi CPU dan alamat fisik memori hardware.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="color:var(--neon-green); margin:20px 0 12px;">Arsitektur Struktur Kernel</h3>
+          <div class="table-responsive" style="margin-bottom:24px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--neon-green);">
+                  <th style="padding:10px;">Struktur Kernel</th>
+                  <th style="padding:10px;">Karakteristik & Desain</th>
+                  <th style="padding:10px;">Kelebihan</th>
+                  <th style="padding:10px;">Kelemahan</th>
+                  <th style="padding:10px;">Contoh Nyata</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-cyan);">Monolithic Kernel</td>
+                  <td style="padding:10px;">Seluruh layanan OS (scheduler, virtual memory, file system, driver) berjalan bersama dalam satu address space di kernel mode.</td>
+                  <td style="padding:10px;">Performa sangat tinggi karena pemanggilan fungsi antar-komponen dilakukan lewat panggilan langsung tanpa context switch IPC.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Jika satu device driver crash atau terkena buffer overflow, seluruh sistem operasi akan crash (Kernel Panic/BSOD).</td>
+                  <td style="padding:10px;">Linux Kernel, FreeBSD, MS-DOS.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--purple);">Microkernel</td>
+                  <td style="padding:10px;">Hanya fungsi paling esensial (minimal memory management, primitive process scheduling, IPC) yang berada di kernel mode. Layanan lain (file system, network) dijalankan sebagai server proses di user mode.</td>
+                  <td style="padding:10px;">Sangat modular, aman, dan stabil. Jika server file system crash, kernel utama tetap hidup dan server cukup di-restart.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Overhead performa tinggi akibat ribuan kali message passing dan context switch antara user space dan kernel.</td>
+                  <td style="padding:10px;">Mach, QNX (sistem otomotif), Minix.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; font-weight:600; color:var(--orange);">Hybrid Kernel</td>
+                  <td style="padding:10px;">Kombinasi performa monolitik dengan modularitas microkernel; sebagian layanan penting tetap diletakkan di kernel mode demi performa cepat.</td>
+                  <td style="padding:10px;">Menyeimbangkan kecepatan komputasi dengan kemudahan driver management.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Kompleksitas kode basis sangat besar.</td>
+                  <td style="padding:10px;">Windows NT Kernel, macOS (XNU / Darwin).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h4 style="color:var(--neon-cyan); margin-bottom:8px;">Mekanisme System Call (Transisi User ke Kernel)</h4>
+            <p style="font-size:13px; line-height:1.7; color:var(--text-secondary);">
+              Ketika program aplikasi di User Mode ingin melakukan operasi I/O (seperti membaca berkas <code>read()</code> atau mencetak teks <code>write()</code>), program memicu instruksi khusus CPU berupa Software Interrupt (Trap) atau instruksi <code>syscall</code> / <code>sysenter</code>.<br>
+              CPU akan beralih ke Mode Bit 0 (Kernel Mode), membaca tabel <strong>System Call Interface</strong>, mengeksekusi rutin handler kernel yang sesuai, lalu kembali mengembalikan nilai hasil ke User Mode (Mode Bit 1).
+            </p>
+          </div>
+        </section>
+
+        <!-- BAB 2 -->
+        <section class="materi-section" id="bab2">
+          <h2>2. Processes: Siklus Hidup, State Diagram & Struktur PCB</h2>
+          <p>
+            <strong>Proses</strong> secara formal didefinisikan sebagai <em>"program yang sedang dieksekusi"</em> (program in execution). Berbeda dengan program yang berupa entitas pasif tersimpan di disk (file biner ELF/EXE), proses adalah entitas aktif yang memiliki Program Counter, register CPU, dan rentang alamat memori virtual.
+          </p>
+
+          <h3 style="color:var(--electric-blue); margin:20px 0 12px;">Diagram 5 Status Proses (Process State Diagram)</h3>
+          <div class="table-responsive" style="margin-bottom:20px;">
+            <div class="highlight-box blue" style="font-family:var(--font-code); font-size:13px;">
+              [ NEW ] ---> (admitted) ---> [ READY ] <-----> (scheduler dispatch / timeout) <-----> [ RUNNING ] ---> (exit) ---> [ TERMINATED ]
+                                              ^                                                          |
+                                              |------------ (I/O or event completed) <--- [ WAITING ] <-- (I/O or event wait)
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h4 style="color:var(--neon-green);">Penjelasan 5 Status Proses:</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>New:</strong> Proses baru saja dibuat namun belum dimuat sepenuhnya ke memori utama untuk dijadwalkan.</li>
+                <li><strong>Ready:</strong> Proses telah siap dieksekusi di RAM dan sedang menunggu giliran dialokasikan waktu CPU oleh Scheduler.</li>
+                <li><strong>Running:</strong> Instruksi-instruksi proses sedang aktif dieksekusi oleh inti core CPU.</li>
+                <li><strong>Waiting / Blocked:</strong> Proses tidak dapat berjalan karena sedang menunggu penyelesaian suatu peristiwa eksternal (misal: menunggu input keyboard, pembacaan blok disk, paket jaringan).</li>
+                <li><strong>Terminated:</strong> Proses telah menyelesaikan eksekusinya dan sumber dayanya sedang dibersihkan oleh OS.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-cyan);">Komponen Process Control Block (PCB):</h4>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">
+                Struktur data kernel (seperti <code>struct task_struct</code> di Linux) yang mewakili setiap proses:
+              </p>
+              <ul style="font-size:13px; line-height:1.7; padding-left:18px;">
+                <li><strong>Process Identifier (PID):</strong> Nomor identifikasi unik integer proses.</li>
+                <li><strong>Process State:</strong> Ready, running, waiting, dll.</li>
+                <li><strong>Program Counter (PC):</strong> Alamat instruksi selanjutnya yang akan dieksekusi saat proses kembali dijadwalkan.</li>
+                <li><strong>CPU Registers:</strong> Akumulator, index registers, stack pointer (ESP/RSP), general purpose registers saat terjadi context switch.</li>
+                <li><strong>CPU Scheduling Information:</strong> Prioritas proses, pointer ke scheduling queues.</li>
+                <li><strong>Memory Management Info:</strong> Base and limit registers, page tables atau segment tables.</li>
+                <li><strong>Accounting Info:</strong> Waktu CPU yang telah digunakan, batas waktu eksekusi.</li>
+                <li><strong>I/O Status Info:</strong> Daftar berkas yang sedang dibuka, perangkat I/O yang dialokasikan.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:20px;">
+            <h4 style="color:var(--orange); margin-bottom:8px;">Manajemen Proses POSIX: fork(), exec(), wait()</h4>
+            <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+              <li><code>fork()</code>: Menduplikasi proses pemanggil menjadi proses anak (Child Process). Mengembalikan nilai <code>0</code> pada proses anak, mengembalikan nilai <code>PID anak</code> pada proses orang tua (Parent), atau <code>-1</code> jika gagal.</li>
+              <li><code>execve() / execlp()</code>: Menggantikan seluruh address space proses saat ini dengan binary program baru.</li>
+              <li><code>wait() / waitpid()</code>: Memblokir proses parent hingga salah satu proses anaknya selesai, guna membaca status exit dan mencegah terjadinya <strong>Zombie Process</strong>.</li>
+              <li><strong>Zombie Process:</strong> Proses yang sudah terminate tetapi parent-nya belum memanggil <code>wait()</code> sehingga entry PCB-nya masih tersisa di tabel proses.</li>
+              <li><strong>Orphan Process:</strong> Proses anak yang parent-nya sudah mati lebih dahulu tanpa menunggu anak selesai; otomatis diadopsi oleh proses <code>init / systemd</code> (PID 1).</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- BAB 3 -->
+        <section class="materi-section" id="bab3">
+          <h2>3. Threads: Konsep, Model Multithreading & POSIX Pthreads</h2>
+          <p>
+            <strong>Thread</strong> (sering disebut <em>Lightweight Process</em> atau LWP) adalah unit terkecil pemanfaatan CPU. Sebuah proses dapat memiliki banyak thread yang berjalan secara konkuren di dalam dirinya.
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--neon-green);">Shared vs Private Resources</h4>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">
+                Di dalam sebuah proses multithread:
+              </p>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Dibagi Bersama (Shared):</strong> Text/Code Segment, Data Segment (variabel global), BSS, Heap memory (alokasi <code>malloc</code>), dan File Descriptors (file terbuka, socket).</li>
+                <li><strong>Privat per-Thread (Unique):</strong> Thread ID (TID), Nilai Register CPU (EAX, EBX, PC), dan Call Stack tersendiri (variabel lokal dan jejak pemanggilan fungsi).</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-pink);">Keunggulan Thread dibanding Fork:</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Responsiveness:</strong> Aplikasi tetap dapat merespons UI meski thread worker sedang sibuk komputasi berat.</li>
+                <li><strong>Resource Sharing:</strong> Tidak membutuhkan mekanisme IPC rumit karena thread berbagi memori yang sama.</li>
+                <li><strong>Economy (Hemat):</strong> Membuat thread jauh lebih cepat dan hemat memori daripada menduplikasi seluruh address space proses (overhead context switch thread jauh lebih ringan).</li>
+                <li><strong>Scalability:</strong> Mengoptimalkan multiprocessor core secara masif.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="color:var(--purple); margin:20px 0 12px;">3 Model Relasi Thread (User vs Kernel Level)</h3>
+          <div class="table-responsive" style="margin-bottom:24px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--purple);">
+                  <th style="padding:10px;">Model</th>
+                  <th style="padding:10px;">Pemetaan</th>
+                  <th style="padding:10px;">Kelebihan</th>
+                  <th style="padding:10px;">Kelemahan Kritis</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-cyan);">Many-to-One</td>
+                  <td style="padding:10px;">Banyak thread user-level dipetakan ke 1 thread kernel. Pengelolaan di user space via library.</td>
+                  <td style="padding:10px;">Peralihan thread sangat cepat tanpa melibatkan kernel trap.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Jika 1 thread melakukan blocking system call (misal: I/O baca disk), SELURUH proses akan terblokir! Tidak dapat memanfaatkan multicore.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">One-to-One (Standar Modern)</td>
+                  <td style="padding:10px;">Setiap thread user-level dipetakan tepat ke 1 thread kernel OS.</td>
+                  <td style="padding:10px;">Konkurensi sejati pada multicore. Jika 1 thread blocking, thread lain tetap berjalan bebas.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Membuat thread user berarti membuat thread kernel (konsumsi memori kernel). Diadopsi oleh Linux (NPTL) dan Windows.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; font-weight:600; color:var(--orange);">Many-to-Many</td>
+                  <td style="padding:10px;">Banyak user thread dimultiplex ke jumlah kernel thread yang sama atau lebih sedikit.</td>
+                  <td style="padding:10px;">Sangat fleksibel; tidak terbatas alokasi kernel namun tetap konkuren.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Sangat rumit untuk diimplementasikan secara efisien di level OS scheduler.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- BAB 4 -->
+        <section class="materi-section" id="bab4">
+          <h2>4. CPU Scheduling: Algoritma & Analisis Gantt Chart Lengkap</h2>
+          <p>
+            <strong>CPU Scheduling</strong> adalah basis dari sistem multiprogramming. Scheduler memilih salah satu proses yang berstatus <em>Ready</em> di memori dan mengalokasikan CPU kepadanya.
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--electric-blue);">Kriteria Optimasi Penjadwalan:</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>CPU Utilization (Maksimalkan):</strong> Persentase waktu CPU sibuk bekerja (ideal: 40% - 90%).</li>
+                <li><strong>Throughput (Maksimalkan):</strong> Jumlah proses yang tuntas per satuan waktu.</li>
+                <li><strong>Turnaround Time / TAT (Minimalkan):</strong> Total selang waktu sejak proses submit tiba hingga selesai tuntas (<code>TAT = Completion Time - Arrival Time</code>).</li>
+                <li><strong>Waiting Time / WT (Minimalkan):</strong> Total waktu yang dihabiskan proses mengantre di Ready Queue (<code>WT = Turnaround Time - Burst Time</code>).</li>
+                <li><strong>Response Time (Minimalkan):</strong> Waktu sejak submit hingga respon keluaran pertama kali muncul.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--orange);">Preemptive vs Non-Preemptive:</h4>
+              <p style="font-size:13px; line-height:1.7; color:var(--text-secondary);">
+                <strong>Non-Preemptive (Kooperatif):</strong> Sekali CPU dialokasikan ke suatu proses, proses tersebut memegang CPU sampai sukarela melepaskannya (terminate atau masuk mode waiting I/O).<br><br>
+                <strong>Preemptive:</strong> OS berhak memotong paksa eksekusi proses yang sedang berjalan di tengah jalan jika habis jatah waktu (Timer Interrupt) atau ada proses dengan prioritas lebih tinggi yang baru tiba.
+              </p>
+            </div>
+          </div>
+
+          <h3 style="color:var(--neon-cyan); margin:24px 0 12px;">Studi Kasus Perhitungan UTS: Gantt Chart & Average Waiting Time</h3>
+          <p style="font-size:14px; margin-bottom:12px;">
+            Diberikan 4 proses yang tiba pada waktu $Arrival\ Time (AT) = 0$ dengan durasi $Burst\ Time (BT)$ masing-masing:
+          </p>
+
+          <div class="table-responsive" style="margin-bottom:16px;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:center;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--neon-cyan);">
+                  <th style="padding:8px;">Proses</th>
+                  <th style="padding:8px;">Arrival Time (AT)</th>
+                  <th style="padding:8px;">Burst Time (BT)</th>
+                  <th style="padding:8px;">Prioritas (1 = Tertinggi)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">P1</td><td>0</td><td>20 ms</td><td>3</td></tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">P2</td><td>0</td><td>4 ms</td><td>1 (High)</td></tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">P3</td><td>0</td><td>6 ms</td><td>2</td></tr>
+                <tr><td style="padding:8px;">P4</td><td>0</td><td>2 ms</td><td>4</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Comparison of Algorithms -->
+          <div class="grid-2">
+            <div class="card">
+              <h4 style="color:var(--neon-pink);">1. FCFS (First-Come, First-Served)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); margin-bottom:6px;">Urutan kedatangan: P1 -> P2 -> P3 -> P4</p>
+              <div class="highlight-box" style="font-family:var(--font-code); font-size:12px;">
+                Gantt Chart:<br>
+                |------ P1 ------|--P2--|---P3---|P4|<br>
+                0               20     24       30  32
+              </div>
+              <ul style="font-size:12px; line-height:1.7; padding-left:16px;">
+                <li>WT P1 = 0 ms</li>
+                <li>WT P2 = 20 ms</li>
+                <li>WT P3 = 24 ms</li>
+                <li>WT P4 = 30 ms</li>
+                <li><strong>Average Waiting Time (AWT)</strong> = (0 + 20 + 24 + 30) / 4 = <strong>18.5 ms</strong></li>
+                <li style="color:var(--neon-pink);"><em>Kelemahan: Convoy Effect</em> (proses pendek terhambat lama di belakang proses besar).</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-green);">2. SJF (Shortest Job First - Non Preemptive)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); margin-bottom:6px;">Urutan durasi tercepat: P4 (2) -> P2 (4) -> P3 (6) -> P1 (20)</p>
+              <div class="highlight-box green" style="font-family:var(--font-code); font-size:12px;">
+                Gantt Chart:<br>
+                |P4|--P2--|---P3---|------ P1 ------|<br>
+                0  2      6        12              32
+              </div>
+              <ul style="font-size:12px; line-height:1.7; padding-left:16px;">
+                <li>WT P4 = 0 ms</li>
+                <li>WT P2 = 2 ms</li>
+                <li>WT P3 = 6 ms</li>
+                <li>WT P1 = 12 ms</li>
+                <li><strong>Average Waiting Time (AWT)</strong> = (0 + 2 + 6 + 12) / 4 = <strong>5.0 ms</strong></li>
+                <li style="color:var(--neon-green);"><em>Optimal secara matematis!</em> Menghasilkan AWT terkecil.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:16px;">
+            <div class="card">
+              <h4 style="color:var(--purple);">3. Priority Scheduling (Non-Preemptive)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); margin-bottom:6px;">Urutan prioritas: P2 (1) -> P3 (2) -> P1 (3) -> P4 (4)</p>
+              <div class="highlight-box purple" style="font-family:var(--font-code); font-size:12px;">
+                Gantt Chart:<br>
+                |--P2--|---P3---|------ P1 ------|P4|<br>
+                0      4        10              30  32
+              </div>
+              <ul style="font-size:12px; line-height:1.7; padding-left:16px;">
+                <li>WT P2 = 0 ms | WT P3 = 4 ms | WT P1 = 10 ms | WT P4 = 30 ms</li>
+                <li><strong>Average Waiting Time (AWT)</strong> = (0 + 4 + 10 + 30) / 4 = <strong>11.0 ms</strong></li>
+                <li><em>Isu Starvation:</em> Proses prioritas rendah bisa tak pernah jalan. Solusi: <strong>Aging</strong> (menaikkan prioritas seiring bertambahnya waktu tunggu).</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--electric-blue);">4. Round Robin (Time Quantum = 4 ms)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); margin-bottom:6px;">Berputar bergiliran dengan kuantum q = 4 ms:</p>
+              <div class="highlight-box blue" style="font-family:var(--font-code); font-size:12px;">
+                Gantt Chart:<br>
+                |P1|P2|P3|P4|P1|P3|P1|P1|P1|<br>
+                0  4  8  12 14 18 20 24 28 32
+              </div>
+              <ul style="font-size:12px; line-height:1.7; padding-left:16px;">
+                <li>P2 selesai di t=8; P4 selesai di t=14; P3 selesai di t=20; P1 selesai di t=32.</li>
+                <li>WT P1 = 32 - 20 = 12 ms | WT P2 = 4 ms | WT P3 = 14 ms | WT P4 = 12 ms</li>
+                <li><strong>Average Waiting Time (AWT)</strong> = (12 + 4 + 14 + 12) / 4 = <strong>10.5 ms</strong></li>
+                <li>Sangat responsif untuk time-sharing interactive system!</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- BAB 5 -->
+        <section class="materi-section" id="bab5">
+          <h2>5. Multiple Processor Systems: SMP, Multicore & NUMA</h2>
+          <p>
+            Sistem komputasi modern menggunakan multi-prosesor dan multi-core untuk mempercepat komputasi throughput secara paralel.
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--neon-green);">Symmetric Multiprocessing (SMP)</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li>Setiap prosesor menjalankan salinan identik dari kernel sistem operasi.</li>
+                <li>Seluruh CPU berbagi bus sistem dan memori fisik RAM utama yang sama (Uniform Memory Access / UMA).</li>
+                <li>Proses dapat dieksekusi di prosesor mana pun tanpa memandang hierarki khusus.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-cyan);">Processor Affinity & Migration</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Processor Affinity:</strong> Menjaga proses agar tetap dieksekusi di core CPU yang sama guna memanfaatkan data yang sudah berada di L1/L2 cache (menghindari cache invalidation).</li>
+                <li><strong>Soft Affinity:</strong> OS berusaha mempertahankan proses di core yang sama tetapi tidak menjamin jika terjadi ketimpangan beban.</li>
+                <li><strong>Hard Affinity:</strong> Proses secara eksplisit diikat ke core tertentu (misal: via <code>sched_setaffinity()</code> di Linux).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:20px;">
+            <h4 style="color:var(--orange); margin-bottom:8px;">Non-Uniform Memory Access (NUMA)</h4>
+            <p style="font-size:13px; line-height:1.7; color:var(--text-secondary);">
+              Pada server berskala besar dengan ratusan core, bus memori tunggal menjadi bottleneck. Arsitektur NUMA membagi memori menjadi beberapa node lokal yang menempel langsung ke masing-masing socket CPU.<br>
+              <strong>Prinsip Kinerja:</strong> Mengakses memori lokal (Local Memory) pada socket sendiri jauh lebih cepat daripada mengakses memori remote pada socket tetangga melalui interkoneksi QPI/UPI. Scheduler OS harus NUMA-aware dengan selalu mengalokasikan memori lokal untuk thread yang berjalan di CPU tersebut.
+            </p>
+          </div>
+        </section>
+
+        <!-- BAB 6 -->
+        <section class="materi-section" id="bab6">
+          <h2>6. Synchronization & IPC: Race Condition, Mutex & Klasik Problem</h2>
+          <p>
+            Ketika beberapa thread atau proses mengakses dan memanipulasi data bersama secara serentak, hasil akhir eksekusi bergantung pada urutan akses instruksi yang terjadi. Fenomena ini disebut <strong>Race Condition</strong>.
+          </p>
+
+          <div class="highlight-box red" style="margin:16px 0;">
+            <h4 style="color:var(--neon-pink);">3 Syarat Wajib Solusi Critical Section Problem:</h4>
+            <ol style="font-size:13px; line-height:1.8; padding-left:20px;">
+              <li><strong>Mutual Exclusion (Mutlak):</strong> Jika proses Pi sedang mengeksekusi Critical Section-nya, tidak ada proses lain yang diizinkan masuk ke Critical Section tersebut.</li>
+              <li><strong>Progress:</strong> Jika tidak ada proses di Critical Section dan ada proses yang ingin masuk, hanya proses yang tidak sedang di Remainder Section yang berhak ikut menentukan siapa yang masuk berikutnya; seleksi tidak boleh ditunda tanpa batas waktu.</li>
+              <li><strong>Bounded Waiting:</strong> Harus ada batas tertentu berapa kali proses lain diizinkan masuk setelah suatu proses mengajukan permintaan, guna mencegah kelaparan tak terbatas (starvation).</li>
+            </ol>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h4 style="color:var(--neon-cyan);">Mutex Lock (Mutual Exclusion Lock)</h4>
+              <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+                Mekanisme penguncian biner sederhana. Hanya thread yang berhasil melakukan <code>acquire()</code> yang berhak memasuki Critical Section, dan ia wajib melepaskan kunci dengan <code>release()</code> setelah selesai.<br>
+                Jika menggunakan polling aktif saat menunggu kunci, disebut <strong>Spinlock</strong> (berguna untuk kunci berdurasi sangat singkat pada multicore).
+              </p>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-green);">Semaphore (Dijkstra)</h4>
+              <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+                Variabel integer yang hanya dapat diakses melalui dua operasi atomik:<br>
+                <code>wait(S)</code> (atau <code>P(S)</code>): Mengurangi nilai S (<code>S--</code>). Jika $S &lt; 0$, proses diblokir.<br>
+                <code>signal(S)</code> (atau <code>V(S)</code>): Menambah nilai S (<code>S++</code>). Jika ada proses yang menunggu, salah satu proses dibangunkan.<br>
+                <strong>Counting Semaphore:</strong> Nilai S mewakili jumlah unit sumber daya yang tersedia.
+              </p>
+            </div>
+          </div>
+
+          <h3 style="color:var(--purple); margin:24px 0 12px;">3 Masalah Klasik Sinkronisasi (Wajib Paham Alur)</h3>
+          <div class="grid-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+            <div class="card">
+              <h4 style="color:var(--neon-cyan);">1. Producer-Consumer (Bounded Buffer)</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Producer memproduksi data ke buffer berukuran terbatas; Consumer mengambil data. Sinkronisasi harus menjamin:<br>
+                - Producer tidak menimpa saat buffer penuh.<br>
+                - Consumer tidak membaca saat buffer kosong.<br>
+                - Solusi: 3 Semaphore (<code>mutex=1</code>, <code>empty=N</code>, <code>full=0</code>).
+              </p>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--orange);">2. Readers-Writers Problem</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                Beberapa pembaca dapat membaca database bersamaan tanpa konflik. Namun jika seorang Penulis (Writer) ingin menulis, tidak boleh ada pembaca atau penulis lain yang sedang aktif.<br>
+                - Solusi: Mutex penghitung pembaca <code>read_count</code> dan semaphore <code>rw_mutex</code>.
+              </p>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-pink);">3. Dining Philosophers Problem</h4>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">
+                5 filsuf duduk melingkar dengan 5 sumpit di antara mereka. Untuk makan butuh 2 sumpit (kiri dan kanan). Jika semua filsuf serentak mengambil sumpit kiri, terjadi <strong>Deadlock</strong>!<br>
+                - Solusi: Filsuf ganjil ambil kanan dulu; atau gunakan monitor dengan pembatasan maksimal 4 filsuf yang boleh mencoba makan bersamaan.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- BAB 7 -->
+        <section class="materi-section" id="bab7">
+          <h2>7. Deadlock: 4 Kondisi Coffman & Algoritma Banker (Avoidance)</h2>
+          <p>
+            <strong>Deadlock</strong> adalah situasi di mana sekumpulan proses terhenti permanen karena setiap proses menahan suatu sumber daya seraya menunggu sumber daya lain yang sedang ditahan oleh proses lain dalam kelompok tersebut.
+          </p>
+
+          <div class="card" style="border-left:4px solid var(--neon-pink); margin:16px 0;">
+            <h4 style="color:var(--neon-pink); margin-bottom:8px;">4 Kondisi Coffman (Semua Harus Terpenuhi Agar Deadlock Terjadi):</h4>
+            <ol style="font-size:13px; line-height:1.8; padding-left:20px;">
+              <li><strong>Mutual Exclusion:</strong> Minimal 1 sumber daya harus bersifat non-shareable (hanya 1 proses dalam satu waktu).</li>
+              <li><strong>Hold and Wait:</strong> Suatu proses harus sedang menahan minimal 1 sumber daya sambil menunggu untuk mendapatkan sumber daya tambahan.</li>
+              <li><strong>No Preemption:</strong> Sumber daya tidak dapat disita paksa; hanya dapat dilepaskan secara sukarela oleh proses yang memegangnya.</li>
+              <li><strong>Circular Wait:</strong> Terdapat himpunan proses $\{P_0, P_1, \dots, P_n\}$ sedemikian rupa sehingga $P_0$ menunggu sumber daya yang ditahan $P_1$, dan $P_n$ menunggu sumber daya yang ditahan $P_0$.</li>
+            </ol>
+          </div>
+
+          <h3 style="color:var(--neon-green); margin:24px 0 12px;">Algoritma Banker (Deadlock Avoidance)</h3>
+          <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+            Diciptakan oleh Edsger Dijkstra untuk sistem perbankan. Setiap kali proses meminta sumber daya, sistem menguji apakah pemenuhan permintaan tersebut akan mempertahankan sistem dalam <strong>Safe State</strong> (ada safe sequence di mana semua proses dijamin dapat tuntas).
+          </p>
+
+          <div class="card">
+            <h4 style="color:var(--neon-cyan); margin-bottom:10px;">Struktur Data Algoritma Banker:</h4>
+            <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+              <li><code>Available[m]</code>: Vektor jumlah instance sumber daya yang sedang bebas.</li>
+              <li><code>Max[n][m]</code>: Matriks batas permintaan maksimum proses terhadap tiap sumber daya.</li>
+              <li><code>Allocation[n][m]</code>: Matriks jumlah sumber daya yang saat ini sedang dipegang oleh masing-masing proses.</li>
+              <li><code>Need[n][m] = Max[n][m] - Allocation[n][m]</code>: Matriks sisa kebutuhan sumber daya yang mungkin diminta lagi oleh proses hingga selesai.</li>
+            </ul>
+            <div class="highlight-box green" style="margin-top:12px; font-size:12px; line-height:1.7;">
+              <strong>Kaidah Keselamatan (Safety Algorithm):</strong><br>
+              Cari proses $P_i$ yang belum selesai (<code>Finish[i] == false</code>) dengan kebutuhan <code>Need[i] &lt;= Work</code>.<br>
+              Jika ditemukan: asumsikan proses $P_i$ berjalan hingga selesai lalu mengembalikan seluruh alokasinya: <code>Work = Work + Allocation[i]</code> dan <code>Finish[i] = true</code>.<br>
+              Jika seluruh proses berhasil diselesaikan (semua <code>Finish == true</code>), maka urutan eksekusi tersebut disebut <strong>Safe Sequence</strong> dan alokasi disetujui tanpa resiko deadlock!
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll ke atas">↑</button>
+  <footer class="site-footer">
+    <div><span class="footer-brand">StudyHub SOC v2.0</span> — Operating Systems Compendium</div>
+    <div>BINUS Cyber Security UTS Prep &bull; All Rights Reserved</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

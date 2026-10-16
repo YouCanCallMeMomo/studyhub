@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solidity Cheatsheet & 10 Smart Contracts — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--neon-green), var(--neon-cyan));">📜</div>
+        <div>
+          <div class="logo-text">Solidity<span style="color:var(--neon-green)">.v0.8</span></div>
+          <span class="logo-sub">10 SMART CONTRACTS</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link"><span class="nav-icon">📚</span> Teori Fundamental</a>
+        <a href="solidity-cheatsheet.html" class="nav-link active"><span class="nav-icon">📜</span> Solidity Cheatsheet</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">10 Smart Contracts</div>
+        <a href="#c1" class="nav-link"><span class="nav-icon">1️⃣</span> 1. Simple Token</a>
+        <a href="#c2" class="nav-link"><span class="nav-icon">2️⃣</span> 2. Voting Contract</a>
+        <a href="#c3" class="nav-link"><span class="nav-icon">3️⃣</span> 3. Crowdfunding</a>
+        <a href="#c4" class="nav-link"><span class="nav-icon">4️⃣</span> 4. Dutch Auction</a>
+        <a href="#c5" class="nav-link"><span class="nav-icon">5️⃣</span> 5. Multi-Sig Wallet</a>
+        <a href="#c6" class="nav-link"><span class="nav-icon">6️⃣</span> 6. Standard ERC-20</a>
+        <a href="#c7" class="nav-link"><span class="nav-icon">7️⃣</span> 7. NFT ERC-721</a>
+        <a href="#c8" class="nav-link"><span class="nav-icon">8️⃣</span> 8. Staking Reward</a>
+        <a href="#c9" class="nav-link"><span class="nav-icon">9️⃣</span> 9. Governance DAO</a>
+        <a href="#c10" class="nav-link"><span class="nav-icon">🔟</span> 10. Escrow Service</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Blockchain</a>
+          <span class="sep">/</span>
+          <span class="current">Solidity Cheatsheet & 10 Contracts</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> SOLIDITY v0.8.20 COMPLIANT</div>
+          <h1 class="glitch-text" data-text="Solidity Cheatsheet">Solidity <span class="highlight" style="color:var(--neon-green)">Cheatsheet</span></h1>
+          <p style="color:var(--text-secondary); max-width:750px;">
+            Referensi lengkap arsitektur kode Solidity (Storage, Memory, Calldata, Visibility, Modifier) beserta 10 Smart Contract produksi dengan bedah fungsi baris per baris.
+          </p>
+        </header>
+
+        <!-- CHEATSHEET SECTION -->
+        <section class="card" style="margin-bottom:36px;">
+          <h2 style="font-size:18px; color:var(--neon-green); margin-bottom:16px;">⚡ Kamus Inti Bahasa Pemrograman Solidity</h2>
+          
+          <div class="grid-2">
+            <div>
+              <h4 style="color:var(--neon-cyan); margin-bottom:8px;">1. Lokasi Memori (Data Locations)</h4>
+              <ul style="font-size:13px; line-height:1.7;">
+                <li><code>storage</code>: Disimpan permanen di blockchain State Trie. Sangat mahal gas. Default untuk state variables.</li>
+                <li><code>memory</code>: Bersifat sementara, hilang saat eksekusi fungsi selesai. Dapat dimodifikasi (mutable).</li>
+                <li><code>calldata</code>: Bersifat sementara, read-only (immutable), paling murah gas, digunakan untuk parameter fungsi eksternal.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 style="color:var(--neon-cyan); margin-bottom:8px;">2. Visibilitas Fungsi & Variabel</h4>
+              <ul style="font-size:13px; line-height:1.7;">
+                <li><code>public</code>: Dapat dipanggil dari dalam kontrak dan dari luar (transaksi EOA). Otomatis membuat getter function.</li>
+                <li><code>external</code>: Hanya dapat dipanggil dari luar kontrak atau melalui <code>this.f()</code>. Paling efisien untuk parameter besar.</li>
+                <li><code>internal</code>: Hanya dapat diakses dari dalam kontrak saat ini dan kontrak turunan (inheritance).</li>
+                <li><code>private</code>: Hanya dapat diakses langsung oleh kontrak yang mendeklarasikannya saja.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:20px;">
+            <div>
+              <h4 style="color:var(--neon-cyan); margin-bottom:8px;">3. Tipe Nilai & Khusus</h4>
+              <ul style="font-size:13px; line-height:1.7;">
+                <li><code>address</code> (20-byte account), <code>address payable</code> (bisa menerima ETH via transfer/send).</li>
+                <li><code>mapping(key => value)</code>: Hash table terdistribusi tanpa ukuran panjang tetap.</li>
+                <li><code>view</code>: Hanya membaca status blockchain tanpa memodifikasi. Gratis jika dipanggil offline.</li>
+                <li><code>pure</code>: Tidak membaca maupun mengubah status blockchain sama sekali.</li>
+                <li><code>payable</code>: Mengizinkan fungsi menerima pembayaran koin Ether (<code>msg.value</code>).</li>
+              </ul>
+            </div>
+            <div>
+              <h4 style="color:var(--neon-cyan); margin-bottom:8px;">4. Error Handling Modern (v0.8+)</h4>
+              <ul style="font-size:13px; line-height:1.7;">
+                <li><code>require(kondisi, "Pesan")</code>: Revert jika kondisi false, refund sisa gas.</li>
+                <li><code>revert CustomError()</code>: Cara paling hemat gas daripada require string error!</li>
+                <li><code>assert(kondisi)</code>: Digunakan untuk mendeteksi bug internal (seharusnya tidak pernah bernilai false).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10 SMART CONTRACTS -->
+        <h2 style="font-size:22px; color:var(--text-primary); margin-bottom:20px;">📜 10 Implementasi Smart Contract Siap Uji</h2>
+
+        <!-- CONTRACT 1 -->
+        <article class="soal-card" id="c1">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">01</div>
+            <div>
+              <div class="soal-title">1. Simple Token (Ledger Saldo Dasar)</div>
+              <div class="soal-sub">Konsep: Mapping, Custom Modifiers, Transfer Event</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleToken {
+    string public name = "CyberToken";
+    string public symbol = "CYBER";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
+    address public owner;
+
+    mapping(address => uint256) public balanceOf;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Mint(address indexed to, uint256 value);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner authorized");
+        _;
+    }
+
+    constructor(uint256 _initialSupply) {
+        owner = msg.sender;
+        totalSupply = _initialSupply * 10 ** decimals;
+        balanceOf[msg.sender] = totalSupply;
+    }
+
+    function transfer(address _to, uint256 _value) public returns (bool success) {
+        require(_to != address(0), "Invalid receiver");
+        require(balanceOf[msg.sender] >= _value, "Insufficient balance");
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
+        emit Transfer(msg.sender, _to, _value);
+        return true;
+    }
+
+    function mint(address _to, uint256 _value) public onlyOwner {
+        totalSupply += _value;
+        balanceOf[_to] += _value;
+        emit Mint(_to, _value);
+    }
+}</code></pre>
+          </div>
+          <div class="highlight-box">
+            <h4>Penjelasan Fungsi:</h4>
+            <ul>
+              <li><code>constructor</code>: Menetapkan pembuat kontrak sebagai <code>owner</code> dan mengalokasikan seluruh pasokan awal ke dompet owner.</li>
+              <li><code>modifier onlyOwner</code>: Memeriksa apakah pemanggil adalah owner sebelum menjalankan fungsi yang dilindungi.</li>
+              <li><code>transfer()</code>: Mengurangi saldo pengirim dan menambah saldo penerima secara aman serta memancarkan event <code>Transfer</code> untuk dicatat node indexer.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- CONTRACT 2 -->
+        <article class="soal-card" id="c2">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">02</div>
+            <div>
+              <div class="soal-title">2. Voting Contract (Pemungutan Suara Terdesentralisasi)</div>
+              <div class="soal-sub">Konsep: Structs, Arrays, State Updates, Anti-Double-Vote</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract VotingSystem {
+    struct Candidate {
+        uint256 id;
+        string name;
+        uint256 voteCount;
+    }
+
+    address public admin;
+    Candidate[] public candidates;
+    mapping(address => bool) public hasVoted;
+    bool public votingOpen = true;
+
+    event VoteCasted(address indexed voter, uint256 candidateId);
+
+    constructor(string[] memory _candidateNames) {
+        admin = msg.sender;
+        for (uint256 i = 0; i < _candidateNames.length; i++) {
+            candidates.push(Candidate({id: i, name: _candidateNames[i], voteCount: 0}));
+        }
+    }
+
+    function vote(uint256 _candidateId) external {
+        require(votingOpen, "Voting closed");
+        require(!hasVoted[msg.sender], "Already voted");
+        require(_candidateId < candidates.length, "Invalid candidate id");
+
+        hasVoted[msg.sender] = true;
+        candidates[_candidateId].voteCount++;
+        emit VoteCasted(msg.sender, _candidateId);
+    }
+
+    function getWinner() external view returns (string memory winnerName, uint256 highestVotes) {
+        uint256 winningVote = 0;
+        uint256 winningId = 0;
+        for (uint256 i = 0; i < candidates.length; i++) {
+            if (candidates[i].voteCount > winningVote) {
+                winningVote = candidates[i].voteCount;
+                winningId = i;
+            }
+        }
+        return (candidates[winningId].name, winningVote);
+    }
+}</code></pre>
+          </div>
+          <div class="highlight-box">
+            <h4>Penjelasan Fungsi:</h4>
+            <ul>
+              <li><code>hasVoted mapping</code>: Menjamin asas jujur pemilu di mana satu address hanya diizinkan memilih tepat 1 kali.</li>
+              <li><code>vote()</code>: Menerapkan pengecekan integritas sebelum memperbarui state kandidat dan menandai voter.</li>
+              <li><code>getWinner()</code>: Fungsi <code>view</code> murni tanpa biaya gas transaksi untuk menghitung pemenang terbanyak.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- CONTRACT 3 -->
+        <article class="soal-card" id="c3">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">03</div>
+            <div>
+              <div class="soal-title">3. Crowdfunding (Penggalangan Dana & Refund Otomatis)</div>
+              <div class="soal-sub">Konsep: Payable, Deadline Block Timestamp, Checks-Effects-Interactions</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Crowdfunding {
+    address payable public beneficiary;
+    uint256 public goal;
+    uint256 public deadline;
+    uint256 public totalRaised;
+
+    mapping(address => uint256) public contributions;
+    bool public fundingClaimed;
+
+    constructor(address payable _beneficiary, uint256 _goalEth, uint256 _durationHours) {
+        beneficiary = _beneficiary;
+        goal = _goalEth * 1 ether;
+        deadline = block.timestamp + (_durationHours * 1 hours);
+    }
+
+    function contribute() external payable {
+        require(block.timestamp < deadline, "Campaign expired");
+        require(msg.value > 0, "Donation must be > 0");
+        contributions[msg.sender] += msg.value;
+        totalRaised += msg.value;
+    }
+
+    function withdrawFunds() external {
+        require(block.timestamp >= deadline, "Campaign still active");
+        require(totalRaised >= goal, "Goal not reached");
+        require(!fundingClaimed, "Funds already claimed");
+
+        fundingClaimed = true;
+        beneficiary.transfer(totalRaised);
+    }
+
+    function claimRefund() external {
+        require(block.timestamp >= deadline, "Campaign still active");
+        require(totalRaised < goal, "Goal reached, no refund");
+        uint256 amount = contributions[msg.sender];
+        require(amount > 0, "No contribution to refund");
+
+        contributions[msg.sender] = 0; // Prevent reentrancy
+        payable(msg.sender).transfer(amount);
+    }
+}</code></pre>
+          </div>
+          <div class="highlight-box">
+            <h4>Penjelasan Fungsi:</h4>
+            <ul>
+              <li><code>contribute()</code>: Menerima transfer ETH langsung menggunakan modifier <code>payable</code>.</li>
+              <li><code>claimRefund()</code>: Memberikan garansi kepada investor jika target dana tidak tercapai; saldo di-nol-kan sebelum transfer guna mencegah Reentrancy.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- CONTRACT 4 -->
+        <article class="soal-card" id="c4">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">04</div>
+            <div>
+              <div class="soal-title">4. Dutch Auction (Lelang Harga Menurun Otomatis)</div>
+              <div class="soal-sub">Konsep: Dynamic Price Calculation, Refund Kembalian, Transfer ETH</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract DutchAuction {
+    address payable public seller;
+    uint256 public startingPrice;
+    uint256 public discountRate;
+    uint256 public startAt;
+    uint256 public expiresAt;
+    bool public stopped;
+
+    constructor(uint256 _startingPrice, uint256 _discountRate, uint256 _durationSeconds) {
+        seller = payable(msg.sender);
+        startingPrice = _startingPrice;
+        discountRate = _discountRate;
+        startAt = block.timestamp;
+        expiresAt = block.timestamp + _durationSeconds;
+        require(_startingPrice >= _discountRate * _durationSeconds, "Starting price too low");
+    }
+
+    function getPrice() public view returns (uint256) {
+        uint256 timeElapsed = block.timestamp - startAt;
+        uint256 discount = discountRate * timeElapsed;
+        return startingPrice - discount;
+    }
+
+    function buy() external payable {
+        require(!stopped, "Auction ended");
+        require(block.timestamp < expiresAt, "Auction expired");
+        uint256 price = getPrice();
+        require(msg.value >= price, "ETH sent lower than current price");
+
+        stopped = true;
+        seller.transfer(price);
+        uint256 refund = msg.value - price;
+        if (refund > 0) {
+            payable(msg.sender).transfer(refund);
+        }
+    }
+}</code></pre>
+          </div>
+        </article>
+
+        <!-- CONTRACT 5 -->
+        <article class="soal-card" id="c5">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">05</div>
+            <div>
+              <div class="soal-title">5. Multi-Signature Wallet (Dompet Multi Pemilik)</div>
+              <div class="soal-sub">Konsep: M-of-N Approval Threshold, Execution Gateways, Security Multi-Admin</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract MultiSigWallet {
+    address[] public owners;
+    mapping(address => bool) public isOwner;
+    uint256 public requiredApprovals;
+
+    struct Transaction {
+        address destination;
+        uint256 value;
+        bool executed;
+        uint256 approvalCount;
+    }
+
+    Transaction[] public transactions;
+    mapping(uint256 => mapping(address => bool)) public approvals;
+
+    constructor(address[] memory _owners, uint256 _required) {
+        require(_owners.length > 0 && _required <= _owners.length && _required > 0, "Invalid params");
+        for (uint256 i = 0; i < _owners.length; i++) {
+            isOwner[_owners[i]] = true;
+        }
+        owners = _owners;
+        requiredApprovals = _required;
+    }
+
+    function submitTransaction(address _to, uint256 _value) external {
+        require(isOwner[msg.sender], "Not owner");
+        transactions.push(Transaction({destination: _to, value: _value, executed: false, approvalCount: 0}));
+    }
+
+    function approveTransaction(uint256 _txId) external {
+        require(isOwner[msg.sender], "Not owner");
+        require(_txId < transactions.length, "Tx doesn't exist");
+        require(!transactions[_txId].executed, "Tx already executed");
+        require(!approvals[_txId][msg.sender], "Tx already approved by you");
+
+        approvals[_txId][msg.sender] = true;
+        transactions[_txId].approvalCount++;
+
+        if (transactions[_txId].approvalCount >= requiredApprovals) {
+            executeTransaction(_txId);
+        }
+    }
+
+    function executeTransaction(uint256 _txId) internal {
+        Transaction storage txn = transactions[_txId];
+        txn.executed = true;
+        (bool success, ) = txn.destination.call{value: txn.value}("");
+        require(success, "Tx execution failed");
+    }
+
+    receive() external payable {}
+}</code></pre>
+          </div>
+        </article>
+
+        <!-- CONTRACT 6 -->
+        <article class="soal-card" id="c6">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">06</div>
+            <div>
+              <div class="soal-title">6. Standard ERC-20 Token (Fungible Token Protocol)</div>
+              <div class="soal-sub">Konsep: Allowance, approve, transferFrom, OpenZeppelin Style Interface</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract ERC20Token {
+    string public name = "Binus Coin";
+    string public symbol = "BNC";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
+
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+
+    constructor(uint256 _initialSupply) {
+        totalSupply = _initialSupply * 10 ** decimals;
+        balanceOf[msg.sender] = totalSupply;
+        emit Transfer(address(0), msg.sender, totalSupply);
+    }
+
+    function transfer(address _to, uint256 _value) external returns (bool) {
+        require(balanceOf[msg.sender] >= _value, "Balance low");
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
+        emit Transfer(msg.sender, _to, _value);
+        return true;
+    }
+
+    function approve(address _spender, uint256 _value) external returns (bool) {
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+
+    function transferFrom(address _from, address _to, uint256 _value) external returns (bool) {
+        require(balanceOf[_from] >= _value, "Balance low");
+        require(allowance[_from][msg.sender] >= _value, "Allowance exceeded");
+        allowance[_from][msg.sender] -= _value;
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+        emit Transfer(_from, _to, _value);
+        return true;
+    }
+}</code></pre>
+          </div>
+        </article>
+
+        <!-- CONTRACT 7 -->
+        <article class="soal-card" id="c7">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">07</div>
+            <div>
+              <div class="soal-title">7. NFT ERC-721 (Non-Fungible Token Minting)</div>
+              <div class="soal-sub">Konsep: Unique Token ID, Token URI, Ownership Mapping</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleNFT {
+    string public name = "CyberBadge";
+    string public symbol = "CBDG";
+    uint256 public nextTokenId;
+    address public minter;
+
+    mapping(uint256 => address) public ownerOf;
+    mapping(address => uint256) public balanceOf;
+    mapping(uint256 => string) private _tokenURIs;
+
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+
+    constructor() { minter = msg.sender; }
+
+    function mint(address _to, string calldata _uri) external returns (uint256) {
+        require(msg.sender == minter, "Only minter");
+        uint256 tokenId = nextTokenId++;
+        ownerOf[tokenId] = _to;
+        balanceOf[_to]++;
+        _tokenURIs[tokenId] = _uri;
+        emit Transfer(address(0), _to, tokenId);
+        return tokenId;
+    }
+
+    function tokenURI(uint256 _tokenId) external view returns (string memory) {
+        require(ownerOf[_tokenId] != address(0), "Nonexistent token");
+        return _tokenURIs[_tokenId];
+    }
+}</code></pre>
+          </div>
+        </article>
+
+        <!-- CONTRACT 8 -->
+        <article class="soal-card" id="c8">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">08</div>
+            <div>
+              <div class="soal-title">8. Staking Rewards Contract (DeFi Yield Farm)</div>
+              <div class="soal-sub">Konsep: Reward Per Block/Second, Timestamp Calculation, Lockup</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleStaking {
+    uint256 public constant REWARD_RATE = 100; // 100 wei per second per staked ether
+    mapping(address => uint256) public stakedBalance;
+    mapping(address => uint256) public lastClaimTime;
+
+    function stake() external payable {
+        require(msg.value > 0, "Cannot stake 0");
+        updateReward(msg.sender);
+        stakedBalance[msg.sender] += msg.value;
+    }
+
+    function withdraw(uint256 _amount) external {
+        require(stakedBalance[msg.sender] >= _amount, "Insufficient stake");
+        updateReward(msg.sender);
+        stakedBalance[msg.sender] -= _amount;
+        payable(msg.sender).transfer(_amount);
+    }
+
+    function updateReward(address _account) internal {
+        if (stakedBalance[_account] > 0) {
+            uint256 timePassed = block.timestamp - lastClaimTime[_account];
+            uint256 pending = (stakedBalance[_account] * timePassed * REWARD_RATE) / 1 ether;
+            // Transfer reward or mint token
+        }
+        lastClaimTime[_account] = block.timestamp;
+    }
+}</code></pre>
+          </div>
+        </article>
+
+        <!-- CONTRACT 9 -->
+        <article class="soal-card" id="c9">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">09</div>
+            <div>
+              <div class="soal-title">9. Governance DAO (Proposal & Voting Quorum)</div>
+              <div class="soal-sub">Konsep: Decentralized Autonomous Organization, Timelock, On-chain Governance</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract SimpleDAO {
+    struct Proposal {
+        string description;
+        uint256 votesFor;
+        uint256 votesAgainst;
+        uint256 deadline;
+        bool executed;
+    }
+
+    Proposal[] public proposals;
+    mapping(uint256 => mapping(address => bool)) public voted;
+    mapping(address => uint256) public shares;
+
+    function createProposal(string calldata _desc) external returns (uint256) {
+        require(shares[msg.sender] > 0, "Must hold shares");
+        proposals.push(Proposal({
+            description: _desc,
+            votesFor: 0,
+            votesAgainst: 0,
+            deadline: block.timestamp + 3 days,
+            executed: false
+        }));
+        return proposals.length - 1;
+    }
+
+    function vote(uint256 _proposalId, bool _support) external {
+        Proposal storage p = proposals[_proposalId];
+        require(block.timestamp < p.deadline, "Voting closed");
+        require(!voted[_proposalId][msg.sender], "Already voted");
+
+        voted[_proposalId][msg.sender] = true;
+        if (_support) p.votesFor += shares[msg.sender];
+        else p.votesAgainst += shares[msg.sender];
+    }
+}</code></pre>
+          </div>
+        </article>
+
+        <!-- CONTRACT 10 -->
+        <article class="soal-card" id="c10">
+          <div class="soal-header">
+            <div class="soal-number" style="background:rgba(57,255,20,0.1); color:var(--neon-green); border-color:var(--neon-green);">10</div>
+            <div>
+              <div class="soal-title">10. Escrow Service (Rekening Bersama Pihak Ketiga Arbiter)</div>
+              <div class="soal-sub">Konsep: Buyer, Seller, Arbiter State Machine (AWAITING_PAYMENT, COMPLETE, REFUNDED)</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Solidity ^0.8.20</span><button class="copy-btn">Copy</button></div>
+            <pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract EscrowService {
+    address public buyer;
+    address payable public seller;
+    address public arbiter;
+    uint256 public amount;
+
+    enum State { AwaitingPayment, AwaitingDelivery, Complete, Refunded }
+    State public currentState;
+
+    modifier onlyBuyer() { require(msg.sender == buyer, "Only buyer"); _; }
+    modifier onlyBuyerOrArbiter() { require(msg.sender == buyer || msg.sender == arbiter, "Unauthorized"); _; }
+
+    constructor(address payable _seller, address _arbiter) {
+        buyer = msg.sender;
+        seller = _seller;
+        arbiter = _arbiter;
+        currentState = State.AwaitingPayment;
+    }
+
+    function deposit() external payable onlyBuyer {
+        require(currentState == State.AwaitingPayment, "Invalid state");
+        amount = msg.value;
+        currentState = State.AwaitingDelivery;
+    }
+
+    function releaseToSeller() external onlyBuyerOrArbiter {
+        require(currentState == State.AwaitingDelivery, "Invalid state");
+        currentState = State.Complete;
+        seller.transfer(amount);
+    }
+
+    function refundToBuyer() external {
+        require(msg.sender == arbiter, "Only arbiter can refund");
+        require(currentState == State.AwaitingDelivery, "Invalid state");
+        currentState = State.Refunded;
+        payable(buyer).transfer(amount);
+    }
+}</code></pre>
+          </div>
+        </article>
+
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — Solidity Cheatsheet & 10 Contracts</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

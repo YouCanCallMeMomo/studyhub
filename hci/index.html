@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human-Computer Interaction — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--purple), var(--neon-pink));">🧠</div>
+        <div>
+          <div class="logo-text">HCI<span style="color:var(--purple)">.Lab</span></div>
+          <span class="logo-sub">COMP6839001</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link active"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link"><span class="nav-icon">📚</span> 6 Topik Materi HCI</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Semua Matkul</div>
+        <a href="../reverse-engineering/index.html" class="nav-link"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link active"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current">Human-Computer Interaction</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 20px 0;">
+          <div class="hero-tag"><span class="dot"></span> COMP6839001 • COGNITIVE ERGONOMICS & INTERACTION DESIGN</div>
+          <h1 class="glitch-text" data-text="Human-Computer Interaction">Human-Computer <span class="highlight" style="color:var(--purple)">Interaction</span></h1>
+          <p style="color:var(--text-secondary); margin-top:8px; max-width:750px;">
+            Materi esensial UTS HCI Semester 4 BINUS: Fondasi Interaction Design, model konseptual & metafora antarmuka, psikologi kognitif pengguna (Fitts' Law, Hick's Law, beban kognitif), interaksi sosial & CSCW, 3 tingkatan desain emosional Don Norman, serta spektrum antarmuka modern (GUI, NUI, VUI, AR/VR, BCI).
+          </p>
+          <div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
+            <a href="materi.html" class="btn btn-primary" style="background:linear-gradient(135deg, var(--purple), var(--neon-cyan)); color:#000;">📚 Buka 6 Topik Materi Lengkap</a>
+            <a href="#kuis-section" class="btn btn-outline" style="border-color:var(--purple); color:var(--purple);">⚡ Kerjakan Kuis Interaktif</a>
+          </div>
+        </header>
+
+        <!-- CHECKLIST PROGRESS -->
+        <section class="card" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="font-size:16px; color:var(--purple);">🎯 Target Capaian UTS Human-Computer Interaction</h3>
+            <span class="badge" style="border-color:var(--purple); color:var(--purple);">PROGRESS UTS</span>
+          </div>
+          <div class="grid-2">
+            <label class="progress-check" data-key="hci_interaction_design">
+              <input type="checkbox">
+              <span>Prinsip Norman: Visibility, Feedback, Constraints, Consistency, Affordance & Signifiers</span>
+            </label>
+            <label class="progress-check" data-key="hci_conceptual_models">
+              <input type="checkbox">
+              <span>Model Konseptual, Metafora Antarmuka & 4 Paradigma Interaksi (Instructing, Conversing, etc.)</span>
+            </label>
+            <label class="progress-check" data-key="hci_cognitive_laws">
+              <input type="checkbox">
+              <span>Aspek Kognitif: Perhatian, Memori (Miller's 7±2), Fitts' Law & Hick's Law</span>
+            </label>
+            <label class="progress-check" data-key="hci_social_interaction">
+              <input type="checkbox">
+              <span>Interaksi Sosial, Mekanisme CSCW, Synchronous vs Asynchronous Collaboration</span>
+            </label>
+            <label class="progress-check" data-key="hci_emotional_levels">
+              <input type="checkbox">
+              <span>3 Level Emosional Norman: Visceral (tampilan), Behavioral (kegunaan), Reflective (makna)</span>
+            </label>
+            <label class="progress-check" data-key="hci_interface_types">
+              <input type="checkbox">
+              <span>Klasifikasi Ragam Antarmuka: CLI, GUI, NUI (Touch/Gesture), VUI, AR/VR, dan BCI</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- TOPICS SUMMARY CARDS -->
+        <div class="section-heading">
+          <h2>📚 Ringkasan 6 Topik UTS</h2>
+          <div class="line"></div>
+          <span class="badge">SYLLABUS COMP6839001</span>
+        </div>
+
+        <div class="grid-auto" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-bottom:36px;">
+          <!-- Topic 1 -->
+          <div class="card">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+              <span style="font-size:24px;">🎯</span>
+              <div>
+                <h4 style="color:var(--purple); font-size:16px;">Topik 1: Interaction Design</h4>
+                <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-code);">UCD & NORMAN PRINCIPLES</span>
+              </div>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+              Memahami User-Centered Design (UCD), perbedaan Usability Goals (efektivitas, efisiensi, safety, learnability) vs User Experience Goals (menyenangkan, estetik, rewarding), serta 6 prinsip desain fundamental Donald Norman.
+            </p>
+            <a href="materi.html#topik1" class="btn btn-sm btn-outline" style="border-color:var(--purple); color:var(--purple);">Pelajari Topik 1 →</a>
+          </div>
+
+          <!-- Topic 2 -->
+          <div class="card">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+              <span style="font-size:24px;">🧩</span>
+              <div>
+                <h4 style="color:var(--neon-cyan); font-size:16px;">Topik 2: Conceptualizing Interaction</h4>
+                <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-code);">MENTAL MODELS & PARADIGMS</span>
+              </div>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+              Model konseptual versus mental model pengguna, antarmuka berbasis metafora (desktop, shopping cart), serta 4 tipe interaksi utama: Instructing, Conversing, Manipulating, dan Exploring.
+            </p>
+            <a href="materi.html#topik2" class="btn btn-sm btn-outline" style="border-color:var(--neon-cyan); color:var(--neon-cyan);">Pelajari Topik 2 →</a>
+          </div>
+
+          <!-- Topic 3 -->
+          <div class="card">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+              <span style="font-size:24px;">⚡</span>
+              <div>
+                <h4 style="color:var(--neon-green); font-size:16px;">Topik 3: Cognitive Aspects</h4>
+                <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-code);">FITTS' LAW & HICK'S LAW</span>
+              </div>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+              Keterbatasan atensi manusia, persepsi visual, memori kerja vs jangka panjang, Cognitive Load Theory, formulasi Fitts' Law (waktu pointing) dan Hick's Law (waktu pengambilan keputusan).
+            </p>
+            <a href="materi.html#topik3" class="btn btn-sm btn-outline" style="border-color:var(--neon-green); color:var(--neon-green);">Pelajari Topik 3 →</a>
+          </div>
+
+          <!-- Topic 4 -->
+          <div class="card">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+              <span style="font-size:24px;">👥</span>
+              <div>
+                <h4 style="color:var(--orange); font-size:16px;">Topik 4: Social Interaction</h4>
+                <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-code);">CSCW & TELEPRESENCE</span>
+              </div>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+              Mekanisme kolaborasi manusia-komputer: Computer-Supported Cooperative Work (CSCW), matriks waktu-tempat (Same/Different Time/Place), Social Presence, Telepresence, dan norma komunitas online.
+            </p>
+            <a href="materi.html#topik4" class="btn btn-sm btn-outline" style="border-color:var(--orange); color:var(--orange);">Pelajari Topik 4 →</a>
+          </div>
+
+          <!-- Topic 5 -->
+          <div class="card">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+              <span style="font-size:24px;">💖</span>
+              <div>
+                <h4 style="color:var(--neon-pink); font-size:16px;">Topik 5: Emotional Interaction</h4>
+                <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-code);">VISCERAL, BEHAVIORAL, REFLECTIVE</span>
+              </div>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+              Teori 3 tingkatan emosional Donald Norman: Visceral (estetika sensoris awal), Behavioral (kenyamanan fungsionalitas), dan Reflective (identitas diri dan kebanggaan), serta peran Affective Computing.
+            </p>
+            <a href="materi.html#topik5" class="btn btn-sm btn-outline" style="border-color:var(--neon-pink); color:var(--neon-pink);">Pelajari Topik 5 →</a>
+          </div>
+
+          <!-- Topic 6 -->
+          <div class="card">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+              <span style="font-size:24px;">🌐</span>
+              <div>
+                <h4 style="color:var(--electric-blue); font-size:16px;">Topik 6: Interface Types</h4>
+                <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-code);">CLI TO BCI PARADIGMS</span>
+              </div>
+            </div>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+              Evolusi antarmuka: Command Line Interface (CLI), GUI, Natural User Interface (NUI), Voice User Interface (VUI), Virtual/Augmented Reality (AR/VR), Wearables, Tangible UI, dan Brain-Computer Interface (BCI).
+            </p>
+            <a href="materi.html#topik6" class="btn btn-sm btn-outline" style="border-color:var(--electric-blue); color:var(--electric-blue);">Pelajari Topik 6 →</a>
+          </div>
+        </div>
+
+        <!-- QUIZ CONTAINER -->
+        <section id="kuis-section" style="margin-top:40px;">
+          <div class="section-heading">
+            <h2 style="color:var(--purple);">⚡ Kuis Pemahaman Human-Computer Interaction</h2>
+            <div class="line"></div>
+            <span class="badge" style="border-color:var(--purple); color:var(--purple);">5 SOAL UTS PREP</span>
+          </div>
+          <div id="quiz-hci-root"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll ke atas">↑</button>
+  <footer class="site-footer">
+    <div><span class="footer-brand">StudyHub SOC v2.0</span> — Human-Computer Interaction Module</div>
+    <div>BINUS Cyber Security UTS Prep &bull; All Rights Reserved</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="js/quiz-hci.js"></script>
+</body>
+</html>

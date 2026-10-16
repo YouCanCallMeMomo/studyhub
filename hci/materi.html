@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Human-Computer Interaction — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--purple), var(--neon-pink));">🧠</div>
+        <div>
+          <div class="logo-text">HCI<span style="color:var(--purple)">.Theory</span></div>
+          <span class="logo-sub">COMP6839001</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link active"><span class="nav-icon">📚</span> 6 Topik Materi</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Daftar Topik UTS</div>
+        <a href="#topik1" class="nav-link"><span class="nav-icon">🎯</span> 1. Interaction Design</a>
+        <a href="#topik2" class="nav-link"><span class="nav-icon">🧩</span> 2. Conceptualizing</a>
+        <a href="#topik3" class="nav-link"><span class="nav-icon">⚡</span> 3. Cognitive Aspects</a>
+        <a href="#topik4" class="nav-link"><span class="nav-icon">👥</span> 4. Social Interaction</a>
+        <a href="#topik5" class="nav-link"><span class="nav-icon">💖</span> 5. Emotional Interaction</a>
+        <a href="#topik6" class="nav-link"><span class="nav-icon">🌐</span> 6. Interface Types</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Semua Matkul</div>
+        <a href="../reverse-engineering/index.html" class="nav-link"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link active"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">HCI</a>
+          <span class="sep">/</span>
+          <span class="current">6 Topik Materi Utama UTS</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> DIKTAT KOMPREHENSIF UTS SEMESTER 4</div>
+          <h1 class="glitch-text" data-text="HCI Core Syllabus">Human-Computer <span class="highlight" style="color:var(--purple)">Interaction</span></h1>
+          <p style="color:var(--text-secondary); max-width:780px;">
+            Diktat teori mendalam dan komprehensif untuk persiapan ujian UTS Computer Science / Cyber Security. Mencakup fondasi User-Centered Design (UCD), prinsip Donald Norman, model mental, hukum kognitif Fitts & Hick, kerangka CSCW, psikologi emosional, dan evolusi ragam antarmuka modern.
+          </p>
+        </header>
+
+        <!-- TOPIK 1 -->
+        <section class="materi-section" id="topik1">
+          <h2>1. Interaction Design: Prinsip, Goals & UCD</h2>
+          <p>
+            <strong>Interaction Design (IxD)</strong> adalah perancangan produk digital interaktif yang mendukung cara orang berkomunikasi dan berinteraksi dalam kehidupan sehari-hari maupun profesional. Fokus utamanya adalah menciptakan pengalaman yang bermakna dan berdaya guna tinggi bagi pengguna.
+          </p>
+
+          <div class="grid-2" style="margin: 20px 0;">
+            <div class="card">
+              <h4 style="color:var(--neon-cyan); margin-bottom:10px;">⚖️ Usability Goals (Tujuan Kegunaan Objektif)</h4>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">Kriteria performa kuantitatif yang harus dipenuhi antarmuka:</p>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Effectiveness:</strong> Seberapa baik produk dapat menyelesaikan tugas pengguna secara tuntas dan akurat.</li>
+                <li><strong>Efficiency:</strong> Seberapa cepat pengguna dapat menyelesaikan pekerjaannya setelah menguasai alur sistem (minimal klik/langkah).</li>
+                <li><strong>Safety:</strong> Melindungi pengguna dari bahaya kesalahan fatal (fungsi konfirmasi, undo, recovery data).</li>
+                <li><strong>Utility:</strong> Apakah sistem menyediakan serangkaian fungsi yang memang dibutuhkan untuk tugas pengguna.</li>
+                <li><strong>Learnability:</strong> Seberapa mudah bagi pemula untuk mempelajari operasi dasar sistem sejak awal interaksi.</li>
+                <li><strong>Memorability:</strong> Seberapa mudah pengguna mengingat kembali cara mengoperasikan sistem setelah lama tidak menggunakannya.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--neon-pink); margin-bottom:10px;">✨ User Experience Goals (Tujuan Pengalaman Subjektif)</h4>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">Perasaan afektif dan kesan emosional yang dialami pengguna:</p>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Desirable (Positif):</strong> Memuaskan (satisfying), menyenangkan (enjoyable), seru (fun), menarik secara estetika (engaging), memotivasi (motivating), dan menantang secara kognitif (rewarding).</li>
+                <li><strong>Undesirable (Harus Dihindari):</strong> Menjengkelkan (frustrating), membosankan (dull), mempermalukan (patronizing), membuat cemas (anxiety-inducing), dan membingungkan (confusing).</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="color:var(--purple); margin:24px 0 12px;">Prinsip Desain Fundamental Donald Norman</h3>
+          <p style="font-size:14px; margin-bottom:16px;">
+            Donald Norman dalam bukunya <em>The Design of Everyday Things</em> merumuskan 6 prinsip esensial dalam rancang bangun antarmuka:
+          </p>
+
+          <div class="table-responsive" style="margin-bottom:24px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--neon-cyan);">
+                  <th style="padding:10px;">Prinsip</th>
+                  <th style="padding:10px;">Definisi</th>
+                  <th style="padding:10px;">Contoh Penerapan Nyata</th>
+                  <th style="padding:10px;">Efek Jika Dilanggar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">1. Visibility</td>
+                  <td style="padding:10px;">Status fungsionalitas dan opsi kontrol harus dapat dilihat secara jelas dan eksplisit oleh pengguna.</td>
+                  <td style="padding:10px;">Menu utama terlihat jelas di navigasi, bukan tersembunyi tanpa indikator.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Pengguna kebingungan mencari letak fitur ("Out of sight, out of mind").</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">2. Feedback</td>
+                  <td style="padding:10px;">Mengirimkan informasi balik kepada pengguna tentang aksi apa yang baru saja dilakukan dan apa hasilnya.</td>
+                  <td style="padding:10px;">Efek hover tombol, status spinner saat download, suara 'klik', toast notification sukses.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Pengguna menekan tombol berulang kali karena menduga sistem macet (double submit).</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">3. Constraints</td>
+                  <td style="padding:10px;">Membatasi opsi interaksi yang mungkin dilakukan pengguna untuk mencegah terjadinya kesalahan langkah.</td>
+                  <td style="padding:10px;">Tombol 'Submit' dinonaktifkan (disabled) sampai semua form wajib diisi valid; date picker memblokir tanggal masa lalu.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Terjadi runtime error sistem akibat input format tanggal atau karakter yang salah.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">4. Consistency</td>
+                  <td style="padding:10px;">Menggunakan operasi dan elemen desain yang serupa untuk aksi-aksi yang setara di seluruh sistem.</td>
+                  <td style="padding:10px;">Warna tombol merah selalu berarti 'Delete/Cancel' di semua modul; shortcut Ctrl+S selalu 'Save'.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Kurva belajar menjadi curam; pengguna salah mengira akibat fungsi yang bergeser.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">5. Affordance</td>
+                  <td style="padding:10px;">Atribut mendasar suatu benda yang mengisyaratkan bagaimana benda tersebut dapat dioperasikan.</td>
+                  <td style="padding:10px;">Bentuk tombol fisik yang timbul mengundang jari untuk ditekan; kenop bulat mengundang untuk diputar.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Objek tampak datar seperti teks biasa sehingga tidak disadari bisa diklik (flat design trap).</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">6. Signifiers</td>
+                  <td style="padding:10px;">Sinyal perseptual eksplisit yang memberitahukan pengguna *di mana* dan *bagaimana* suatu aksi harus dieksekusi.</td>
+                  <td style="padding:10px;">Ikon garis tiga hamburger, panah dropdown pada select menu, label teks "Klik Disini", garis bawah hyperlink.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Pengguna ragu-ragu menentukan elemen mana yang interaktif.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="highlight-box purple">
+            <h4>💡 Siklus User-Centered Design (UCD):</h4>
+            <p style="margin-bottom:8px;">Pendekatan UCD memastikan produk dirancang dengan menempatkan kebutuhan, kebiasaan, dan batasan pengguna sebagai titik tumpu utama melalui iterasi berulang:</p>
+            <ol style="padding-left:20px; font-size:13px; line-height:1.8;">
+              <li><strong>Understand Context of Use:</strong> Mengidentifikasi profil pengguna, tugas yang dikerjakan, dan lingkungan eksekusinya.</li>
+              <li><strong>Specify User Requirements:</strong> Menetapkan sasaran fungsional dan usability yang dapat diukur.</li>
+              <li><strong>Design Solutions:</strong> Membuat wireframe, sketsa konseptual, dan prototipe interaktif (low-fidelity hingga high-fidelity).</li>
+              <li><strong>Evaluate Against Requirements:</strong> Menguji prototipe kepada pengguna riil melalui usability testing, wawancara, dan evaluasi heuristik.</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- TOPIK 2 -->
+        <section class="materi-section" id="topik2">
+          <h2>2. Conceptualizing Interaction: Model Konseptual & Paradigma</h2>
+          <p>
+            Sebelum mulai menggambar tombol visual atau menulis baris kode CSS/HTML, desainer harus merumuskan <strong>Conceptual Model</strong> — deskripsi abstraksi tingkat tinggi tentang bagaimana suatu sistem diorganisasikan dan dioperasikan.
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--orange);">Model Konseptual vs Mental Model</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Design Model (Conceptual Model):</strong> Model sistem yang dirancang oleh desainer perangkat lunak secara sadar dan terstruktur.</li>
+                <li><strong>User's Mental Model:</strong> Representasi psikologis dalam pikiran pengguna tentang cara kerja sistem tersebut, terbentuk dari pengalaman masa lalu dan analogi dunia nyata.</li>
+                <li><strong>System Image:</strong> Wujud fisik aktual dari sistem (UI, pesan error, dokumentasi, manual). Jika System Image tidak mencerminkan Design Model secara jernih, User's Mental Model akan cacat dan berujung frustrasi.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--neon-cyan);">Metafora Antarmuka (Interface Metaphors)</h4>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">
+                Meminjam pemahaman pengguna dari dunia nyata untuk memudahkan pemahaman terhadap konsep komputasi abstrak:
+              </p>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Desktop Metaphor:</strong> File disimpan dalam Folder, berkas yang tidak terpakai dibuang ke Tempat Sampah (Recycle Bin).</li>
+                <li><strong>Shopping Cart:</strong> Memasukkan belanjaan ke keranjang sebelum menuju kasir (Checkout) di platform e-commerce.</li>
+                <li><strong>Tabbed Notebook:</strong> Tab navigasi pada web browser dan formulir dialog meniru pembatas lembar binder fisik.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="color:var(--purple); margin:24px 0 12px;">4 Tipe Interaksi Utama (Interaction Types)</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4 style="color:var(--neon-green);">1. Instructing (Memberi Perintah)</h4>
+              <p style="font-size:13px; color:var(--text-secondary);">
+                Pengguna mengeluarkan serangkaian perintah langsung ke sistem melalui tombol, shortcut, atau CLI. Cocok untuk operasi cepat berulang (misal: Ctrl+C, menekan tombol Print, mengetik perintah Shell).
+              </p>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--electric-blue);">2. Conversing (Bercakap-cakap)</h4>
+              <p style="font-size:13px; color:var(--text-secondary);">
+                Pengguna berdialog dua arah dengan sistem layaknya bercakap dengan manusia (Natural Language). Contoh: Chatbot layanan pelanggan, ChatGPT, asisten suara Apple Siri / Google Assistant.
+              </p>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--orange);">3. Manipulating (Manipulasi Langsung)</h4>
+              <p style="font-size:13px; color:var(--text-secondary);">
+                Pengguna memanipulasi objek virtual secara spasial melalui aksi fisik (klik, drag-and-drop, zoom cubit). Memberikan umpan balik langsung yang instan dan reversibel (mudah di-undo). Contoh: Menggeser slider, drag folder ke folder lain.
+              </p>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--purple);">4. Exploring (Menjelajah)</h4>
+              <p style="font-size:13px; color:var(--text-secondary);">
+                Pengguna bergerak menjelajahi lingkungan virtual 3D, sensor lingkungan, atau peta interaktif untuk menemukan informasi secara organik. Contoh: Google Street View, game 3D open-world, virtual showroom metaverse.
+              </p>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:20px;">
+            <h4 style="color:var(--neon-pink); margin-bottom:8px;">Gulf of Execution vs Gulf of Evaluation (Donald Norman)</h4>
+            <p style="font-size:13px; line-height:1.7;">
+              <strong>Gulf of Execution:</strong> Kesenjangan antara niat pengguna (apa yang ingin dilakukan pengguna) dan tindakan fisik yang diizinkan oleh sistem (bagaimana pengguna melakukannya). Tugas desainer adalah memperkecil jurang ini agar pengguna langsung tahu apa yang harus ditekan.<br>
+              <strong>Gulf of Evaluation:</strong> Kesenjangan antara status fisik sistem dan kemampuan pengguna untuk menginterpretasikan apakah tujuannya telah tercapai. Tugas desainer adalah memberikan umpan balik status yang transparan dan dapat dipahami secara instan.
+            </p>
+          </div>
+        </section>
+
+        <!-- TOPIK 3 -->
+        <section class="materi-section" id="topik3">
+          <h2>3. Cognitive Aspects: Memori, Fitts' Law & Hick's Law</h2>
+          <p>
+            Memahami kapabilitas dan batasan kognitif otak manusia sangat vital dalam perancangan antarmuka agar sistem tidak membebani kapasitas pemrosesan pengguna (Cognitive Overload).
+          </p>
+
+          <div class="grid-2" style="margin:20px 0;">
+            <div class="card">
+              <h4 style="color:var(--neon-green);">Kapasitas Memori & Beban Kognitif</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Sensory Memory:</strong> Menyimpan impresi sensoris beberapa milidetik.</li>
+                <li><strong>Working Memory (Short-Term):</strong> Menyimpan informasi aktif secara temporer. George Miller (1956) mencetuskan kaidah <em>Miller's Magic Number 7 ± 2</em> (manusia hanya mampu mengingat 5 hingga 9 item sekaligus). Dalam UI modern direkomendasikan pengelompokan (<em>Chunking</em>).</li>
+                <li><strong>Long-Term Memory:</strong> Penyimpanan jangka panjang tak terbatas, namun proses <em>retrieval</em> (pemanggilan ulang) membutuhkan asosiasi bermakna.</li>
+                <li><strong>Recognition vs Recall:</strong> Manusia jauh lebih unggul mengenali sesuatu (Recognition) daripada mengingat dari ingatan kosong (Recall). Desain UI modern selalu menyajikan menu pilihan visual, bukan menyuruh pengguna mengetik dari ingatan!</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h4 style="color:var(--orange);">Attention & Perception</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Selective Attention:</strong> Kemampuan memfokuskan panca indera pada stimulus tertentu seraya mengabaikan stimulus lain.</li>
+                <li><strong>Change Blindness:</strong> Ketidakmampuan pengguna menyadari perubahan visual yang terjadi jika tidak diberi isyarat gerak atau kontras yang cukup.</li>
+                <li><strong>Gestalt Principles:</strong> Kecenderungan otak mengelompokkan elemen secara otomatis berdasarkan kedekatan jarak (Proximity), kemiripan rupa (Similarity), penutupan bidang (Closure), dan keberlanjutan garis (Continuity).</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="color:var(--neon-cyan); margin:24px 0 12px;">Hukum Kognitif Kuantitatif (Wajib UTS!)</h3>
+
+          <div class="grid-2">
+            <!-- Fitts' Law -->
+            <div class="card" style="border: 1px solid rgba(0, 255, 245, 0.3);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h4 style="color:var(--neon-cyan);">📐 Fitts' Law (Movement Time)</h4>
+                <span class="badge" style="border-color:var(--neon-cyan); color:var(--neon-cyan);">RUMUS UTS</span>
+              </div>
+              <p style="font-size:13px; margin:10px 0; color:var(--text-secondary);">
+                Memodelkan waktu yang dibutuhkan tangan/kursor untuk berpindah ke target tertentu:
+              </p>
+              <div class="code-block" style="margin:10px 0;">
+                <pre><code>MT = a + b * log2(2D / W)
+atau
+MT = a + b * log2(1 + D / W)  [Formulasi Shannon]</code></pre>
+              </div>
+              <ul style="font-size:12px; line-height:1.7; padding-left:16px;">
+                <li><strong>MT:</strong> Movement Time (waktu gerak yang dibutuhkan).</li>
+                <li><strong>D:</strong> Distance (jarak dari posisi kursor awal ke target).</li>
+                <li><strong>W:</strong> Width (lebar dimensi target sepanjang sumbu gerak).</li>
+                <li><strong>Index of Difficulty (ID):</strong> <code>log2(2D / W)</code> diukur dalam satuan bits.</li>
+                <li><strong>Implikasi Desain:</strong> Buat tombol aksi utama berukuran besar (W diperbesar) dan dekatkan dengan posisi kursor pengguna (D diperkecil). Sudut dan tepi layar memiliki lebar target virtual tak terbatas (infinite width) karena kursor terhenti secara fisik!</li>
+              </ul>
+            </div>
+
+            <!-- Hick's Law -->
+            <div class="card" style="border: 1px solid rgba(168, 85, 247, 0.3);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h4 style="color:var(--purple);">⏱️ Hick's Law (Hick-Hyman Law)</h4>
+                <span class="badge" style="border-color:var(--purple); color:var(--purple);">RUMUS UTS</span>
+              </div>
+              <p style="font-size:13px; margin:10px 0; color:var(--text-secondary);">
+                Memodelkan waktu reaksi yang dibutuhkan manusia untuk mengambil keputusan di antara sejumlah pilihan:
+              </p>
+              <div class="code-block" style="margin:10px 0;">
+                <pre><code>RT = b * log2(n + 1)</code></pre>
+              </div>
+              <ul style="font-size:12px; line-height:1.7; padding-left:16px;">
+                <li><strong>RT:</strong> Reaction Time (waktu respon memilih).</li>
+                <li><strong>n:</strong> Jumlah opsi alternatif yang setara.</li>
+                <li><strong>b:</strong> Konstanta kognitif empiris (kecepatan pemrosesan otak).</li>
+                <li><strong>Implikasi Desain:</strong> Mengurangi jumlah opsi yang ditampilkan sekaligus mempercepat pengambilan keputusan secara drastis. Gunakan teknik <em>Progressive Disclosure</em>, kategorisasi bertingkat, dan opsi default yang cerdas untuk mencegah kelumpuhan analisis pengguna.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOPIK 4 -->
+        <section class="materi-section" id="topik4">
+          <h2>4. Social Interaction: CSCW & Komunitas Online</h2>
+          <p>
+            Komputasi saat ini bukan lagi sekadar interaksi satu orang dengan satu mesin (single-user), melainkan media yang memfasilitasi komunikasi dan kolaborasi ribuan orang secara serentak.
+          </p>
+
+          <h3 style="color:var(--orange); margin:20px 0 12px;">Computer-Supported Cooperative Work (CSCW) Matrix</h3>
+          <p style="font-size:14px; margin-bottom:14px;">
+            Diusulkan oleh Ellis, Gibbs, dan Rein (1991), taksonomi ini membagi kolaborasi manusia ke dalam matriks Waktu-Tempat (Time-Space Matrix):
+          </p>
+
+          <div class="table-responsive" style="margin-bottom:24px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--neon-green);">
+                  <th style="padding:12px; width:25%;">Dimensi Kolaborasi</th>
+                  <th style="padding:12px; width:35%;">Same Time (Synchronous)</th>
+                  <th style="padding:12px; width:40%;">Different Time (Asynchronous)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:12px; font-weight:600; color:var(--neon-cyan);">Same Place (Colocated)</td>
+                  <td style="padding:12px;">
+                    <strong>Interaksi Tatap Muka:</strong><br>
+                    Smart whiteboard (Google Jamboard), presentasi ruang rapat, layar sentuh meja bersama.
+                  </td>
+                  <td style="padding:12px;">
+                    <strong>Interaksi Asinkron Lokal:</strong><br>
+                    Catatan sticky notes fisik di dinding lab, papan pengumuman kantor, terminal shift kerja bergilir.
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:12px; font-weight:600; color:var(--orange);">Different Place (Remote)</td>
+                  <td style="padding:12px;">
+                    <strong>Kolaborasi Jarak Jauh Real-Time:</strong><br>
+                    Video conference (Zoom, Teams, Google Meet), co-editing dokumen live (Google Docs, Figma live cursor), panggilan suara Discord.
+                  </td>
+                  <td style="padding:12px;">
+                    <strong>Komunikasi Terdistribusi Ditunda:</strong><br>
+                    Email korporat, forum diskusi (Reddit, StackOverflow), pull request GitHub, ticketing Jira.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h4 style="color:var(--neon-pink);">Konsep Kunci Kolaborasi Sosial</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Social Presence:</strong> Derajat kesadaran bahwa partisipan lain hadir secara nyata dalam interaksi digital.</li>
+                <li><strong>Telepresence:</strong> Sensasi psikologis pengguna merasa benar-benar berada di lokasi fisik lain melalui manipulasi sensoris.</li>
+                <li><strong>Co-presence:</strong> Kesadaran timbal balik bahwa dua orang atau lebih sedang berada di satu ruang virtual bersama-sama.</li>
+                <li><strong>Awareness Mechanisms:</strong> Mengetahui apa yang sedang dikerjakan rekan tim (misal: penunjuk kursor bernama di Figma, status "User is typing..." di WhatsApp).</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 style="color:var(--electric-blue);">Dinamika Komunitas Online</h4>
+              <ul style="font-size:13px; line-height:1.8; padding-left:18px;">
+                <li><strong>Social Loafing (Kemalasan Sosial):</strong> Kecenderungan seseorang mengerahkan usaha lebih sedikit saat bekerja dalam kelompok besar dibanding sendiri.</li>
+                <li><strong>Online Disinhibition Effect:</strong> Orang cenderung berbicara lebih bebas, terkadang kasar atau agresif (toxic/flaming), karena merasa terlindung oleh tabir anonimitas digital.</li>
+                <li><strong>Moderasi & Reputasi:</strong> Pentingnya sistem karma, lencana (badges), dan aturan perilaku untuk menjaga etika percakapan komunitas.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOPIK 5 -->
+        <section class="materi-section" id="topik5">
+          <h2>5. Emotional Interaction: Teori Don Norman & Affective Computing</h2>
+          <p>
+            Emosi manusia bukan sekadar perasaan acak, melainkan sistem pemrosesan informasi biologis yang menentukan bagaimana seseorang mengambil keputusan, memecahkan masalah, dan bereaksi terhadap situasi.
+          </p>
+
+          <h3 style="color:var(--neon-pink); margin:20px 0 12px;">3 Tingkatan Desain Emosional (Donald Norman - Emotional Design)</h3>
+          <p style="font-size:14px; margin-bottom:16px;">
+            Donald Norman mengidentifikasi bahwa otak manusia memproses pengalaman melalui 3 tingkat kognisi yang saling berkelindan:
+          </p>
+
+          <div class="grid-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+            <div class="card" style="border-top:3px solid var(--neon-pink);">
+              <h4 style="color:var(--neon-pink); margin-bottom:8px;">1. Visceral Level</h4>
+              <span class="badge" style="margin-bottom:10px;">REAKSI OTOMATIS BAWAH SADAR</span>
+              <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+                Tingkat pemrosesan biologis paling dasar dan instan. Bereaksi terhadap aspek visual sensoris (tampilan luar, bentuk, warna, tekstur, suara awal, keindahan simetri).
+              </p>
+              <div style="font-size:12px; margin-top:10px; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                <strong>Contoh UI:</strong> Desain antarmuka modern yang memukau (dark theme, animasi glowing neon, tipografi tajam) memicu hormon dopamin seketika saat landing page pertama kali dimuat.
+              </div>
+            </div>
+
+            <div class="card" style="border-top:3px solid var(--neon-green);">
+              <h4 style="color:var(--neon-green); margin-bottom:8px;">2. Behavioral Level</h4>
+              <span class="badge" style="margin-bottom:10px;">PENGALAMAN FUNGSI & KEGUNAAN</span>
+              <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+                Tingkat operasional praktis. Berkaitan erat dengan usability dan ergonomi: seberapa mudah produk dikendalikan, ketepatan fungsi, keandalan sistem, dan respon balik yang memuaskan.
+              </p>
+              <div style="font-size:12px; margin-top:10px; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                <strong>Contoh UI:</strong> Tombol copy code yang menyalin teks secara instan dalam 1 klik tanpa lag, navigasi menu keyboard yang mulus, alur form pendaftaran yang ringkas tanpa hambatan.
+              </div>
+            </div>
+
+            <div class="card" style="border-top:3px solid var(--purple);">
+              <h4 style="color:var(--purple); margin-bottom:8px;">3. Reflective Level</h4>
+              <span class="badge" style="margin-bottom:10px;">MAKNA, CITRA DIRI & MEMORI</span>
+              <p style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+                Tingkat kognitif tertinggi yang melibatkan kesadaran penuh, rasionalisasi, interpretasi budaya, kebanggaan personal, status sosial, dan memori masa lalu.
+              </p>
+              <div style="font-size:12px; margin-top:10px; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                <strong>Contoh UI:</strong> Menggunakan platform StudyHub SOC memberikan sensasi bahwa pengguna adalah analis keamanan siber profesional ("Elite Hacker Aesthetic"), membangun identitas dan kebanggaan diri.
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:20px;">
+            <h4 style="color:var(--neon-cyan); margin-bottom:8px;">Affective Computing & Antropomorfisme</h4>
+            <p style="font-size:13px; line-height:1.7; color:var(--text-secondary);">
+              <strong>Affective Computing:</strong> Cabang ilmu komputer (dipelopori oleh Rosalind Picard di MIT) yang mengembangkan sistem yang mampu mengenali, menafsirkan, dan mensimulasikan afeksi manusia (misal: analisis ekspresi wajah pengguna lewat webcam, deteksi emosi dari intonasi suara mikrofon).<br>
+              <strong>Antropomorfisme:</strong> Kecenderungan manusia memproyeksikan sifat-sifat kemanusiaan (perasaan, niat, karakter) kepada benda mati atau program komputer. Contoh: Desain asisten pintar dengan avatar wajah atau karakter virtual (Duolingo Owl). Desainer harus berhati-hati agar tidak terjerembap ke dalam fenomena <em>Uncanny Valley</em> (rasa ngeri saat objek buatan tampak hampir menyerupai manusia asli tetapi tidak sempurna).
+            </p>
+          </div>
+        </section>
+
+        <!-- TOPIK 6 -->
+        <section class="materi-section" id="topik6">
+          <h2>6. Interface Types: Dari CLI hingga BCI</h2>
+          <p>
+            Evolusi antarmuka manusia-komputer mencerminkan pergeseran dari interaksi mekanik kaku menuju interaksi alami tanpa batas fisik.
+          </p>
+
+          <div class="table-responsive" style="margin:20px 0; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-neon); color:var(--electric-blue);">
+                  <th style="padding:10px;">Tipe Interface</th>
+                  <th style="padding:10px;">Mekanisme Interaksi</th>
+                  <th style="padding:10px;">Kelebihan Utama</th>
+                  <th style="padding:10px;">Kelemahan / Limitasi</th>
+                  <th style="padding:10px;">Contoh Sistem</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-cyan);">1. CLI (Command Line)</td>
+                  <td style="padding:10px;">Mengetik string teks instruksi secara manual ke konsol prompt.</td>
+                  <td style="padding:10px;">Sangat hemat memori/resource, eksekusi scripting otomasi cepat bagi pakar.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Kurva belajar curam, menuntut beban ingatan memori tinggi (Recall murni).</td>
+                  <td style="padding:10px;">Bash shell, PowerShell, GDB, Vim.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">2. GUI (Graphical)</td>
+                  <td style="padding:10px;">WIMP paradigm (Windows, Icons, Menus, Pointer) dimanipulasi dengan mouse/keyboard.</td>
+                  <td style="padding:10px;">Intuitif, mengandalkan Recognition (mudah dipelajari), visualisasi langsung.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Beban memori grafik lebih tinggi, screen real estate terbatas pada layar kecil.</td>
+                  <td style="padding:10px;">Windows 11, macOS, desktop web apps.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--orange);">3. NUI (Natural User Interface)</td>
+                  <td style="padding:10px;">Sentuhan multi-touch, gestur tangan di udara, pelacakan mata (eye tracking).</td>
+                  <td style="padding:10px;">Sangat alami tanpa alat bantu perantara, tidak perlu belajar mekanik mouse.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Kelelahan otot (Gorilla Arm syndrome), ketiadaan umpan balik haptik fisik.</td>
+                  <td style="padding:10px;">iPad Pro, Microsoft Kinect, Apple Vision Pro.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--purple);">4. VUI (Voice User Interface)</td>
+                  <td style="padding:10px;">Pemrosesan perintah lisan (Speech Recognition & Synthesizer).</td>
+                  <td style="padding:10px;">Hands-free dan eyes-free (dapat dioperasikan saat menyetir mobil), aksesibel bagi difabel.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Rentan gangguan noise sekitar, minim privasi suara di tempat umum, tanpa visibilitas menu.</td>
+                  <td style="padding:10px;">Amazon Alexa, Google Assistant, Siri.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-pink);">5. AR / VR (Mixed Reality)</td>
+                  <td style="padding:10px;">Imersi spasial 3D: menumpuk grafik virtual di dunia nyata (AR) atau menutup total penglihatan (VR).</td>
+                  <td style="padding:10px;">Sensasi imersi spasial 360 derajat yang realistis untuk simulasi medis, militer, dan pelatihan.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Motion sickness (cybersickness), bobot headset berat, isolasi dari ruang nyata.</td>
+                  <td style="padding:10px;">Meta Quest 3, Microsoft HoloLens, Magic Leap.</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding:10px; font-weight:600; color:var(--neon-cyan);">6. Tangible & Wearables</td>
+                  <td style="padding:10px;">Benda fisik nyata berpasangan dengan komputasi digital; perangkat menempel di tubuh.</td>
+                  <td style="padding:10px;">Interaksi sentuhan taktil alami, pemantauan kesehatan biologis kontinu secara real-time.</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Keterbatasan daya baterai, ukuran layar mikro, masalah privasi data biometrik.</td>
+                  <td style="padding:10px;">Apple Watch, Oura Ring, papan balok interaktif MIT Tangible Media.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; font-weight:600; color:var(--neon-green);">7. BCI (Brain-Computer Interface)</td>
+                  <td style="padding:10px;">Menangkap sinyal gelombang listrik saraf otak (EEG non-invasif atau mikroskop elektroda invasif).</td>
+                  <td style="padding:10px;">Membuka kemampuan komunikasi bagi penderita kelumpuhan motorik total (Locked-in Syndrome).</td>
+                  <td style="padding:10px; color:var(--neon-pink);">Signal-to-noise ratio rendah, butuh kalibrasi pelatihan intensif, dilema etika neuro-privacy.</td>
+                  <td style="padding:10px;">Emotiv EEG, Neuralink, BrainGate.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll ke atas">↑</button>
+  <footer class="site-footer">
+    <div><span class="footer-brand">StudyHub SOC v2.0</span> — Human-Computer Interaction Compendium</div>
+    <div>BINUS Cyber Security UTS Prep &bull; All Rights Reserved</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

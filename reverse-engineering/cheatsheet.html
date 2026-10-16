@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assembly x86/x64 Cheatsheet — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">📜</div>
+        <div>
+          <div class="logo-text">ASM<span style="color:var(--neon-cyan)">.Ref</span></div>
+          <span class="logo-sub">x86/x64 CHEATSHEET</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link"><span class="nav-icon">📖</span> Ringkasan Materi</a>
+        <a href="cheatsheet.html" class="nav-link active"><span class="nav-icon">📜</span> Assembly Cheatsheet</a>
+        <a href="soal-latihan.html" class="nav-link"><span class="nav-icon">📝</span> 10 Soal ASM→C</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Lompat Bab</div>
+        <a href="#registers" class="nav-link"><span class="nav-icon">📊</span> Register Matrix</a>
+        <a href="#instructions" class="nav-link"><span class="nav-icon">⚙️</span> Instruksi CPU</a>
+        <a href="#calling" class="nav-link"><span class="nav-icon">📞</span> Calling Convention</a>
+        <a href="#stack" class="nav-link"><span class="nav-icon">🧱</span> Stack Frame Layout</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <a href="index.html">Reverse Engineering</a>
+          <span class="sep">/</span>
+          <span class="current">Assembly Cheatsheet</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 10px 0 24px;">
+          <div class="hero-tag"><span class="dot"></span> RAPID REFERENCE CHEATSHEET</div>
+          <h1 class="glitch-text" data-text="x86 / x64 Cheatsheet">x86 / x64 <span class="highlight">Cheatsheet</span></h1>
+          <p style="color:var(--text-secondary); max-width:700px;">
+            Referensi lengkap register, instruksi aritmetika, instruksi percabangan, calling conventions, dan anatomi stack memory untuk pembedahan binary assembly ke source code C.
+          </p>
+        </header>
+
+        <!-- 1. REGISTERS TABLE -->
+        <section class="materi-section" id="registers">
+          <h2>1. Matriks Register Intel x86 (32-bit) vs AMD64 (64-bit)</h2>
+          <p>Register 64-bit dapat diakses bagian-bagiannya yang lebih kecil (32-bit, 16-bit, 8-bit tinggi & rendah):</p>
+          
+          <table class="cyber-table">
+            <thead>
+              <tr>
+                <th>64-bit (8B)</th>
+                <th>32-bit (4B)</th>
+                <th>16-bit (2B)</th>
+                <th>8-bit Low</th>
+                <th>Fungsi Konvensional & Karakteristik</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>RAX</code></td>
+                <td><code>EAX</code></td>
+                <td><code>AX</code></td>
+                <td><code>AL</code> (<code>AH</code>: byte tinggi)</td>
+                <td><strong>Accumulator:</strong> Menyimpan return value fungsi, operasi aritmetika & I/O.</td>
+              </tr>
+              <tr>
+                <td><code>RBX</code></td>
+                <td><code>EBX</code></td>
+                <td><code>BX</code></td>
+                <td><code>BL</code> (<code>BH</code>)</td>
+                <td><strong>Base Register:</strong> Pointer ke data di segmen DS, callee-saved.</td>
+              </tr>
+              <tr>
+                <td><code>RCX</code></td>
+                <td><code>ECX</code></td>
+                <td><code>CX</code></td>
+                <td><code>CL</code> (<code>CH</code>)</td>
+                <td><strong>Counter:</strong> Pengendali loop counter (LOOP), shift counts, argumen ke-4 (Linux) / ke-1 (Win x64).</td>
+              </tr>
+              <tr>
+                <td><code>RDX</code></td>
+                <td><code>EDX</code></td>
+                <td><code>DX</code></td>
+                <td><code>DL</code> (<code>DH</code>)</td>
+                <td><strong>Data Register:</strong> Operasi perkalian/pembagian 64/128-bit, argumen ke-3 (Linux) / ke-2 (Win x64).</td>
+              </tr>
+              <tr>
+                <td><code>RSI</code></td>
+                <td><code>ESI</code></td>
+                <td><code>SI</code></td>
+                <td><code>SIL</code></td>
+                <td><strong>Source Index:</strong> Sumber operasi string/array, argumen ke-2 fungsi di Linux x64.</td>
+              </tr>
+              <tr>
+                <td><code>RDI</code></td>
+                <td><code>EDI</code></td>
+                <td><code>DI</code></td>
+                <td><code>DIL</code></td>
+                <td><strong>Destination Index:</strong> Tujuan operasi string, argumen ke-1 fungsi di Linux x64.</td>
+              </tr>
+              <tr>
+                <td><code>RBP</code></td>
+                <td><code>EBP</code></td>
+                <td><code>BP</code></td>
+                <td><code>BPL</code></td>
+                <td><strong>Base / Frame Pointer:</strong> Titik referensi tetap untuk local variables dan argumen stack.</td>
+              </tr>
+              <tr>
+                <td><code>RSP</code></td>
+                <td><code>ESP</code></td>
+                <td><code>SP</code></td>
+                <td><code>SPL</code></td>
+                <td><strong>Stack Pointer:</strong> Menunjuk ke posisi paling atas (top) memori stack saat ini.</td>
+              </tr>
+              <tr>
+                <td><code>RIP</code></td>
+                <td><code>EIP</code></td>
+                <td><code>IP</code></td>
+                <td>-</td>
+                <td><strong>Instruction Pointer:</strong> Menyimpan alamat memori instruksi CPU berikutnya yang akan dieksekusi.</td>
+              </tr>
+              <tr>
+                <td><code>R8 - R15</code></td>
+                <td><code>R8D - R15D</code></td>
+                <td><code>R8W - R15W</code></td>
+                <td><code>R8B - R15B</code></td>
+                <td>Register umum tambahan eksklusif pada mode 64-bit. (R8=arg 5, R9=arg 6 pada System V).</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 2. INSTRUCTIONS -->
+        <section class="materi-section" id="instructions">
+          <h2>2. Katalog Instruksi Assembly Fundamental</h2>
+          
+          <h3>A. Transfer Data & Manipulasi Alamat</h3>
+          <table class="cyber-table">
+            <thead>
+              <tr><th>Instruksi</th><th>Sintaks Contoh</th><th>Penjelasan Operasi & Efek ke C</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>MOV</code></td><td><code>mov eax, [rbp-4]</code></td><td>Salin nilai operand sumber ke operand tujuan. <code>eax = a;</code></td></tr>
+              <tr><td><code>MOVZX</code></td><td><code>movzx eax, al</code></td><td>Move with Zero-Extend: mengisikan 0 ke bit-bit atas saat transfer dari tipe kecil ke besar (misal <code>unsigned char</code> ke <code>int</code>).</td></tr>
+              <tr><td><code>MOVSX</code></td><td><code>movsx eax, al</code></td><td>Move with Sign-Extend: memperluas bit tanda saat transfer bilangan bertanda (misal <code>signed char</code> ke <code>int</code>).</td></tr>
+              <tr><td><code>LEA</code></td><td><code>lea rax, [rbp-8]</code><br><code>lea eax, [rdi+rsi*4]</code></td><td><strong>Load Effective Address:</strong> Menghitung alamat memori tanpa mengakses memori itu sendiri! Sering dipakai compiler untuk trik aritmetika cepat (misal <code>a + b*4</code>) atau pointer address <code>&x</code>.</td></tr>
+              <tr><td><code>PUSH</code></td><td><code>push rbp</code></td><td>Kurangi RSP (RSP -= 8), lalu simpan nilai ke memori <code>[RSP]</code>.</td></tr>
+              <tr><td><code>POP</code></td><td><code>pop rbp</code></td><td>Ambil nilai dari <code>[RSP]</code> ke tujuan, lalu tambah RSP (RSP += 8).</td></tr>
+            </tbody>
+          </table>
+
+          <h3>B. Aritmetika & Logika Bit</h3>
+          <table class="cyber-table">
+            <thead>
+              <tr><th>Instruksi</th><th>Sintaks Contoh</th><th>Operasi C Terkait</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>ADD / SUB</code></td><td><code>add eax, 5</code> / <code>sub eax, 2</code></td><td><code>eax += 5;</code> / <code>eax -= 2;</code></td></tr>
+              <tr><td><code>INC / DEC</code></td><td><code>inc eax</code> / <code>dec ecx</code></td><td><code>eax++;</code> / <code>ecx--;</code></td></tr>
+              <tr><td><code>IMUL</code></td><td><code>imul eax, edx</code><br><code>imul eax, [rbp-4], 10</code></td><td>Signed multiplication. Bentuk 3 operand: <code>eax = var * 10;</code></td></tr>
+              <tr><td><code>IDIV</code></td><td><code>cdq; idiv ecx</code></td><td>Signed division: EDX:EAX dibagi ECX. Hasil bagi di <code>EAX</code> (quotient /), sisa di <code>EDX</code> (modulo %).</td></tr>
+              <tr><td><code>AND / OR / XOR</code></td><td><code>xor eax, eax</code><br><code>and eax, 0x0F</code></td><td>Operasi bitwise: <code>xor reg, reg</code> adalah cara standar compiler untuk <code>reg = 0;</code> karena paling efisien opcode-nya.</td></tr>
+              <tr><td><code>SHL / SHR</code></td><td><code>shl eax, 2</code> / <code>shr eax, 1</code></td><td>Bit shift: <code>eax << 2</code> (kali 4) dan logical right shift <code>eax >> 1</code> (bagi 2 unsigned).</td></tr>
+              <tr><td><code>SAR</code></td><td><code>sar eax, 1</code></td><td>Arithmetic right shift: menggeser bit ke kanan dengan mempertahankan bit sign (bagi 2 signed).</td></tr>
+              <tr><td><code>NOT / NEG</code></td><td><code>not eax</code> / <code>neg eax</code></td><td>Bitwise NOT <code>~a</code> / Two's complement negation <code>-a</code>.</td></tr>
+            </tbody>
+          </table>
+
+          <h3>C. Kontrol Alur & Jump Berdasarkan Flag</h3>
+          <div class="highlight-box">
+            <h4>Prinsip Flag CMP & TEST</h4>
+            <p><code>cmp a, b</code> melakukan operasi internal <code>a - b</code> dan mengatur RFLAGS (ZF: Zero Flag, SF: Sign Flag, OF: Overflow Flag, CF: Carry Flag) tanpa mengubah nilai <code>a</code>.</p>
+            <p><code>test a, b</code> melakukan operasi internal bitwise <code>a & b</code> dan mengatur ZF. Umum dipakai untuk memeriksa nilai 0: <code>test eax, eax; jz .IS_ZERO</code>.</p>
+          </div>
+          <table class="cyber-table">
+            <thead>
+              <tr><th>Instruksi</th><th>Kondisi Flag</th><th>Artian & Hubungan Logika C</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>JMP</code></td><td>Unconditional</td><td>Lompat mutlak: <code>goto label;</code> atau loop continuation.</td></tr>
+              <tr><td><code>JE / JZ</code></td><td>ZF = 1</td><td>Jump if Equal / Jump if Zero: <code>if (a == b)</code> atau <code>if (x == 0)</code>.</td></tr>
+              <tr><td><code>JNE / JNZ</code></td><td>ZF = 0</td><td>Jump if Not Equal / Not Zero: <code>if (a != b)</code>.</td></tr>
+              <tr><td><code>JG / JNLE</code></td><td>ZF = 0 and SF = OF</td><td>Jump if Greater (Signed): <code>if (a > b)</code>.</td></tr>
+              <tr><td><code>JGE / JNL</code></td><td>SF = OF</td><td>Jump if Greater or Equal (Signed): <code>if (a >= b)</code>.</td></tr>
+              <tr><td><code>JL / JNGE</code></td><td>SF != OF</td><td>Jump if Less (Signed): <code>if (a < b)</code>.</td></tr>
+              <tr><td><code>JLE / JNG</code></td><td>ZF = 1 or SF != OF</td><td>Jump if Less or Equal (Signed): <code>if (a <= b)</code>.</td></tr>
+              <tr><td><code>JA / JB</code></td><td>CF = 0 / CF = 1</td><td>Jump if Above / Jump if Below (Unsigned comparison).</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 3. CALLING CONVENTION -->
+        <section class="materi-section" id="calling">
+          <h2>3. Calling Conventions (Konvensi Pemanggilan Fungsi)</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3 style="color:var(--neon-cyan);">cdecl (Standar Linux & C 32-bit)</h3>
+              <ul style="font-size:13px; line-height:1.8;">
+                <li><strong>Lokasi Argumen:</strong> Semua parameter dilewatkan melalui <strong>Stack</strong> dalam urutan <em>kanan ke kiri</em> (right-to-left).</li>
+                <li><strong>Stack Cleanup:</strong> Tanggung jawab <strong>Caller</strong> (pemanggil) membersihkan stack setelah call (misal: <code>add esp, 8</code>).</li>
+                <li><strong>Return Value:</strong> Disimpan dalam register <code>EAX</code> (atau <code>EDX:EAX</code> untuk 64-bit int).</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 style="color:var(--neon-green);">System V AMD64 ABI (Linux x64)</h3>
+              <ul style="font-size:13px; line-height:1.8;">
+                <li><strong>6 Argumen Pertama via Register:</strong><br>
+                  1: <code>RDI</code>, 2: <code>RSI</code>, 3: <code>RDX</code>, 4: <code>RCX</code>, 5: <code>R8</code>, 6: <code>R9</code>.
+                </li>
+                <li><strong>Argumen ke-7 dst:</strong> Dilewatkan melalui stack.</li>
+                <li><strong>Return Value:</strong> Disimpan di <code>RAX</code>.</li>
+                <li><strong>Floating Point:</strong> Menggunakan register XMM0 - XMM7.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px;">
+            <h3 style="color:var(--purple);">Microsoft x64 Calling Convention (Windows x64)</h3>
+            <p style="font-size:13px;">
+              Menggunakan 4 register: 1: <code>RCX</code>, 2: <code>RDX</code>, 3: <code>R8</code>, 4: <code>R9</code>. Caller wajib mengalokasikan 32 bytes "Shadow Space" (Home Space) di stack sebelum instruksi <code>call</code>.
+            </p>
+          </div>
+        </section>
+
+        <!-- 4. STACK FRAME LAYOUT -->
+        <section class="materi-section" id="stack">
+          <h2>4. Anatomi Stack Frame Memori (RBP / EBP Layout)</h2>
+          <p>
+            Memori stack bergerak dari alamat memori TINGGI ke alamat memori RENDAH. Variabel lokal diakses dengan offset negatif dari base pointer (<code>rbp - offset</code>), sedangkan argumen fungsi (pada 32-bit) diakses dengan offset positif (<code>ebp + offset</code>).
+          </p>
+          <table class="stack-table">
+            <thead>
+              <tr>
+                <th>Alamat Relatif</th>
+                <th>Tipe Isi</th>
+                <th>Keterangan Fungsi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>[rbp + 16]</code></td><td>Argumen ke-2 (32-bit cdecl)</td><td>Parameter fungsi pemanggil</td></tr>
+              <tr><td><code>[rbp + 12]</code></td><td>Argumen ke-1 (32-bit cdecl)</td><td>Parameter fungsi pemanggil</td></tr>
+              <tr><td><code>[rbp + 8]</code></td><td><strong>Return Address (Saved RIP/EIP)</strong></td><td>Alamat instruksi berikutnya setelah fungsi selesai dieksekusi (disimpan otomatis oleh CALL)</td></tr>
+              <tr style="background:rgba(0,255,245,0.08); font-weight:bold;">
+                <td><code>[rbp]</code></td>
+                <td><strong>Saved Frame Pointer (Old RBP/EBP)</strong></td><td>Titik tumpu frame saat ini (disimpan saat `push rbp`)</td></tr>
+              <tr><td><code>[rbp - 4]</code></td><td>Variabel Lokal 1 (4 bytes int)</td><td>Contoh: <code>int a;</code></td></tr>
+              <tr><td><code>[rbp - 8]</code></td><td>Variabel Lokal 2 (4 bytes int)</td><td>Contoh: <code>int b;</code></td></tr>
+              <tr><td><code>[rbp - 16]</code></td><td>Array / Buffer / Padding</td><td>Alokasi alignment 16-byte CPU</td></tr>
+              <tr style="color:var(--neon-green)"><td><code>[rsp]</code></td><td><strong>Top of Stack</strong></td><td>Posisi terkini stack pointer setelah alokasi `sub rsp, N`</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — Assembly Cheatsheet</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

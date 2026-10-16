@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyHub SOC — Portal Materi UTS Semester 4 Cyber Security</title>
+  <meta name="description" content="StudyHub Security Operations Center: Portal Materi & Persiapan Ujian Tengah Semester 4 Program Cyber Security BINUS University.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">🛡️</div>
+        <div>
+          <div class="logo-text">StudyHub<span style="color:var(--neon-green)">.SOC</span></div>
+          <span class="logo-sub">UTS S4 CYBER SECURITY</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation Hub</div>
+        <a href="index.html" class="nav-link active">
+          <span class="nav-icon">⚡</span> Dashboard
+          <span class="nav-badge">v2.0</span>
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Mata Kuliah UTS</div>
+        <a href="reverse-engineering/index.html" class="nav-link">
+          <span class="nav-icon">🔓</span> Rev. Engineering
+        </a>
+        <a href="blockchain/index.html" class="nav-link">
+          <span class="nav-icon">⛓️</span> Blockchain
+        </a>
+        <a href="computer-forensic/index.html" class="nav-link">
+          <span class="nav-icon">🔍</span> Computer Forensic
+        </a>
+        <a href="hci/index.html" class="nav-link">
+          <span class="nav-icon">🧠</span> HCI
+        </a>
+        <a href="operating-system/index.html" class="nav-link">
+          <span class="nav-icon">🖥️</span> Operating System
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Quick Actions</div>
+        <a href="reverse-engineering/soal-latihan.html" class="nav-link">
+          <span class="nav-icon">📝</span> 10 Soal ASM→C
+        </a>
+        <a href="blockchain/solidity-cheatsheet.html" class="nav-link">
+          <span class="nav-icon">📜</span> Solidity Cheatsheet
+        </a>
+        <a href="computer-forensic/study-case.html" class="nav-link">
+          <span class="nav-icon">💼</span> 10 Forensic Cases
+        </a>
+        <a href="operating-system/code-examples.html" class="nav-link">
+          <span class="nav-icon">💻</span> 10 C OS Codes
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span class="status-dot"></span>
+          <span>SOC SYSTEM OPERATIONAL</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <div class="breadcrumb">
+          <span>SEC_OPS</span>
+          <span class="sep">/</span>
+          <span class="current">Dashboard</span>
+        </div>
+        <div class="topbar-actions">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="Cari modul / topik...">
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <!-- HERO -->
+        <header class="hero-header">
+          <div class="hero-tag">
+            <span class="dot"></span>
+            DEFENSE GRADE ACADEMIC PORTAL
+          </div>
+          <h1 class="glitch-text" data-text="StudyHub SOC">StudyHub <span class="highlight">SOC</span></h1>
+          <div class="typing-text">
+            <span>&gt; </span>
+            <span id="typing-target">Portal Materi UTS Semester 4 — BINUS Cyber Security</span>
+            <span class="cursor"></span>
+          </div>
+
+          <div class="stats-bar">
+            <div class="stat-item">
+              <span class="stat-value" data-counter="5">5</span>
+              <span class="stat-label">Mata Kuliah</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" data-counter="18">18</span>
+              <span class="stat-label">Modul & Kasus</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" data-counter="40">40</span>
+              <span class="stat-label">Code & Latihan</span>
+            </div>
+            <div class="stat-item countdown-stat">
+              <span class="stat-value" id="countdown-display">14h 00j 00m</span>
+              <span class="stat-label">UTS Countdown</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- CARDS GRID -->
+        <section>
+          <div class="section-heading">
+            <h2>🎯 Core Mata Kuliah S4</h2>
+            <div class="line"></div>
+            <span class="badge">SEC-OPS HUB</span>
+          </div>
+
+          <div class="grid-auto">
+            <!-- 1. RE -->
+            <div class="card-wrap">
+              <a href="reverse-engineering/index.html" class="card matkul-card">
+                <div class="card-header">
+                  <div class="card-icon cyan">🔓</div>
+                  <div class="card-meta">
+                    <h3 class="card-title">Reverse Engineering</h3>
+                    <div class="card-subtitle">COMP6836001 • RE-LAB</div>
+                  </div>
+                </div>
+                <p class="card-desc">Bedah binary x86 (32-bit) & x64 (64-bit), alur stack frame (RBP/EBP), instruksi assembly, calling convention, dan dekompilasi manual ASM ke kode C.</p>
+                <div class="card-tags">
+                  <span class="tag cyan">x86/x64</span>
+                  <span class="tag cyan">ASM→C</span>
+                  <span class="tag cyan">Stack Visual</span>
+                  <span class="tag cyan">GDB/Objdump</span>
+                </div>
+                <div class="card-footer-row">
+                  <div class="progress-bar-wrap">
+                    <div class="progress-label">
+                      <span>Status Materi</span>
+                      <span>Lengkap</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+                  </div>
+                  <div class="btn-arrow">→</div>
+                </div>
+              </a>
+            </div>
+
+            <!-- 2. BLOCKCHAIN -->
+            <div class="card-wrap">
+              <a href="blockchain/index.html" class="card matkul-card">
+                <div class="card-header">
+                  <div class="card-icon green">⛓️</div>
+                  <div class="card-meta">
+                    <h3 class="card-title">Blockchain Technology</h3>
+                    <div class="card-subtitle">COMP6837001 • WEB3-SEC</div>
+                  </div>
+                </div>
+                <p class="card-desc">Arsitektur terdesentralisasi, SHA-256, Merkle Tree, Konsensus (PoW, PoS, PBFT), EVM, Smart Contracts, DeFi security, dan cheatsheet Solidity v0.8+.</p>
+                <div class="card-tags">
+                  <span class="tag green">SHA-256</span>
+                  <span class="tag green">Ethereum EVM</span>
+                  <span class="tag green">Solidity</span>
+                  <span class="tag green">ERC-20/721</span>
+                </div>
+                <div class="card-footer-row">
+                  <div class="progress-bar-wrap">
+                    <div class="progress-label">
+                      <span>Status Materi</span>
+                      <span>Lengkap</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan))"></div></div>
+                  </div>
+                  <div class="btn-arrow">→</div>
+                </div>
+              </a>
+            </div>
+
+            <!-- 3. FORENSIC -->
+            <div class="card-wrap">
+              <a href="computer-forensic/index.html" class="card matkul-card">
+                <div class="card-header">
+                  <div class="card-icon orange">🔍</div>
+                  <div class="card-meta">
+                    <h3 class="card-title">Computer Forensic & DFIR</h3>
+                    <div class="card-subtitle">COMP6838001 • CIRT-OPS</div>
+                  </div>
+                </div>
+                <p class="card-desc">Investigasi forensik digital, Chain of Custody ISO/IEC 27037, Volatility memory analysis, disk imaging (E01/DD), Wireshark PCAP, dan 10 skenario insiden nyata.</p>
+                <div class="card-tags">
+                  <span class="tag orange">Chain of Custody</span>
+                  <span class="tag orange">Volatility</span>
+                  <span class="tag orange">Autopsy</span>
+                  <span class="tag orange">10 Study Cases</span>
+                </div>
+                <div class="card-footer-row">
+                  <div class="progress-bar-wrap">
+                    <div class="progress-label">
+                      <span>Status Materi</span>
+                      <span>Lengkap</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, var(--orange), var(--neon-pink))"></div></div>
+                  </div>
+                  <div class="btn-arrow">→</div>
+                </div>
+              </a>
+            </div>
+
+            <!-- 4. HCI -->
+            <div class="card-wrap">
+              <a href="hci/index.html" class="card matkul-card">
+                <div class="card-header">
+                  <div class="card-icon purple">🧠</div>
+                  <div class="card-meta">
+                    <h3 class="card-title">Human-Computer Interaction</h3>
+                    <div class="card-subtitle">COMP6839001 • UI/UX-COGNITIVE</div>
+                  </div>
+                </div>
+                <p class="card-desc">Prinsip Interaksi Don Norman, 6 topik UTS, aspek kognitif (Fitts' Law, Hick's Law), CSCW kolaborasi sosial, interaksi emosional, dan ragam antarmuka (NUI/VUI/BCI).</p>
+                <div class="card-tags">
+                  <span class="tag purple">Norman Design</span>
+                  <span class="tag purple">Fitts' Law</span>
+                  <span class="tag purple">Cognitive Load</span>
+                  <span class="tag purple">NUI/BCI</span>
+                </div>
+                <div class="card-footer-row">
+                  <div class="progress-bar-wrap">
+                    <div class="progress-label">
+                      <span>Status Materi</span>
+                      <span>Lengkap</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, var(--purple), var(--neon-cyan))"></div></div>
+                  </div>
+                  <div class="btn-arrow">→</div>
+                </div>
+              </a>
+            </div>
+
+            <!-- 5. OPERATING SYSTEM -->
+            <div class="card-wrap">
+              <a href="operating-system/index.html" class="card matkul-card">
+                <div class="card-header">
+                  <div class="card-icon blue">🖥️</div>
+                  <div class="card-meta">
+                    <h3 class="card-title">Operating Systems</h3>
+                    <div class="card-subtitle">COMP6840001 • KERNEL-CORE</div>
+                  </div>
+                </div>
+                <p class="card-desc">Struktur OS & System Calls, Process Lifecycle, Pthreads, CPU Scheduling (Gantt chart), IPC (Pipe, Shared Memory), Sinkronisasi (Mutex/Semaphore), dan Deadlock (Banker's).</p>
+                <div class="card-tags">
+                  <span class="tag blue">Process & Thread</span>
+                  <span class="tag blue">Banker's Algo</span>
+                  <span class="tag blue">Semaphore</span>
+                  <span class="tag blue">10 C Codes</span>
+                </div>
+                <div class="card-footer-row">
+                  <div class="progress-bar-wrap">
+                    <div class="progress-label">
+                      <span>Status Materi</span>
+                      <span>Lengkap</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, var(--electric-blue), var(--neon-green))"></div></div>
+                  </div>
+                  <div class="btn-arrow">→</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- QUICK PRACTICE SECTION -->
+        <section style="margin-top: 48px;">
+          <div class="section-heading">
+            <h2>⚡ Modul Spesial Latihan UTS</h2>
+            <div class="line"></div>
+            <span class="badge">HANDS-ON LABS</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span class="tag cyan">Reverse Engineering</span>
+                <span style="font-family:var(--font-code); font-size:12px; color:var(--neon-green);">10 Soal ASM→C</span>
+              </div>
+              <h3 style="font-size:18px; margin-bottom:8px;">Decompilation & Stack Analysis Practice</h3>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+                5 Soal x86 32-bit + 5 Soal x64 64-bit lengkap dengan step-by-step register tracing, tabel visualisasi stack frame (EBP/RBP offsets), dan kode bahasa C final.
+              </p>
+              <div style="display:flex; gap:12px;">
+                <a href="reverse-engineering/soal-latihan.html" class="btn btn-primary btn-sm">Buka 10 Soal ASM→C →</a>
+                <a href="reverse-engineering/cheatsheet.html" class="btn btn-outline btn-sm">Assembly Cheatsheet</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span class="tag orange">Computer Forensic</span>
+                <span style="font-family:var(--font-code); font-size:12px; color:var(--orange);">10 Study Cases</span>
+              </div>
+              <h3 style="font-size:18px; margin-bottom:8px;">Incident Response & DFIR Investigations</h3>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+                10 studi kasus serangan nyata (Ransomware, Data Exfiltration, Phishing, SQLi, Crypto Theft) dengan metodologi NIST SP 800-86 dan form Chain of Custody.
+              </p>
+              <div style="display:flex; gap:12px;">
+                <a href="computer-forensic/study-case.html" class="btn btn-primary btn-sm">Buka 10 Case DFIR →</a>
+                <a href="computer-forensic/materi.html" class="btn btn-outline btn-sm">Materi Teori DFIR</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span class="tag green">Blockchain</span>
+                <span style="font-family:var(--font-code); font-size:12px; color:var(--neon-green);">Solidity v0.8+</span>
+              </div>
+              <h3 style="font-size:18px; margin-bottom:8px;">Smart Contract Cheatsheet & 10 Contracts</h3>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+                Sintaks Solidity, data locations (storage, memory, calldata), visibility, modifiers, serta 10 smart contract compilable (Token, Staking, DAO, Escrow, Multi-sig).
+              </p>
+              <div style="display:flex; gap:12px;">
+                <a href="blockchain/solidity-cheatsheet.html" class="btn btn-primary btn-sm">Buka Solidity Cheatsheet →</a>
+                <a href="blockchain/materi.html" class="btn btn-outline btn-sm">Materi Teori Blockchain</a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span class="tag blue">Operating System</span>
+                <span style="font-family:var(--font-code); font-size:12px; color:var(--electric-blue);">10 C Programs</span>
+              </div>
+              <h3 style="font-size:18px; margin-bottom:8px;">POSIX System Calls & Synchronization in C</h3>
+              <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+                10 program C compilable: fork, exec, pipe, shmget, pthread_create, pthread_mutex, sem_init, Producer-Consumer, Reader-Writer, dan Dining Philosophers.
+              </p>
+              <div style="display:flex; gap:12px;">
+                <a href="operating-system/code-examples.html" class="btn btn-primary btn-sm">Buka 10 Kode C OS →</a>
+                <a href="operating-system/materi.html" class="btn btn-outline btn-sm">Materi Teori OS</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll ke atas">↑</button>
+
+  <footer class="site-footer">
+    <div>
+      <span class="footer-brand">StudyHub SOC v2.0</span> — Built with 💚 for BINUS Cyber Security
+    </div>
+    <div>
+      Portal Materi UTS Semester 4 &bull; All Rights Reserved
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

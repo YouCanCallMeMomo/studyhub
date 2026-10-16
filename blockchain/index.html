@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blockchain Technology — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--neon-green), var(--neon-cyan));">⛓️</div>
+        <div>
+          <div class="logo-text">Block<span style="color:var(--neon-green)">.Chain</span></div>
+          <span class="logo-sub">COMP6837001</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link active"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link"><span class="nav-icon">📚</span> Teori Fundamental</a>
+        <a href="solidity-cheatsheet.html" class="nav-link"><span class="nav-icon">📜</span> Solidity Cheatsheet (10 Code)</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Semua Matkul</div>
+        <a href="../reverse-engineering/index.html" class="nav-link"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link active"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current">Blockchain Technology</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 20px 0;">
+          <div class="hero-tag"><span class="dot"></span> COMP6837001 • WEB3 & SMART CONTRACTS</div>
+          <h1 class="glitch-text" data-text="Blockchain Tech">Blockchain <span class="highlight" style="color:var(--neon-green);">Tech</span></h1>
+          <p style="color:var(--text-secondary); margin-top:8px; max-width:750px;">
+            Studi terdistribusi terdesentralisasi: Kriptografi Hash SHA-256, Struktur Blok & Pohon Merkle, Mekanisme Konsensus (PoW, PoS, PBFT), Arsitektur EVM Ethereum, dan implementasi Smart Contract Solidity v0.8+.
+          </p>
+          <div style="display:flex; gap:12px; margin-top:20px;">
+            <a href="materi.html" class="btn btn-primary" style="background:linear-gradient(135deg, var(--neon-green), var(--neon-cyan)); color:#000;">📚 Pelajari Materi Teori</a>
+            <a href="solidity-cheatsheet.html" class="btn btn-outline" style="border-color:var(--neon-green); color:var(--neon-green);">📜 10 Kode Solidity Lengkap</a>
+          </div>
+        </header>
+
+        <!-- CHECKLIST PROGRESS -->
+        <section class="card" style="margin-bottom:32px;">
+          <h3 style="font-size:16px; margin-bottom:12px; color:var(--neon-green);">🎯 Target Capaian UTS Blockchain</h3>
+          <div class="grid-2">
+            <label class="progress-check" data-key="bc_sha256">
+              <input type="checkbox">
+              <span>Prinsip Kriptografi Hashing SHA-256 (Pre-image resistance, Avalanche effect)</span>
+            </label>
+            <label class="progress-check" data-key="bc_merkle">
+              <input type="checkbox">
+              <span>Struktur Merkle Tree, SPV (Simplified Payment Verification), & Root Hash</span>
+            </label>
+            <label class="progress-check" data-key="bc_consensus">
+              <input type="checkbox">
+              <span>Perbandingan Konsensus: PoW (Nakamoto), PoS (Casper), DPoS, dan PBFT</span>
+            </label>
+            <label class="progress-check" data-key="bc_evm">
+              <input type="checkbox">
+              <span>Arsitektur Ethereum Virtual Machine (EVM), Gas Mechanism, & State Trie</span>
+            </label>
+            <label class="progress-check" data-key="bc_solidity_syntax">
+              <input type="checkbox">
+              <span>Memahami Storage vs Memory vs Calldata & Visibility di Solidity</span>
+            </label>
+            <label class="progress-check" data-key="bc_security">
+              <input type="checkbox">
+              <span>Analisis Kerentanan Web3: Reentrancy, Overflow/Underflow, Front-running</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- MODUL CARDS -->
+        <div class="grid-2">
+          <div class="card">
+            <h3 style="color:var(--neon-green); margin-bottom:8px;">📚 Modul Materi Fundamental</h3>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+              Membahas konsep kriptografi SHA-256, struktur header blok, Merkle Tree, algoritma konsensus Proof of Work vs Proof of Stake, staking, arsitektur EVM, dan keamanan smart contract.
+            </p>
+            <a href="materi.html" class="btn btn-sm btn-outline">Buka Materi Lengkap →</a>
+          </div>
+
+          <div class="card">
+            <h3 style="color:var(--neon-cyan); margin-bottom:8px;">📜 Solidity Cheatsheet & 10 Contracts</h3>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
+              Kamus referensi tipe data, modifiers, events, inheritance, serta 10 smart contract nyata: Simple Token, Voting, Crowdfunding, Auction, Multi-Signature Wallet, ERC-20, NFT ERC-721, Staking, DAO, dan Escrow.
+            </p>
+            <a href="solidity-cheatsheet.html" class="btn btn-sm btn-outline">Buka Cheatsheet & 10 Code →</a>
+          </div>
+        </div>
+
+        <!-- QUIZ CONTAINER -->
+        <section style="margin-top:40px;">
+          <h2 style="font-size:18px; margin-bottom:16px; color:var(--neon-green);">⚡ Uji Pemahaman: Kuis Blockchain</h2>
+          <div id="quiz-blockchain-root"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn">↑</button>
+  <footer class="site-footer">
+    <div>StudyHub SOC — Blockchain Technology Module</div>
+    <div>BINUS Cyber Security UTS Prep</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="js/quiz-blockchain.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operating Systems — StudyHub SOC</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="wrapper">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, var(--electric-blue), var(--neon-cyan));">🖥️</div>
+        <div>
+          <div class="logo-text">OS<span style="color:var(--electric-blue)">.Kernel</span></div>
+          <span class="logo-sub">COMP6840001</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Navigation</div>
+        <a href="../index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="index.html" class="nav-link active"><span class="nav-icon">📖</span> Overview Modul</a>
+        <a href="materi.html" class="nav-link"><span class="nav-icon">📚</span> 7 Topik Teori OS</a>
+        <a href="code-examples.html" class="nav-link"><span class="nav-icon">💻</span> 10 Kode C Compilable</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Semua Matkul</div>
+        <a href="../reverse-engineering/index.html" class="nav-link"><span class="nav-icon">🔓</span> Rev. Engineering</a>
+        <a href="../blockchain/index.html" class="nav-link"><span class="nav-icon">⛓️</span> Blockchain</a>
+        <a href="../computer-forensic/index.html" class="nav-link"><span class="nav-icon">🔍</span> Forensic</a>
+        <a href="../hci/index.html" class="nav-link"><span class="nav-icon">🧠</span> HCI</a>
+        <a href="../operating-system/index.html" class="nav-link active"><span class="nav-icon">🖥️</span> OS</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">☰</button>
+        <div class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current">Operating Systems</span>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header class="hero-header" style="text-align:left; padding: 20px 0;">
+          <div class="hero-tag"><span class="dot"></span> COMP6840001 • KERNEL ARCHITECTURE & CONCURRENCY</div>
+          <h1 class="glitch-text" data-text="Operating Systems">Operating <span class="highlight" style="color:var(--electric-blue)">Systems</span></h1>
+          <p style="color:var(--text-secondary); margin-top:8px; max-width:750px;">
+            Diktat resmi UTS Operating Systems Semester 4 BINUS: Struktur Kernel & System Calls, Manajemen Proses & PCB, POSIX Multithreading, Penjadwalan CPU (Gantt Chart), Arsitektur Multiprocessor & NUMA, Sinkronisasi IPC (Mutex/Semaphore), serta Pencegahan & Penghindaran Deadlock (Banker's Algorithm). Dilengkapi 10 program C compilable.
+          </p>
+          <div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
+            <a href="materi.html" class="btn btn-primary" style="background:linear-gradient(135deg, var(--electric-blue), var(--neon-cyan)); color:#000;">📚 Buka Materi Teori (7 Topik)</a>
+            <a href="code-examples.html" class="btn btn-outline" style="border-color:var(--electric-blue); color:var(--electric-blue);">💻 10 Program Bahasa C</a>
+          </div>
+        </header>
+
+        <!-- CHECKLIST PROGRESS -->
+        <section class="card" style="margin-bottom:32px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3 style="font-size:16px; color:var(--electric-blue);">🎯 Target Capaian UTS Operating Systems</h3>
+            <span class="badge" style="border-color:var(--electric-blue); color:var(--electric-blue);">PROGRESS UTS</span>
+          </div>
+          <div class="grid-2">
+            <label class="progress-check" data-key="os_kernel_structure">
+              <input type="checkbox">
+              <span>Arsitektur Kernel: Monolithic, Microkernel, Hybrid & Dual-Mode System Calls</span>
+            </label>
+            <label class="progress-check" data-key="os_process_lifecycle">
+              <input type="checkbox">
+              <span>Model State Proses (New, Ready, Running, Waiting, Terminated) & Struktur PCB</span>
+            </label>
+            <label class="progress-check" data-key="os_threads_posix">
+              <input type="checkbox">
+              <span>Proses vs Thread, Multithreading Models (1:1, M:1, M:M) & POSIX Pthreads</span>
+            </label>
+            <label class="progress-check" data-key="os_cpu_scheduling">
+              <input type="checkbox">
+              <span>Algoritma Penjadwalan CPU: FCFS, SJF, Round Robin & Analisis Gantt Chart</span>
+            </label>
+            <label class="progress-check" data-key="os_multiprocessor">
+              <input type="checkbox">
+              <span>Arsitektur Multiprocessor: Symmetric Multiprocessing (SMP), Multicore, dan NUMA</span>
+            </label>
+            <label class="progress-check" data-key="os_ipc_sync">
+              <input type="checkbox">
+              <span>Race Condition, Critical Section Problem, Mutex Locks & Semaphores (Counting/Binary)</span>
+            </label>
+            <label class="progress-check" data-key="os_deadlock_banker">
+              <input type="checkbox">
+              <span>4 Syarat Deadlock Coffman, Resource Allocation Graph (RAG) & Algoritma Banker</span>
+            </label>
+            <label class="progress-check" data-key="os_c_programs">
+              <input type="checkbox">
+              <span>10 Program C Compilable: Fork, Pipe, Shm, Pthread, Mutex, Sem, Producer-Consumer, etc.</span>
+            </label>
+          </div>
+        </section>
+
+        <!-- DUAL MODULE CARDS -->
+        <div class="grid-2" style="margin-bottom:36px;">
+          <div class="card" style="border-left:4px solid var(--electric-blue);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="tag blue">TEORI KOMPREHENSIF</span>
+              <span style="font-family:var(--font-code); font-size:12px; color:var(--electric-blue);">7 BAB MATERI</span>
+            </div>
+            <h3 style="color:var(--text-primary); margin-bottom:10px;">Diktat Teori & Konsep Kernel OS</h3>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:18px;">
+              Penjelasan mendalam 7 topik utama: Pengenalan Arsitektur OS, Siklus Hidup Proses & PCB, Threads, Algoritma Penjadwalan CPU lengkap dengan kalkulasi Average Waiting Time pada Gantt Chart, Komputasi Multiprocessor, Sinkronisasi Proses Klasik, dan Manajemen Deadlock.
+            </p>
+            <a href="materi.html" class="btn btn-sm btn-outline" style="border-color:var(--electric-blue); color:var(--electric-blue);">Pelajari 7 Topik Teori →</a>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--neon-green);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="tag green">HANDS-ON KODE C</span>
+              <span style="font-family:var(--font-code); font-size:12px; color:var(--neon-green);">10 PROGRAM POSIX</span>
+            </div>
+            <h3 style="color:var(--text-primary); margin-bottom:10px;">10 Contoh Kode C Compilable</h3>
+            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:18px;">
+              Implementasi kode bahasa C nyata berstandar POSIX (Linux/UNIX): Forking & child PID, wait synchronization, UNIX Anonymous Pipe, POSIX Shared Memory, Pthreads creation & join, Mutex locks, Counting Semaphores, Producer-Consumer buffer, Reader-Writer problem, dan Dining Philosophers.
+            </p>
+            <a href="code-examples.html" class="btn btn-sm btn-outline" style="border-color:var(--neon-green); color:var(--neon-green);">Buka 10 Kode C OS →</a>
+          </div>
+        </div>
+
+        <!-- QUIZ CONTAINER -->
+        <section id="kuis-section" style="margin-top:40px;">
+          <div class="section-heading">
+            <h2 style="color:var(--electric-blue);">⚡ Kuis Pemahaman Operating Systems</h2>
+            <div class="line"></div>
+            <span class="badge" style="border-color:var(--electric-blue); color:var(--electric-blue);">5 SOAL UTS PREP</span>
+          </div>
+          <div id="quiz-os-root"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <button class="scroll-top" id="scroll-top-btn" aria-label="Scroll ke atas">↑</button>
+  <footer class="site-footer">
+    <div><span class="footer-brand">StudyHub SOC v2.0</span> — Operating Systems Module</div>
+    <div>BINUS Cyber Security UTS Prep &bull; All Rights Reserved</div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="js/quiz-os.js"></script>
+</body>
+</html>
